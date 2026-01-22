@@ -6,6 +6,7 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { SectionOneComponent } from './section-one/section-one.component';
 import { LogoComponent } from './logo/logo.component';
 import { FooterComponent } from './footer/footer.component';
+import { HomeComponent } from './home/home.component';
 
 @Component({
   selector: 'app-root',
@@ -18,6 +19,7 @@ import { FooterComponent } from './footer/footer.component';
     SectionOneComponent,
     LogoComponent,
     FooterComponent,
+    HomeComponent,
   ],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
