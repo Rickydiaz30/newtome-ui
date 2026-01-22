@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { LogoComponent } from '../logo/logo.component';
-import { HeroComponent } from '../hero/hero.component';
-import { SectionOneComponent } from '../section-one/section-one.component';
+import { LogoComponent } from 'src/app/pages/home/sections/logo/logo.component';
+import { HeroComponent } from 'src/app/pages/home/sections/hero/hero.component';
+import { SectionOneComponent } from 'src/app/pages/home/sections/section-one/section-one.component';
 
 @Component({
   selector: 'app-home',
