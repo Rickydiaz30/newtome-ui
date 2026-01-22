@@ -1,0 +1,145 @@
+<nav class="relative bg-blue-950 text-white" data-nav>
+  <div class="mx-auto max-w-6xl px-4">
+    <div class="flex h-16 items-center justify-between">
+      <!-- Brand -->
+      <div class="font-bold tracking-wide">MyApp</div>
+
+      <!-- Desktop links -->
+      <div class="hidden items-center gap-6 md:flex">
+        <a class="hover:text-slate-300" href="#">Home</a>
+        <a class="hover:text-slate-300" href="#">Pricing</a>
+
+        <!-- Desktop dropdown -->
+        <div class="relative">
+          <button
+            type="button"
+            class="flex items-center gap-2 rounded-md px-3 py-2 hover:bg-slate-800"
+            (click)="toggleDropdown(); $event.stopPropagation()"
+            [attr.aria-expanded]="dropdownOpen"
+          >
+            More
+            <span
+              class="text-xs transition-transform duration-300 ease-in-out"
+              [class.rotate-180]="dropdownOpen"
+              >▾</span
+            >
+          </button>
+
+          <div
+            *ngIf="dropdownOpen"
+            class="absolute right-0 mt-2 w-48 rounded-lg bg-white py-2 text-slate-800 shadow-lg ring-1 ring-black/10"
+            (click)="$event.stopPropagation()"
+          >
+            <a class="block px-4 py-2 hover:bg-slate-100" href="#">Account</a>
+            <a class="block px-4 py-2 hover:bg-slate-100" href="#">Settings</a>
+            <div class="my-2 h-px bg-slate-200"></div>
+            <button
+              class="w-full px-4 py-2 text-left hover:bg-slate-100"
+              type="button"
+            >
+              Sign out
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mobile hamburger (morphs into X) -->
+      <button
+        type="button"
+        class="relative inline-flex h-10 w-10 items-center justify-center rounded-md hover:bg-slate-800 md:hidden"
+        (click)="toggleMobile(); $event.stopPropagation()"
+        aria-label="Open menu"
+        [attr.aria-expanded]="mobileOpen"
+      >
+        <span class="sr-only">Open main menu</span>
+
+        <!-- Top line -->
+        <span
+          class="absolute block h-0.5 w-6 bg-white transition-all duration-700 ease-in-out"
+          [class.translate-y-0]="mobileOpen"
+          [class.rotate-45]="mobileOpen"
+          [class.-translate-y-2]="!mobileOpen"
+          [class.rotate-0]="!mobileOpen"
+        ></span>
+
+        <!-- Middle line -->
+        <span
+          class="absolute block h-0.5 w-6 bg-white transition-all duration-700 ease-in-out"
+          [class.opacity-0]="mobileOpen"
+          [class.opacity-100]="!mobileOpen"
+        ></span>
+
+        <!-- Bottom line -->
+        <span
+          class="absolute block h-0.5 w-6 bg-white transition-all duration-700 ease-in-out"
+          [class.translate-y-0]="mobileOpen"
+          [class.-rotate-45]="mobileOpen"
+          [class.translate-y-2]="!mobileOpen"
+          [class.rotate-0]="!mobileOpen"
+        ></span>
+      </button>
+    </div>
+
+    <!-- Mobile menu panel (overlay + slow smooth slide) -->
+    <div
+      class="absolute left-0 top-full z-50 w-full overflow-hidden md:hidden transition-all duration-700 ease-in-out transform"
+      [class.max-h-0]="!mobileOpen"
+      [class.max-h-[500px]]="mobileOpen"
+      [class.opacity-0]="!mobileOpen"
+      [class.opacity-100]="mobileOpen"
+      [class.-translate-y-2]="!mobileOpen"
+      [class.translate-y-0]="mobileOpen"
+      (click)="$event.stopPropagation()"
+    >
+      <div class="mx-auto max-w-6xl px-4 pb-4">
+        <div
+          class="space-y-1 rounded-lg bg-blue-950/95 p-2 shadow-lg ring-1 ring-black/10"
+        >
+          <a class="block rounded-md px-3 py-2 hover:bg-blue-900" href="#"
+            >Home</a
+          >
+          <a class="block rounded-md px-3 py-2 hover:bg-blue-900" href="#"
+            >Pricing</a
+          >
+
+          <!-- Mobile dropdown -->
+          <button
+            type="button"
+            class="flex w-full items-center justify-between rounded-md px-3 py-2 hover:bg-slate-700"
+            (click)="toggleDropdown(); $event.stopPropagation()"
+            [attr.aria-expanded]="dropdownOpen"
+          >
+            More
+            <span
+              class="text-xs transition-transform duration-300 ease-in-out"
+              [class.rotate-180]="dropdownOpen"
+              >▾</span
+            >
+          </button>
+
+          <!-- Mobile dropdown panel (smooth open/close) -->
+          <div
+            class="overflow-hidden transition-all duration-500 ease-in-out"
+            [class.max-h-0]="!dropdownOpen"
+            [class.max-h-40]="dropdownOpen"
+          >
+            <div class="space-y-1 pl-2">
+              <a class="block rounded-md px-3 py-2 hover:bg-slate-700" href="#"
+                >Account</a
+              >
+              <a class="block rounded-md px-3 py-2 hover:bg-slate-700" href="#"
+                >Settings</a
+              >
+              <button
+                class="block w-full rounded-md px-3 py-2 text-left hover:bg-slate-700"
+                type="button"
+              >
+                Sign out
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
