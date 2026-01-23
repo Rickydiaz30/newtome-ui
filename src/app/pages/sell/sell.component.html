@@ -1,53 +1,52 @@
 <section class="bg-slate-50 px-6 py-16">
   <div class="mx-auto max-w-4xl">
-    <!-- Header -->
     <div class="text-center">
       <h1 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
         Post a listing
       </h1>
       <p class="mt-4 text-base leading-relaxed text-slate-700">
-        Create a clean, detailed listing so buyers can make serious offers — no
-        more “Is this available?” messages.
+        Fill out the details below. This will create a listing in the database.
       </p>
     </div>
 
-    <!-- Form card -->
     <div
       class="mt-10 rounded-xl border border-blue-950/20 bg-white p-6 shadow-sm sm:p-8"
     >
-      <form class="space-y-10">
-        <!-- Basic details -->
+      <form class="space-y-10" (ngSubmit)="submit()" #listingForm="ngForm">
         <div>
           <h2 class="text-lg font-semibold text-slate-900">Listing details</h2>
 
           <div class="mt-4 grid gap-4 sm:grid-cols-2">
+            <!-- Title -->
             <div class="sm:col-span-2">
               <label class="text-sm font-medium text-slate-700">Title</label>
               <input
                 type="text"
+                name="title"
+                [(ngModel)]="model.title"
+                required
                 placeholder="e.g., Like-new Air Fryer (5qt)"
                 class="mt-2 w-full rounded-md border border-blue-950/25 bg-white px-4 py-3 text-slate-900 outline-none placeholder:text-slate-400 focus:border-blue-950 focus:ring-2 focus:ring-blue-950/15"
               />
             </div>
 
+            <!-- Category -->
             <div>
               <label class="text-sm font-medium text-slate-700">Category</label>
-
               <div class="relative mt-2">
                 <select
+                  name="categoryId"
+                  [(ngModel)]="model.categoryId"
+                  required
                   class="w-full appearance-none rounded-md border border-blue-950/25 bg-white px-4 py-3 pr-10 text-slate-900 outline-none focus:border-blue-950 focus:ring-2 focus:ring-blue-950/15"
                 >
-                  <option value="">Select a category</option>
-                  <option>Electronics</option>
-                  <option>Home</option>
-                  <option>Furniture</option>
-                  <option>Clothing</option>
-                  <option>Tools</option>
-                  <option>Sports & Outdoors</option>
-                  <option>Other</option>
+                  <option [ngValue]="null">Select a category</option>
+                  <option *ngIf="loadingCategories" disabled>Loading...</option>
+                  <option *ngFor="let c of categories" [ngValue]="c.id">
+                    {{ c.name }}
+                  </option>
                 </select>
 
-                <!-- Custom arrow -->
                 <span
                   class="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-slate-500"
                 >
@@ -56,23 +55,22 @@
               </div>
             </div>
 
+            <!-- Status -->
             <div>
-              <label class="text-sm font-medium text-slate-700"
-                >Condition</label
-              >
-
+              <label class="text-sm font-medium text-slate-700">Status</label>
               <div class="relative mt-2">
                 <select
+                  name="status"
+                  [(ngModel)]="model.status"
+                  required
                   class="w-full appearance-none rounded-md border border-blue-950/25 bg-white px-4 py-3 pr-10 text-slate-900 outline-none focus:border-blue-950 focus:ring-2 focus:ring-blue-950/15"
                 >
-                  <option value="">Select condition</option>
-                  <option>New</option>
-                  <option>Like new</option>
-                  <option>Good</option>
-                  <option>Fair</option>
+                  <option value="">Select status</option>
+                  <option value="ACTIVE">Active</option>
+                  <option value="DRAFT">Draft</option>
+                  <option value="SOLD">Sold</option>
                 </select>
 
-                <!-- Custom arrow -->
                 <span
                   class="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-slate-500"
                 >
@@ -81,7 +79,33 @@
               </div>
             </div>
 
+            <!-- Color -->
             <div>
+              <label class="text-sm font-medium text-slate-700">Color</label>
+              <input
+                type="text"
+                name="color"
+                [(ngModel)]="model.color"
+                placeholder="e.g., Black"
+                class="mt-2 w-full rounded-md border border-blue-950/25 bg-white px-4 py-3 text-slate-900 outline-none placeholder:text-slate-400 focus:border-blue-950 focus:ring-2 focus:ring-blue-950/15"
+              />
+            </div>
+
+            <!-- City -->
+            <div>
+              <label class="text-sm font-medium text-slate-700">City</label>
+              <input
+                type="text"
+                name="city"
+                [(ngModel)]="model.city"
+                required
+                placeholder="e.g., Omaha"
+                class="mt-2 w-full rounded-md border border-blue-950/25 bg-white px-4 py-3 text-slate-900 outline-none placeholder:text-slate-400 focus:border-blue-950 focus:ring-2 focus:ring-blue-950/15"
+              />
+            </div>
+
+            <!-- Price -->
+            <div class="sm:col-span-2">
               <label class="text-sm font-medium text-slate-700">Price</label>
               <div
                 class="mt-2 flex rounded-md border border-blue-950/25 bg-white focus-within:ring-2 focus-within:ring-blue-950/15"
@@ -89,137 +113,31 @@
                 <span class="flex items-center px-3 text-slate-600">$</span>
                 <input
                   type="number"
+                  name="price"
+                  [(ngModel)]="model.price"
+                  required
+                  min="0"
+                  step="0.01"
                   inputmode="decimal"
                   placeholder="0.00"
                   class="w-full rounded-md px-4 py-3 text-slate-900 outline-none placeholder:text-slate-400"
                 />
               </div>
-              <p class="mt-2 text-xs text-slate-600">
-                You can allow offers below. Buyers will place verified offers —
-                fewer time-wasters.
-              </p>
             </div>
 
+            <!-- Description -->
             <div class="sm:col-span-2">
               <label class="text-sm font-medium text-slate-700"
                 >Description</label
               >
               <textarea
                 rows="5"
-                placeholder="What’s included? Any flaws? Why are you selling? The more detail, the fewer questions."
+                name="description"
+                [(ngModel)]="model.description"
+                required
+                placeholder="What’s included? Any flaws?"
                 class="mt-2 w-full rounded-md border border-blue-950/25 bg-white px-4 py-3 text-slate-900 outline-none placeholder:text-slate-400 focus:border-blue-950 focus:ring-2 focus:ring-blue-950/15"
               ></textarea>
-            </div>
-          </div>
-        </div>
-
-        <!-- Offers -->
-        <div>
-          <h2 class="text-lg font-semibold text-slate-900">Offers</h2>
-
-          <div class="mt-4 grid gap-4 sm:grid-cols-2">
-            <label
-              class="flex items-start gap-3 rounded-lg border border-blue-950/15 bg-slate-50 p-4"
-            >
-              <input type="checkbox" class="mt-1" />
-              <div>
-                <p class="text-sm font-semibold text-slate-900">Allow offers</p>
-                <p class="mt-1 text-sm text-slate-700">
-                  Buyers can make verified offers. When you accept, payment
-                  completes automatically.
-                </p>
-              </div>
-            </label>
-
-            <div class="rounded-lg border border-blue-950/15 bg-white p-4">
-              <label class="text-sm font-medium text-slate-700"
-                >Minimum offer (optional)</label
-              >
-              <div
-                class="mt-2 flex rounded-md border border-blue-950/25 bg-white focus-within:ring-2 focus-within:ring-blue-950/15"
-              >
-                <span class="flex items-center px-3 text-slate-600">$</span>
-                <input
-                  type="number"
-                  inputmode="decimal"
-                  placeholder="0.00"
-                  class="w-full rounded-md px-4 py-3 text-slate-900 outline-none placeholder:text-slate-400"
-                />
-              </div>
-              <p class="mt-2 text-xs text-slate-600">
-                If set, offers below this won’t be allowed.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Photos -->
-        <div>
-          <h2 class="text-lg font-semibold text-slate-900">Photos</h2>
-          <p class="mt-1 text-sm text-slate-600">
-            Add clear photos. Buyers trust what they can see.
-          </p>
-
-          <div
-            class="mt-4 rounded-lg border border-dashed border-blue-950/30 bg-white p-6 text-center"
-          >
-            <p class="text-sm font-medium text-slate-900">Upload images</p>
-            <p class="mt-1 text-sm text-slate-600">
-              PNG, JPG up to ~10MB each (placeholder for now).
-            </p>
-
-            <div class="mt-4">
-              <input
-                type="file"
-                multiple
-                class="block w-full text-sm text-slate-700"
-              />
-            </div>
-          </div>
-        </div>
-
-        <!-- Delivery / Location -->
-        <div>
-          <h2 class="text-lg font-semibold text-slate-900">
-            Pickup / delivery
-          </h2>
-
-          <div class="mt-4 grid gap-4 sm:grid-cols-2">
-            <!-- Delivery option -->
-            <div>
-              <label class="text-sm font-medium text-slate-700">
-                Delivery option
-              </label>
-
-              <div class="relative mt-2">
-                <select
-                  class="w-full appearance-none rounded-md border border-blue-950/25 bg-white px-4 py-3 pr-10 text-slate-900 outline-none focus:border-blue-950 focus:ring-2 focus:ring-blue-950/15"
-                >
-                  <option value="">Select an option</option>
-                  <option>Local pickup</option>
-                  <option>Shipping available</option>
-                  <option>Local pickup or shipping</option>
-                </select>
-
-                <!-- Custom arrow -->
-                <span
-                  class="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-slate-500"
-                >
-                  ▾
-                </span>
-              </div>
-            </div>
-
-            <!-- Location -->
-            <div>
-              <label class="text-sm font-medium text-slate-700">
-                Location (City, State)
-              </label>
-              <input
-                type="text"
-                placeholder="e.g., Omaha, NE"
-                class="mt-2 w-full rounded-md border border-blue-950/25 bg-white px-4 py-3 text-slate-900 outline-none placeholder:text-slate-400 focus:border-blue-950 focus:ring-2 focus:ring-blue-950/15"
-              />
             </div>
           </div>
         </div>
@@ -229,22 +147,22 @@
           class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between"
         >
           <p class="text-xs text-slate-600">
-            By posting, you confirm the item details are accurate.
+            Created date will be set automatically when you publish.
           </p>
 
           <div class="flex gap-3">
             <button
               type="button"
+              (click)="saveDraft()"
               class="rounded-md border border-blue-950/25 bg-white px-5 py-3 text-sm font-semibold text-slate-900 transition hover:bg-slate-100"
             >
               Save draft
             </button>
 
             <button
-              type="button"
-              routerLink="/"
-              (click)="gotClicked()"
-              class="rounded-md bg-blue-950 px-5 py-3 text-sm font-semibold text-slate-50 shadow-sm transition hover:bg-blue-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-950"
+              type="submit"
+              [disabled]="listingForm.invalid"
+              class="rounded-md bg-blue-950 px-5 py-3 text-sm font-semibold text-slate-50 shadow-sm transition hover:bg-blue-900 disabled:opacity-50"
             >
               Publish listing
             </button>
