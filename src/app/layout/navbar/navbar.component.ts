@@ -1,6 +1,7 @@
 import { Component, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-navbar',
@@ -12,6 +13,30 @@ import { RouterLink } from '@angular/router';
 export class NavbarComponent {
   mobileOpen = false;
   dropdownOpen = false;
+
+  constructor(
+    public auth: AuthService,
+    private router: Router,
+  ) {}
+
+  get displayName(): string {
+    const u = this.auth.getUser();
+    return u?.fullName?.trim() || u?.email || '';
+  }
+
+  get loggedIn(): boolean {
+    return this.auth.isLoggedIn();
+  }
+
+  get firstName(): string {
+    const fullName = this.auth.getUser()?.fullName;
+    if (!fullName) return '';
+    return fullName.split(' ')[0]; // take first word only
+  }
+
+  get greeting(): string {
+    return this.firstName ? `Hello, ${this.firstName}` : '';
+  }
 
   toggleMobile() {
     this.mobileOpen = !this.mobileOpen;
@@ -27,6 +52,11 @@ export class NavbarComponent {
   closeAll() {
     this.mobileOpen = false;
     this.dropdownOpen = false;
+  }
+
+  logout() {
+    this.auth.logout();
+    this.router.navigate(['/']);
   }
 
   // Close menus if you tap/click outside

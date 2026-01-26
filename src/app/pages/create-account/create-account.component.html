@@ -6,10 +6,7 @@
         Create your new2me account
       </h1>
       <p class="mt-4 text-base leading-relaxed text-slate-700">
-        Make offers with confidence. When you place an offer, we verify your
-        payment method by placing a temporary authorization/hold. If the seller
-        accepts, the payment completes — so there’s no more “Is this available?”
-        ever again.
+        Create an account to post listings and make real offers with confidence.
       </p>
     </div>
 
@@ -17,207 +14,148 @@
     <div
       class="mt-10 rounded-xl border border-blue-950/20 bg-white p-6 shadow-sm sm:p-8"
     >
-      <form class="space-y-10">
+      <form class="space-y-10" (ngSubmit)="submit()" #f="ngForm">
         <!-- Personal Info -->
         <div>
           <h2 class="text-lg font-semibold text-slate-900">Personal info</h2>
+
           <div class="mt-4 grid gap-4 sm:grid-cols-2">
+            <!-- Full name -->
             <div class="sm:col-span-2">
               <label class="text-sm font-medium text-slate-700"
                 >Full name</label
               >
               <input
                 type="text"
-                class="mt-2 w-full rounded-md border border-blue-950/25 bg-white px-4 py-3 text-slate-900 outline-none ring-0 placeholder:text-slate-400 focus:border-blue-950 focus:outline-none focus:ring-2 focus:ring-blue-950/15"
-                placeholder="Jane Doe"
+                name="fullName"
+                [(ngModel)]="model.fullName"
+                required
                 autocomplete="name"
+                placeholder="Jane Doe"
+                class="mt-2 w-full rounded-md border border-blue-950/25 bg-white px-4 py-3 text-slate-900 outline-none focus:border-blue-950 focus:ring-2 focus:ring-blue-950/15"
               />
             </div>
 
+            <!-- Phone -->
             <div>
-              <label class="text-sm font-medium text-slate-700">Phone</label>
+              <label class="text-sm font-medium text-slate-700"
+                >Phone (optional)</label
+              >
               <input
                 type="tel"
-                class="mt-2 w-full rounded-md border border-blue-950/25 bg-white px-4 py-3 text-slate-900 outline-none placeholder:text-slate-400 focus:border-blue-950 focus:ring-2 focus:ring-blue-950/15"
-                placeholder="(555) 123-4567"
+                name="phone"
+                [(ngModel)]="model.phone"
                 autocomplete="tel"
+                placeholder="(555) 123-4567"
+                class="mt-2 w-full rounded-md border border-blue-950/25 bg-white px-4 py-3 text-slate-900 outline-none focus:border-blue-950 focus:ring-2 focus:ring-blue-950/15"
               />
             </div>
 
+            <!-- Email -->
             <div>
               <label class="text-sm font-medium text-slate-700">Email</label>
               <input
                 type="email"
-                class="mt-2 w-full rounded-md border border-blue-950/25 bg-white px-4 py-3 text-slate-900 outline-none placeholder:text-slate-400 focus:border-blue-950 focus:ring-2 focus:ring-blue-950/15"
-                placeholder="you@example.com"
+                name="email"
+                [(ngModel)]="model.email"
+                required
                 autocomplete="email"
+                placeholder="you@example.com"
+                class="mt-2 w-full rounded-md border border-blue-950/25 bg-white px-4 py-3 text-slate-900 outline-none focus:border-blue-950 focus:ring-2 focus:ring-blue-950/15"
               />
             </div>
+
+            <!-- Password -->
+            <div>
+              <label class="text-sm font-medium text-slate-700">Password</label>
+              <input
+                type="password"
+                name="password"
+                [(ngModel)]="model.password"
+                required
+                minlength="8"
+                autocomplete="new-password"
+                placeholder="At least 8 characters"
+                class="mt-2 w-full rounded-md border border-blue-950/25 bg-white px-4 py-3 text-slate-900 outline-none focus:border-blue-950 focus:ring-2 focus:ring-blue-950/15"
+              />
+            </div>
+
+            <!-- Confirm password -->
+            <div>
+              <label class="text-sm font-medium text-slate-700"
+                >Confirm password</label
+              >
+              <input
+                type="password"
+                name="confirmPassword"
+                [(ngModel)]="confirmPassword"
+                required
+                autocomplete="new-password"
+                placeholder="Re-enter password"
+                class="mt-2 w-full rounded-md border border-blue-950/25 bg-white px-4 py-3 text-slate-900 outline-none focus:border-blue-950 focus:ring-2 focus:ring-blue-950/15"
+              />
+            </div>
+
+            <!-- Password mismatch -->
+            <p
+              *ngIf="passwordMismatch"
+              class="sm:col-span-2 text-sm text-red-600"
+            >
+              Passwords do not match.
+            </p>
           </div>
         </div>
 
-        <!-- Address -->
+        <!-- Address (display-only for now) -->
         <div>
           <h2 class="text-lg font-semibold text-slate-900">Address</h2>
           <p class="mt-1 text-sm text-slate-600">
-            Used for receipts, tax rules, and fraud prevention when offers are
-            placed.
+            Address details will be used later for receipts and verification.
           </p>
 
           <div class="mt-4 grid gap-4 sm:grid-cols-2">
-            <div class="sm:col-span-2">
-              <label class="text-sm font-medium text-slate-700"
-                >Street address</label
-              >
-              <input
-                type="text"
-                class="mt-2 w-full rounded-md border border-blue-950/25 bg-white px-4 py-3 text-slate-900 outline-none placeholder:text-slate-400 focus:border-blue-950 focus:ring-2 focus:ring-blue-950/15"
-                placeholder="123 Main St"
-                autocomplete="street-address"
-              />
-            </div>
-
-            <div>
-              <label class="text-sm font-medium text-slate-700">City</label>
-              <input
-                type="text"
-                class="mt-2 w-full rounded-md border border-blue-950/25 bg-white px-4 py-3 text-slate-900 outline-none placeholder:text-slate-400 focus:border-blue-950 focus:ring-2 focus:ring-blue-950/15"
-                placeholder="Omaha"
-                autocomplete="address-level2"
-              />
-            </div>
-
-            <div>
-              <label class="text-sm font-medium text-slate-700">State</label>
-              <input
-                type="text"
-                class="mt-2 w-full rounded-md border border-blue-950/25 bg-white px-4 py-3 text-slate-900 outline-none placeholder:text-slate-400 focus:border-blue-950 focus:ring-2 focus:ring-blue-950/15"
-                placeholder="NE"
-                autocomplete="address-level1"
-              />
-            </div>
-
-            <div>
-              <label class="text-sm font-medium text-slate-700">ZIP</label>
-              <input
-                type="text"
-                class="mt-2 w-full rounded-md border border-blue-950/25 bg-white px-4 py-3 text-slate-900 outline-none placeholder:text-slate-400 focus:border-blue-950 focus:ring-2 focus:ring-blue-950/15"
-                placeholder="68102"
-                autocomplete="postal-code"
-              />
-            </div>
-
-            <div>
-              <label class="text-sm font-medium text-slate-700">Country</label>
-              <input
-                type="text"
-                class="mt-2 w-full rounded-md border border-blue-950/25 bg-white px-4 py-3 text-slate-900 outline-none placeholder:text-slate-400 focus:border-blue-950 focus:ring-2 focus:ring-blue-950/15"
-                placeholder="United States"
-                autocomplete="country-name"
-              />
-            </div>
+            <input
+              class="rounded-md border px-4 py-3"
+              placeholder="Street address"
+              disabled
+            />
+            <input
+              class="rounded-md border px-4 py-3"
+              placeholder="City"
+              disabled
+            />
+            <input
+              class="rounded-md border px-4 py-3"
+              placeholder="State"
+              disabled
+            />
+            <input
+              class="rounded-md border px-4 py-3"
+              placeholder="ZIP"
+              disabled
+            />
           </div>
         </div>
 
-        <!-- Payment / Bank Info -->
-        <div>
-          <h2 class="text-lg font-semibold text-slate-900">Payment method</h2>
-
-          <div
-            class="mt-3 rounded-lg border border-blue-950/15 bg-slate-50 p-4"
-          >
-            <p class="text-sm leading-relaxed text-slate-700">
-              <span class="font-semibold text-slate-900"
-                >Why we ask for payment info:</span
-              >
-              new2me is offer-based. When you make an offer, we place a
-              temporary authorization (a hold) to confirm funds are available.
-              If the seller accepts, the charge completes automatically. If they
-              decline or the offer expires, the hold is released. That means no
-              more “Is this available?” — offers are real.
-            </p>
-            <p class="mt-3 text-xs text-slate-600">
-              Tip: In production, card/bank details should be collected and
-              tokenized by a trusted payments provider (e.g., Stripe) so your
-              app never stores sensitive payment data.
-            </p>
-          </div>
-
-          <div class="mt-4 grid gap-4 sm:grid-cols-2">
-            <div class="sm:col-span-2">
-              <label class="text-sm font-medium text-slate-700"
-                >Account holder name</label
-              >
-              <input
-                type="text"
-                class="mt-2 w-full rounded-md border border-blue-950/25 bg-white px-4 py-3 text-slate-900 outline-none placeholder:text-slate-400 focus:border-blue-950 focus:ring-2 focus:ring-blue-950/15"
-                placeholder="Jane Doe"
-              />
-            </div>
-
-            <div>
-              <label class="text-sm font-medium text-slate-700"
-                >Bank name</label
-              >
-              <input
-                type="text"
-                class="mt-2 w-full rounded-md border border-blue-950/25 bg-white px-4 py-3 text-slate-900 outline-none placeholder:text-slate-400 focus:border-blue-950 focus:ring-2 focus:ring-blue-950/15"
-                placeholder="Your Bank"
-              />
-            </div>
-
-            <div>
-              <label class="text-sm font-medium text-slate-700"
-                >Account type</label
-              >
-              <select
-                class="mt-2 w-full rounded-md border border-blue-950/25 bg-white px-4 py-3 text-slate-900 outline-none focus:border-blue-950 focus:ring-2 focus:ring-blue-950/15"
-              >
-                <option>Checking</option>
-                <option>Savings</option>
-              </select>
-            </div>
-
-            <div>
-              <label class="text-sm font-medium text-slate-700"
-                >Routing number</label
-              >
-              <input
-                inputmode="numeric"
-                class="mt-2 w-full rounded-md border border-blue-950/25 bg-white px-4 py-3 text-slate-900 outline-none placeholder:text-slate-400 focus:border-blue-950 focus:ring-2 focus:ring-blue-950/15"
-                placeholder="XXXXXXXXX"
-              />
-            </div>
-
-            <div>
-              <label class="text-sm font-medium text-slate-700"
-                >Account number</label
-              >
-              <input
-                inputmode="numeric"
-                class="mt-2 w-full rounded-md border border-blue-950/25 bg-white px-4 py-3 text-slate-900 outline-none placeholder:text-slate-400 focus:border-blue-950 focus:ring-2 focus:ring-blue-950/15"
-                placeholder="XXXXXXXXXXXX"
-              />
-            </div>
-          </div>
-        </div>
-
-        <!-- Footer actions -->
+        <!-- Footer -->
         <div
-          class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between"
+          class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
         >
           <p class="text-xs text-slate-600">
             By creating an account, you agree to our Terms and Privacy Policy.
           </p>
 
           <button
-            type="button"
-            routerLink="/"
-            class="inline-flex justify-center rounded-md bg-blue-950 px-6 py-3 text-sm font-semibold text-slate-50 shadow-sm transition hover:bg-blue-900"
+            type="submit"
+            [disabled]="f.invalid || passwordMismatch || loading"
+            class="inline-flex justify-center rounded-md bg-blue-950 px-6 py-3 text-sm font-semibold text-slate-50 transition hover:bg-blue-900 disabled:opacity-50"
           >
-            Create account
+            {{ loading ? "Creating account…" : "Create account" }}
           </button>
         </div>
+
+        <!-- Error -->
+        <p *ngIf="error" class="text-sm text-red-600">{{ error }}</p>
       </form>
     </div>
   </div>

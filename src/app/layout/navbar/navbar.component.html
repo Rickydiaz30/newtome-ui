@@ -11,20 +11,43 @@
 
       <!-- Desktop links -->
       <div class="hidden items-center gap-6 md:flex">
+        <a routerLink="/" class="hover:text-slate-300" (click)="closeAll()">
+          Home
+        </a>
+
         <a
-          routerLink="/"
+          routerLink="/browse"
           class="hover:text-slate-300"
           (click)="closeAll()"
-          href="#"
-          >Home</a
         >
+          Shop Now
+        </a>
 
-        <a routerLink="/browse" class="hover:text-slate-300" href=""
-          >Shop Now</a
+        <a routerLink="/sell" class="hover:text-slate-300" (click)="closeAll()">
+          Sell
+        </a>
+
+        <!-- Logged out: show Login -->
+        <a
+          *ngIf="!loggedIn"
+          routerLink="/login"
+          class="hover:text-slate-300"
+          (click)="closeAll()"
         >
-        <a routerLink="/sell" class="hover:text-slate-300" href="">Sell</a>
+          Login
+        </a>
 
-        <!-- Desktop dropdown -->
+        <!-- Logged in: show Hello, FirstName (far right-ish, before dropdown) -->
+        <a
+          *ngIf="loggedIn"
+          routerLink="/account"
+          class="cursor-pointer text-sm text-slate-100/90 hover:text-white"
+          (click)="closeAll()"
+        >
+          <span class="text-sky-500">Hello,</span> {{ displayName }}
+        </a>
+
+        <!-- ✅ More dropdown ALWAYS visible -->
         <div class="relative">
           <button
             type="button"
@@ -45,28 +68,57 @@
             class="absolute right-0 mt-2 w-48 rounded-lg bg-white py-2 text-slate-800 shadow-lg ring-1 ring-black/10"
             (click)="$event.stopPropagation()"
           >
-            <a
-              routerLink="/account"
-              (click)="closeAll()"
-              class="block px-4 py-2 hover:bg-slate-100"
-              href="#"
-              >Account</a
-            >
-            <a class="block px-4 py-2 hover:bg-slate-100" href="#">Settings</a>
-            <div class="my-2 h-px bg-slate-200"></div>
-            <button
-              class="w-full px-4 py-2 text-left hover:bg-slate-100"
-              routerLink="/create-account"
-              (click)="closeAll()"
-              type="button"
-            >
-              Create Account
-            </button>
+            <!-- Logged OUT menu -->
+            <ng-container *ngIf="!loggedIn; else loggedInMenu">
+              <a
+                routerLink="/create-account"
+                (click)="closeAll()"
+                class="block px-4 py-2 hover:bg-slate-100"
+              >
+                Create Account
+              </a>
+              <a
+                routerLink="/about"
+                (click)="closeAll()"
+                class="block px-4 py-2 hover:bg-slate-100"
+              >
+                About
+              </a>
+              <a
+                routerLink="/contact"
+                (click)="closeAll()"
+                class="block px-4 py-2 hover:bg-slate-100"
+              >
+                Contact
+              </a>
+            </ng-container>
+
+            <!-- Logged IN menu -->
+            <ng-template #loggedInMenu>
+              <a
+                routerLink="/account"
+                (click)="closeAll()"
+                class="block px-4 py-2 hover:bg-slate-100"
+              >
+                Account
+              </a>
+              <a class="block px-4 py-2 hover:bg-slate-100" (click)="closeAll()"
+                >Settings</a
+              >
+              <div class="my-2 h-px bg-slate-200"></div>
+              <button
+                class="w-full px-4 py-2 text-left hover:bg-slate-100"
+                type="button"
+                (click)="logout()"
+              >
+                Log out
+              </button>
+            </ng-template>
           </div>
         </div>
       </div>
 
-      <!-- Mobile hamburger (morphs into X) -->
+      <!-- Mobile hamburger -->
       <button
         type="button"
         class="relative inline-flex h-10 w-10 items-center justify-center rounded-md hover:bg-slate-800 md:hidden"
@@ -103,11 +155,11 @@
       </button>
     </div>
 
-    <!-- Mobile menu panel (overlay + slow smooth slide) -->
+    <!-- Mobile panel -->
     <div
       class="absolute left-0 top-full z-50 w-full overflow-hidden md:hidden transition-all duration-700 ease-in-out transform"
       [class.max-h-0]="!mobileOpen"
-      [class.max-h-[500px]]="mobileOpen"
+      [class.max-h-[560px]]="mobileOpen"
       [class.opacity-0]="!mobileOpen"
       [class.opacity-100]="mobileOpen"
       [class.-translate-y-2]="!mobileOpen"
@@ -118,17 +170,20 @@
         <div
           class="space-y-1 rounded-lg bg-blue-950/95 p-2 shadow-lg ring-1 ring-black/10"
         >
+          <!-- Logged-in header -->
+          <div
+            *ngIf="loggedIn"
+            class="rounded-md px-3 py-2 text-sm text-slate-100/90"
+          >
+            <span class="text-sky-500">Hello, </span>
+            <span class="font-semibold">{{ displayName }}</span>
+          </div>
+
           <a
             routerLink="/"
             (click)="closeAll()"
             class="block rounded-md px-3 py-2 hover:bg-blue-900"
             >Home</a
-          >
-          <a
-            routerLink="/create-account"
-            (click)="closeAll()"
-            class="block rounded-md px-3 py-2 hover:bg-blue-900"
-            >Create Account</a
           >
           <a
             routerLink="/browse"
@@ -143,10 +198,36 @@
             >Sell</a
           >
 
-          <!-- Mobile dropdown -->
+          <!-- Auth links -->
+          <ng-container *ngIf="!loggedIn; else mobileLoggedIn">
+            <a
+              routerLink="/login"
+              (click)="closeAll()"
+              class="block rounded-md px-3 py-2 hover:bg-blue-900"
+              >Login</a
+            >
+          </ng-container>
+
+          <ng-template #mobileLoggedIn>
+            <a
+              routerLink="/account"
+              (click)="closeAll()"
+              class="block rounded-md px-3 py-2 hover:bg-blue-900"
+              >Account</a
+            >
+            <button
+              type="button"
+              class="block w-full rounded-md px-3 py-2 text-left hover:bg-blue-900"
+              (click)="logout()"
+            >
+              Log out
+            </button>
+          </ng-template>
+
+          <!-- ✅ Mobile “More” (always visible) -->
           <button
             type="button"
-            class="flex w-full items-center justify-between rounded-md px-3 py-2 hover:bg-slate-700"
+            class="mt-2 flex w-full items-center justify-between rounded-md px-3 py-2 hover:bg-slate-700"
             (click)="toggleDropdown(); $event.stopPropagation()"
             [attr.aria-expanded]="dropdownOpen"
           >
@@ -158,25 +239,46 @@
             >
           </button>
 
-          <!-- Mobile dropdown panel (smooth open/close) -->
           <div
             class="overflow-hidden transition-all duration-500 ease-in-out"
             [class.max-h-0]="!dropdownOpen"
-            [class.max-h-40]="dropdownOpen"
+            [class.max-h-56]="dropdownOpen"
           >
             <div class="space-y-1 pl-2">
-              <a class="block rounded-md px-3 py-2 hover:bg-slate-700"
-                >Account</a
-              >
-              <a class="block rounded-md px-3 py-2 hover:bg-slate-700"
-                >Settings</a
-              >
-              <button
-                class="block w-full rounded-md px-3 py-2 text-left hover:bg-slate-700"
-                type="button"
-              >
-                Sign out
-              </button>
+              <!-- Logged OUT menu -->
+              <ng-container *ngIf="!loggedIn; else mobileMoreLoggedIn">
+                <a
+                  routerLink="/create-account"
+                  (click)="closeAll()"
+                  class="block rounded-md px-3 py-2 hover:bg-slate-700"
+                  >Create Account</a
+                >
+                <a
+                  routerLink="/about"
+                  (click)="closeAll()"
+                  class="block rounded-md px-3 py-2 hover:bg-slate-700"
+                  >About</a
+                >
+                <a
+                  routerLink="/contact"
+                  (click)="closeAll()"
+                  class="block rounded-md px-3 py-2 hover:bg-slate-700"
+                  >Contact</a
+                >
+              </ng-container>
+
+              <!-- Logged IN menu -->
+              <ng-template #mobileMoreLoggedIn>
+                <a
+                  routerLink="/account"
+                  (click)="closeAll()"
+                  class="block rounded-md px-3 py-2 hover:bg-slate-700"
+                  >Account</a
+                >
+                <a class="block rounded-md px-3 py-2 hover:bg-slate-700"
+                  >Settings</a
+                >
+              </ng-template>
             </div>
           </div>
         </div>

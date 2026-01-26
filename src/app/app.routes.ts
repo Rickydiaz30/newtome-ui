@@ -7,6 +7,7 @@ import { CreateAccountComponent } from './pages/create-account/create-account.co
 import { LearnMoreComponent } from './pages/learn-more/learn-more.component';
 import { AboutComponent } from './pages/about/about.component';
 import { ContactComponent } from './pages/contact/contact.component';
+import { LoginComponent } from './pages/login/login.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -17,4 +18,5 @@ export const routes: Routes = [
   { path: 'learn-more', component: LearnMoreComponent },
   { path: 'about', component: AboutComponent },
   { path: 'contact', component: ContactComponent },
+  { path: 'login', component: LoginComponent },
 ];

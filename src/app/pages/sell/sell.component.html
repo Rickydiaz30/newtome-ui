@@ -142,6 +142,23 @@
           </div>
         </div>
 
+        <!-- Feedback -->
+        <div *ngIf="errorMsg || successMsg" class="space-y-2">
+          <div
+            *ngIf="errorMsg"
+            class="rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800"
+          >
+            {{ errorMsg }}
+          </div>
+
+          <div
+            *ngIf="successMsg"
+            class="rounded-md border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800"
+          >
+            {{ successMsg }}
+          </div>
+        </div>
+
         <!-- Actions -->
         <div
           class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between"
@@ -150,21 +167,23 @@
             Created date will be set automatically when you publish.
           </p>
 
-          <div class="flex gap-3">
+          <div class="flex items-center gap-3">
             <button
               type="button"
               (click)="saveDraft()"
-              class="rounded-md border border-blue-950/25 bg-white px-5 py-3 text-sm font-semibold text-slate-900 transition hover:bg-slate-100"
+              [disabled]="submitting"
+              class="rounded-md border border-blue-950/25 bg-white px-5 py-3 text-sm font-semibold text-slate-900 transition hover:bg-slate-100 disabled:opacity-50"
             >
               Save draft
             </button>
 
             <button
               type="submit"
-              [disabled]="listingForm.invalid"
+              [disabled]="listingForm.invalid || submitting"
               class="rounded-md bg-blue-950 px-5 py-3 text-sm font-semibold text-slate-50 shadow-sm transition hover:bg-blue-900 disabled:opacity-50"
             >
-              Publish listing
+              <span *ngIf="!submitting">Publish listing</span>
+              <span *ngIf="submitting">Saving...</span>
             </button>
           </div>
         </div>
