@@ -21,7 +21,8 @@ export class NavbarComponent {
 
   get displayName(): string {
     const u = this.auth.getUser();
-    return u?.fullName?.trim() || u?.email || '';
+    console.log(this.auth.getUser());
+    return u?.firstName?.trim() || u?.email || '';
   }
 
   get loggedIn(): boolean {
@@ -29,9 +30,9 @@ export class NavbarComponent {
   }
 
   get firstName(): string {
-    const fullName = this.auth.getUser()?.fullName;
-    if (!fullName) return '';
-    return fullName.split(' ')[0]; // take first word only
+    const firstName = this.auth.getUser()?.firstName;
+    if (!firstName) return '';
+    return firstName;
   }
 
   get greeting(): string {

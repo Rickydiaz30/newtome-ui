@@ -2,20 +2,23 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { tap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
+import { switchMap } from 'rxjs';
 
 type LoginResponse = { message: string; token: string };
 type RegisterResponse = { message: string };
 
 type JwtPayload = {
   sub?: string; // email (subject)
-  fullName?: string;
   exp?: number;
   iat?: number;
 };
 
 export type CurrentUser = {
+  id: number;
+  firstName: string;
+  lastName: string;
   email: string;
-  fullName?: string; // will be undefined until you add it to JWT or create /me endpoint
+  phone: string | null;
 };
 
 @Injectable({ providedIn: 'root' })
@@ -27,11 +30,11 @@ export class AuthService {
 
   constructor(private http: HttpClient) {
     // Restore user on refresh (if token already exists)
-    this.user = this.buildUserFromToken(this.getToken());
   }
 
   register(payload: {
-    fullName: string;
+    firstName: string;
+    lastName: string;
     email: string;
     password: string;
     phone?: string | null;
@@ -42,15 +45,10 @@ export class AuthService {
     );
   }
 
-  login(payload: {
-    email: string;
-    password: string;
-  }): Observable<LoginResponse> {
+  login(payload: { email: string; password: string }): Observable<CurrentUser> {
     return this.http.post<LoginResponse>(`${this.baseUrl}/login`, payload).pipe(
-      tap((res) => {
-        this.setToken(res.token);
-        this.user = this.buildUserFromToken(res.token);
-      }),
+      tap((res) => this.setToken(res.token)),
+      switchMap(() => this.loadCurrentUser()),
     );
   }
 
@@ -68,29 +66,21 @@ export class AuthService {
   }
 
   getUser(): CurrentUser | null {
-    // Lazy rebuild in case something changed
-    if (!this.user) {
-      this.user = this.buildUserFromToken(this.getToken());
-    }
     return this.user;
+  }
+
+  loadCurrentUser(): Observable<CurrentUser> {
+    return this.http
+      .get<CurrentUser>('http://localhost:8081/api/users/me')
+      .pipe(
+        tap((user) => {
+          this.user = user;
+        }),
+      );
   }
 
   private setToken(token: string): void {
     localStorage.setItem(this.tokenKey, token);
-  }
-
-  private buildUserFromToken(token: string | null): CurrentUser | null {
-    if (!token) return null;
-
-    const payload = this.decodeJwt(token);
-    const email = payload?.sub;
-
-    if (!email) return null;
-
-    return {
-      email,
-      fullName: payload.fullName, // ✅ THIS was missing
-    };
   }
 
   private decodeJwt(token: string): JwtPayload | null {

@@ -6,7 +6,8 @@ import { AuthService } from '../../services/auth.service';
 
 type MeResponse = {
   id: number;
-  fullName: string;
+  firstName: string;
+  lastName: string;
   email: string;
   phone: string | null;
 };

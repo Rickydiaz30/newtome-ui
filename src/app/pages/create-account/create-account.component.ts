@@ -13,7 +13,8 @@ import { AuthService } from '../../services/auth.service';
 })
 export class CreateAccountComponent {
   model = {
-    fullName: '',
+    firstName: '',
+    lastName: '',
     phone: '',
     email: '',
     password: '',
@@ -49,7 +50,8 @@ export class CreateAccountComponent {
 
     this.auth
       .register({
-        fullName: this.model.fullName.trim(),
+        firstName: this.model.firstName.trim(),
+        lastName: this.model.lastName.trim(),
         email: this.model.email.trim(),
         password: this.model.password,
         phone: this.model.phone?.trim() || null,
