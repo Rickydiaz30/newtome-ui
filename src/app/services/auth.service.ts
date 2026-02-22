@@ -29,7 +29,11 @@ export class AuthService {
   private user: CurrentUser | null = null;
 
   constructor(private http: HttpClient) {
-    // Restore user on refresh (if token already exists)
+    if (this.getToken()) {
+      this.loadCurrentUser().subscribe({
+        error: () => this.logout(), // token invalid/expired → clear it
+      });
+    }
   }
 
   register(payload: {

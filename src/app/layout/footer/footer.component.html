@@ -2,7 +2,9 @@
   <div class="mx-auto max-w-6xl">
     <div class="flex flex-col items-center text-center">
       <!-- Brand -->
-      <h3 class="cursor-pointer font-bold text-slate-50">new2me</h3>
+      <h3 class="cursor-pointer font-bold text-slate-50">
+        new<span class="text-sky-500">2</span>me
+      </h3>
 
       <p class="mt-4 max-w-md text-sm text-slate-50">
         A modern marketplace for discovering and giving new life to gently used
@@ -14,20 +16,39 @@
         class="cursor-pointer mt-8 flex flex-wrap justify-center gap-6 text-sm"
       >
         <a
+          routerLink="/"
+          routerLinkActive="text-sky-400"
+          [routerLinkActiveOptions]="{ exact: true }"
+          class="text-slate-50 hover:underline"
+        >
+          Home
+        </a>
+        <a
           routerLink="/browse"
-          (click)="gotClicked()"
+          routerLinkActive="text-sky-400"
           class="text-slate-50 hover:underline"
         >
           Browse
         </a>
         <a
           routerLink="/sell"
-          class="cursor-pointer text-slate-50 hover:underline"
+          routerLinkActive="text-sky-400"
+          class="text-slate-50 hover:underline"
         >
           Sell
         </a>
-        <a routerLink="/about" class="text-slate-50 hover:underline"> About </a>
-        <a routerLink="/contact" class="text-slate-50 hover:underline">
+        <a
+          routerLink="/about"
+          routerLinkActive="text-sky-400"
+          class="text-slate-50 hover:underline"
+        >
+          About
+        </a>
+        <a
+          routerLink="/contact"
+          routerLinkActive="text-sky-400"
+          class="text-slate-50 hover:underline"
+        >
           Contact
         </a>
       </div>

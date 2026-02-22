@@ -31,7 +31,7 @@ export class LoginComponent {
     this.auth.login(this.model).subscribe({
       next: () => {
         this.loading = false;
-        this.router.navigateByUrl('/account'); // or '/sell'
+        this.router.navigateByUrl('/browse', { replaceUrl: true }); // or '/sell'
       },
       error: (err) => {
         this.loading = false;
