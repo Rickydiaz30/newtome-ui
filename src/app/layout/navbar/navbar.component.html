@@ -22,7 +22,7 @@
         </a>
 
         <a
-          routerLink="/browse"
+          routerLink="/shop"
           routerLinkActive="!text-sky-400"
           [routerLinkActiveOptions]="{ exact: true }"
           class="hover:text-slate-300 transition-colors"
@@ -32,6 +32,7 @@
         </a>
 
         <a
+          *ngIf="loggedIn"
           routerLink="/sell"
           routerLinkActive="!text-sky-400"
           [routerLinkActiveOptions]="{ exact: true }"
@@ -39,6 +40,15 @@
           (click)="closeAll()"
         >
           Sell
+        </a>
+
+        <a
+          routerLink="/about"
+          routerLinkActive="!text-sky-400"
+          (click)="closeAll()"
+          class="hover:text-slate-300"
+        >
+          About
         </a>
 
         <!-- Logged out: show Login -->
@@ -93,20 +103,6 @@
               >
                 Create Account
               </a>
-              <a
-                routerLink="/about"
-                (click)="closeAll()"
-                class="block px-4 py-2 hover:bg-slate-100"
-              >
-                About
-              </a>
-              <a
-                routerLink="/contact"
-                (click)="closeAll()"
-                class="block px-4 py-2 hover:bg-slate-100"
-              >
-                Contact
-              </a>
             </ng-container>
 
             <!-- Logged IN menu -->
@@ -125,7 +121,7 @@
               <button
                 class="w-full px-4 py-2 text-left hover:bg-slate-100"
                 type="button"
-                (click)="logout()"
+                (click)="logout(); closeAll()"
               >
                 Log out
               </button>
@@ -202,7 +198,7 @@
             >Home</a
           >
           <a
-            routerLink="/browse"
+            routerLink="/shop"
             (click)="closeAll()"
             class="block rounded-md px-3 py-2 hover:bg-blue-900"
             >Shop Now</a
@@ -234,7 +230,7 @@
             <button
               type="button"
               class="block w-full rounded-md px-3 py-2 text-left hover:bg-blue-900"
-              (click)="logout()"
+              (click)="logout(); closeAll()"
             >
               Log out
             </button>

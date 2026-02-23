@@ -1,0 +1,48 @@
+<section class="p-12">
+  <h1 class="text-3xl font-bold text-center">Shop</h1>
+  <p class="mt-4 text-center text-slate-600">Listings</p>
+
+  <div *ngIf="loading" class="mt-8 text-center text-slate-500">
+    Loading listings…
+  </div>
+
+  <div
+    *ngIf="!loading && listings.length === 0"
+    class="mt-8 text-center text-slate-500"
+  >
+    No listings yet.
+  </div>
+
+  <ul
+    *ngIf="!loading && listings.length > 0"
+    class="mt-10 space-y-4 max-w-2xl mx-auto"
+  >
+    <li
+      *ngFor="let listing of listings"
+      class="rounded-md border border-slate-200 p-4 flex items-center justify-between"
+    >
+      <!-- Left side (existing content stays stacked) -->
+      <div>
+        <h2 class="text-lg font-semibold text-slate-900">
+          {{ listing.title }}
+        </h2>
+
+        <p class="mt-1 text-slate-700">
+          ${{ listing.price }} • {{ listing.city }}
+        </p>
+
+        <p class="mt-1 text-sm text-slate-600">
+          {{ listing.category.name }} • Posted
+          {{ listing.createdAt | date: "mediumDate" }}
+        </p>
+      </div>
+
+      <!-- Right side thumbnail -->
+      <img
+        [src]="listing.imageUrl || 'assets/images/ninjaBlender.webp'"
+        alt="Listing thumbnail"
+        class="w-20 h-20 object-cover rounded-md ml-4"
+      />
+    </li>
+  </ul>
+</section>

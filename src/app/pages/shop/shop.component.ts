@@ -1,32 +1,22 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-
-type Listing = {
-  id: number;
-  title: string;
-  price: number;
-  city: string;
-  createdAt: string;
-  category: {
-    id: number;
-    name: string;
-  };
-};
+import { ListingService } from 'src/app/services/listing-service.service';
+import { Listing } from 'src/app/models/listing.model';
 
 @Component({
-  selector: 'app-browse',
+  selector: 'app-shop',
   standalone: true,
   imports: [CommonModule, HttpClientModule],
-  templateUrl: './browse.component.html',
+  templateUrl: './shop.component.html',
 })
-export class BrowseComponent implements OnInit {
+export class ShopComponent implements OnInit {
   private listingsUrl = 'http://localhost:8081/api/listings';
 
   listings: Listing[] = [];
   loading = false;
 
-  constructor(private http: HttpClient) {}
+  constructor(private listingService: ListingService) {}
 
   ngOnInit(): void {
     this.loadListings();
@@ -35,7 +25,7 @@ export class BrowseComponent implements OnInit {
   loadListings() {
     this.loading = true;
 
-    this.http.get<Listing[]>(this.listingsUrl).subscribe({
+    this.listingService.getAll().subscribe({
       next: (data) => {
         this.listings = data;
         this.loading = false;

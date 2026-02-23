@@ -1,10 +1,9 @@
 import { Component, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
-import { HeroComponent } from './pages/home/sections/hero/hero.component';
+
 import { NavbarComponent } from './layout/navbar/navbar.component';
-import { SectionOneComponent } from './pages/home/sections/section-one/section-one.component';
-import { LogoComponent } from './pages/home/sections/logo/logo.component';
+
 import { FooterComponent } from './layout/footer/footer.component';
 import { HomeComponent } from './pages/home/home.component';
 
@@ -14,10 +13,7 @@ import { HomeComponent } from './pages/home/home.component';
   imports: [
     CommonModule,
     RouterOutlet,
-    HeroComponent,
     NavbarComponent,
-    SectionOneComponent,
-    LogoComponent,
     FooterComponent,
     HomeComponent,
   ],

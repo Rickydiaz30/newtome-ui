@@ -17,39 +17,35 @@
       >
         <a
           routerLink="/"
-          routerLinkActive="text-sky-400"
+          routerLinkActive="!text-sky-400"
           [routerLinkActiveOptions]="{ exact: true }"
           class="text-slate-50 hover:underline"
         >
           Home
         </a>
         <a
-          routerLink="/browse"
-          routerLinkActive="text-sky-400"
+          routerLink="/shop"
+          routerLinkActive="!text-sky-400"
+          [routerLinkActiveOptions]="{ exact: true }"
           class="text-slate-50 hover:underline"
         >
-          Browse
+          Shop
         </a>
         <a
           routerLink="/sell"
-          routerLinkActive="text-sky-400"
+          routerLinkActive="!text-sky-400"
+          [routerLinkActiveOptions]="{ exact: true }"
           class="text-slate-50 hover:underline"
         >
           Sell
         </a>
         <a
           routerLink="/about"
-          routerLinkActive="text-sky-400"
+          routerLinkActive="!text-sky-400"
+          [routerLinkActiveOptions]="{ exact: true }"
           class="text-slate-50 hover:underline"
         >
           About
-        </a>
-        <a
-          routerLink="/contact"
-          routerLinkActive="text-sky-400"
-          class="text-slate-50 hover:underline"
-        >
-          Contact
         </a>
       </div>
 

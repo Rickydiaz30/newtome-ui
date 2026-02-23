@@ -4,6 +4,7 @@ import { RouterLink, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { finalize } from 'rxjs/operators';
+import { ListingService } from 'src/app/services/listing-service.service';
 
 type Category = {
   id: number;
@@ -23,7 +24,6 @@ type ListingStatus = 'ACTIVE' | 'DRAFT';
 })
 export class SellComponent implements OnInit {
   private categoriesUrl = 'http://localhost:8081/api/categories';
-  private listingsUrl = 'http://localhost:8081/api/listings';
 
   model = {
     title: '',
@@ -33,6 +33,7 @@ export class SellComponent implements OnInit {
     city: '',
     status: 'ACTIVE' as ListingStatus,
     categoryId: null as number | null,
+    imageUrl: '',
   };
 
   categories: Array<{ id: number; name: string }> = [];
@@ -43,7 +44,8 @@ export class SellComponent implements OnInit {
   successMsg = '';
 
   constructor(
-    private http: HttpClient,
+    private http: HttpClient, // still used for categories
+    private listingService: ListingService,
     private router: Router,
   ) {}
 
@@ -66,12 +68,10 @@ export class SellComponent implements OnInit {
             .sort((a, b) => a.name.localeCompare(b.name))
             .map((c) => ({ id: c.id, name: c.name }));
 
-          // Optional: if nothing came back
           if (this.categories.length === 0) {
             this.errorMsg = 'No categories available.';
           }
         },
-
         error: (err) => {
           console.error('Failed to load categories', err);
           this.errorMsg = 'Failed to load categories. Try again.';
@@ -80,7 +80,6 @@ export class SellComponent implements OnInit {
   }
 
   private isValidForSubmit(): boolean {
-    // Keep this simple for now—just prevent totally empty listings.
     if (!this.model.title.trim()) return false;
     if (!this.model.description.trim()) return false;
     if (!this.model.city.trim()) return false;
@@ -94,7 +93,6 @@ export class SellComponent implements OnInit {
 
     if (this.submitting) return;
 
-    // Only enforce validation for ACTIVE submits (drafts can be looser if you want)
     if (this.model.status === 'ACTIVE' && !this.isValidForSubmit()) {
       this.errorMsg = 'Please fill in Title, Description, City, and Category.';
       return;
@@ -106,14 +104,15 @@ export class SellComponent implements OnInit {
       title: this.model.title,
       description: this.model.description,
       color: this.model.color,
-      price: this.model.price,
+      price: this.model.price ?? undefined,
       city: this.model.city,
-      status: this.model.status, // ✅ send status
-      categoryId: this.model.categoryId,
+      status: this.model.status,
+      categoryId: this.model.categoryId ?? undefined,
+      imageUrl: this.model.imageUrl || 'assets/images/blueLogo.png',
     };
 
-    this.http
-      .post(this.listingsUrl, payload)
+    this.listingService
+      .create(payload)
       .pipe(finalize(() => (this.submitting = false)))
       .subscribe({
         next: (response) => {
@@ -123,16 +122,13 @@ export class SellComponent implements OnInit {
             this.model.status === 'DRAFT' ? 'Draft saved.' : 'Listing created.';
 
           if (this.model.status === 'ACTIVE') {
-            this.router.navigate(['/browse']).then((ok) => {
-              console.log('navigate to /browse ok?', ok);
-
+            this.router.navigate(['/shop']).then((ok) => {
               if (ok) {
                 this.resetForm();
               }
             });
           }
         },
-
         error: (err) => {
           console.error('Error creating listing:', err);
           this.errorMsg = 'Something went wrong saving your listing.';
@@ -141,11 +137,10 @@ export class SellComponent implements OnInit {
   }
 
   saveDraft() {
-    // Temporarily set to DRAFT, submit, then reset it back to ACTIVE for next time
     const previousStatus = this.model.status;
     this.model.status = 'DRAFT';
     this.submit();
-    this.model.status = previousStatus; // ✅ prevents “sticky draft” behavior
+    this.model.status = previousStatus;
   }
 
   resetForm() {
@@ -157,6 +152,7 @@ export class SellComponent implements OnInit {
       city: '',
       status: 'ACTIVE',
       categoryId: null,
+      imageUrl: '',
     };
   }
 }

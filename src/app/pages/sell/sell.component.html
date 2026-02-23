@@ -139,6 +139,20 @@
                 class="mt-2 w-full rounded-md border border-blue-950/25 bg-white px-4 py-3 text-slate-900 outline-none placeholder:text-slate-400 focus:border-blue-950 focus:ring-2 focus:ring-blue-950/15"
               ></textarea>
             </div>
+
+            <!-- Image URL -->
+            <div class="sm:col-span-2">
+              <label class="text-sm font-medium text-slate-700"
+                >Image URL</label
+              >
+              <input
+                type="text"
+                name="imageUrl"
+                [(ngModel)]="model.imageUrl"
+                placeholder="assets/images/fridge.avif"
+                class="mt-2 w-full rounded-md border border-blue-950/25 bg-white px-4 py-3 text-slate-900 outline-none placeholder:text-slate-400 focus:border-blue-950 focus:ring-2 focus:ring-blue-950/15"
+              />
+            </div>
           </div>
         </div>
 

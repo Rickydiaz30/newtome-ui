@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { BrowseComponent } from './browse.component';
+import { BrowseComponent } from './shop.component';
 
 describe('BrowseComponent', () => {
   let component: BrowseComponent;
@@ -8,7 +8,7 @@ describe('BrowseComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [BrowseComponent]
+      imports: [BrowseComponent],
     });
     fixture = TestBed.createComponent(BrowseComponent);
     component = fixture.componentInstance;
