@@ -4,9 +4,8 @@ export interface Listing {
   price: number;
   city: string;
   createdAt: string;
-  imageUrl: string;
-  category: {
-    id: number;
-    name: string;
-  };
+  imageUrl?: string;
+  category?: { name: string; id?: number };
+  status?: 'ACTIVE' | 'DRAFT' | 'SOLD';
+  description?: string; // ✅ add this
 }

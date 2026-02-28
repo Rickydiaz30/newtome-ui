@@ -1,3 +1,5 @@
+<!-- TODO: Implement offer submission + success state -->
+
 <section class="p-12">
   <h1 class="text-3xl font-bold text-center">Shop</h1>
   <p class="mt-4 text-center text-slate-600">Listings</p>
@@ -19,7 +21,13 @@
   >
     <li
       *ngFor="let listing of listings"
-      class="rounded-md border border-slate-200 p-4 flex items-center justify-between"
+      (click)="listing.status === 'ACTIVE' && openListing(listing)"
+      [ngClass]="{
+        'cursor-pointer hover:bg-slate-50 hover:shadow-sm':
+          listing.status === 'ACTIVE',
+        'opacity-60': listing.status !== 'ACTIVE',
+      }"
+      class="rounded-md border border-slate-200 p-4 flex items-center justify-between transition"
     >
       <!-- Left side (existing content stays stacked) -->
       <div>
@@ -32,7 +40,7 @@
         </p>
 
         <p class="mt-1 text-sm text-slate-600">
-          {{ listing.category.name }} • Posted
+          {{ listing.category?.name }} • Posted
           {{ listing.createdAt | date: "mediumDate" }}
         </p>
       </div>
@@ -45,4 +53,112 @@
       />
     </li>
   </ul>
+
+  <!-- Listing Modal -->
+  <div
+    *ngIf="showListingModal && selectedListing"
+    class="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+  >
+    <div class="bg-white w-full max-w-2xl rounded-xl shadow-lg p-6 relative">
+      <!-- Close button -->
+      <button
+        (click)="showListingModal = false"
+        class="absolute top-4 right-4 text-slate-500 hover:text-slate-900"
+      >
+        ✕
+      </button>
+
+      <!-- Detail Form -->
+      <div *ngIf="modalView === 'DETAIL'">
+        <!-- Image -->
+        <div
+          class="w-full max-h-[400px] bg-slate-100 border border-slate-200 rounded-lg flex items-center justify-center"
+        >
+          <img
+            [src]="
+              selectedListing.imageUrl || 'assets/images/ninjaBlender.webp'
+            "
+            alt="Listing image"
+            class="max-h-[400px] w-auto object-contain"
+          />
+        </div>
+
+        <!-- Content -->
+        <div class="mt-6">
+          <h2 class="text-2xl font-bold text-slate-900">
+            {{ selectedListing.title }}
+          </h2>
+
+          <p class="mt-2 text-slate-700">
+            ${{ selectedListing.price }} • {{ selectedListing?.city }}
+          </p>
+
+          <p class="mt-2 text-sm text-slate-600">
+            {{ selectedListing.category?.name }} • Posted
+            {{ selectedListing.createdAt | date: "mediumDate" }}
+          </p>
+
+          <!-- Offer Button -->
+          <button
+            (click)="modalView = 'OFFER'"
+            class="mt-6 w-full rounded-md bg-blue-950 px-5 py-3 text-sm font-semibold text-slate-50 hover:bg-blue-900 transition"
+          >
+            Make Offer
+          </button>
+        </div>
+      </div>
+
+      <!-- Offer Form -->
+      <div *ngIf="modalView === 'OFFER'">
+        <!-- Back -->
+        <button
+          (click)="modalView = 'DETAIL'"
+          class="text-sm text-slate-500 hover:text-slate-900"
+        >
+          ← Back
+        </button>
+
+        <h3 class="mt-4 text-xl font-bold text-slate-900">Make an Offer</h3>
+
+        <!-- Offer Amount -->
+        <div class="mt-4">
+          <label class="text-sm font-medium text-slate-700">
+            Offer Amount
+          </label>
+          <div class="mt-2 flex rounded-md border border-blue-950/25 bg-white">
+            <span class="flex items-center px-3 text-slate-600">$</span>
+            <input
+              type="number"
+              [(ngModel)]="offerAmount"
+              class="w-full px-4 py-3 outline-none"
+            />
+          </div>
+        </div>
+
+        <!-- Message -->
+        <div class="mt-4">
+          <label class="text-sm font-medium text-slate-700">
+            Message (optional)
+          </label>
+          <textarea
+            rows="3"
+            [(ngModel)]="offerMessage"
+            class="mt-2 w-full rounded-md border border-blue-950/25 px-4 py-3 outline-none"
+            placeholder="Anything you'd like the seller to know?"
+          ></textarea>
+        </div>
+
+        <p class="mt-4 text-xs text-slate-600">
+          We will place a temporary authorization hold on your card. You are
+          only charged if the seller accepts.
+        </p>
+
+        <button
+          class="mt-6 w-full rounded-md bg-blue-950 px-5 py-3 text-sm font-semibold text-slate-50 hover:bg-blue-900 transition"
+        >
+          Submit Offer
+        </button>
+      </div>
+    </div>
+  </div>
 </section>
