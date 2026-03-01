@@ -25,14 +25,23 @@
       [ngClass]="{
         'cursor-pointer hover:bg-slate-50 hover:shadow-sm':
           listing.status === 'ACTIVE',
-        'opacity-60': listing.status !== 'ACTIVE',
+        'opacity-70': listing.status !== 'ACTIVE',
       }"
       class="rounded-md border border-slate-200 p-4 flex items-center justify-between transition"
     >
       <!-- Left side (existing content stays stacked) -->
       <div>
-        <h2 class="text-lg font-semibold text-slate-900">
+        <h2
+          class="text-lg font-semibold text-slate-900 flex items-center gap-2"
+        >
           {{ listing.title }}
+
+          <span
+            *ngIf="listing.status === 'SOLD'"
+            class="text-xs bg-red-600 text-white px-2 py-1 rounded"
+          >
+            SOLD
+          </span>
         </h2>
 
         <p class="mt-1 text-slate-700">
@@ -40,7 +49,7 @@
         </p>
 
         <p class="mt-1 text-sm text-slate-600">
-          {{ listing.category?.name }} • Posted
+          {{ listing.categoryName }} • Posted
           {{ listing.createdAt | date: "mediumDate" }}
         </p>
       </div>
@@ -83,23 +92,53 @@
           />
         </div>
 
+        <div *ngIf="isOwner() && offers.length > 0" class="mt-8">
+          <h3 class="text-lg font-semibold">Offers</h3>
+
+          <div *ngFor="let offer of offers" class="border p-4 mt-3 rounded">
+            <p>
+              <strong>{{ offer.buyerFirstName }}</strong>
+            </p>
+            <p>${{ offer.amount }}</p>
+            <p>{{ offer.message }}</p>
+            <p>Status: {{ offer.status }}</p>
+
+            <button
+              *ngIf="offer.status === 'PENDING'"
+              (click)="acceptOffer(offer.id)"
+              class="mt-2 bg-green-700 text-white px-4 py-2 rounded"
+            >
+              Accept
+            </button>
+          </div>
+        </div>
+
         <!-- Content -->
         <div class="mt-6">
           <h2 class="text-2xl font-bold text-slate-900">
             {{ selectedListing.title }}
+            <span
+              *ngIf="selectedListing.status !== 'ACTIVE'"
+              class="text-xs bg-red-600 text-white px-2 py-1 rounded"
+            >
+              SOLD
+            </span>
           </h2>
+
+          <p>Status: {{ selectedListing.status }}</p>
 
           <p class="mt-2 text-slate-700">
             ${{ selectedListing.price }} • {{ selectedListing?.city }}
           </p>
 
           <p class="mt-2 text-sm text-slate-600">
-            {{ selectedListing.category?.name }} • Posted
+            {{ selectedListing.categoryName }} • Posted
             {{ selectedListing.createdAt | date: "mediumDate" }}
           </p>
 
           <!-- Offer Button -->
           <button
+            *ngIf="selectedListing.status === 'ACTIVE' && !isOwner()"
             (click)="modalView = 'OFFER'"
             class="mt-6 w-full rounded-md bg-blue-950 px-5 py-3 text-sm font-semibold text-slate-50 hover:bg-blue-900 transition"
           >
@@ -154,11 +193,39 @@
         </p>
 
         <button
+          (click)="submitOffer()"
           class="mt-6 w-full rounded-md bg-blue-950 px-5 py-3 text-sm font-semibold text-slate-50 hover:bg-blue-900 transition"
         >
           Submit Offer
         </button>
       </div>
+      <!-- Success View -->
+      <div *ngIf="modalView === 'SUCCESS'" class="text-center py-12">
+        <div class="text-3xl font-bold text-emerald-600">Offer Sent ✓</div>
+
+        <p class="mt-4 text-slate-600">
+          The seller has been notified. You will only be charged if they accept.
+        </p>
+
+        <button
+          (click)="showListingModal = false"
+          class="mt-6 rounded-md bg-blue-950 px-6 py-3 text-sm font-semibold text-white hover:bg-blue-900 transition"
+        >
+          Close
+        </button>
+      </div>
     </div>
   </div>
 </section>
+
+<!-- Project: NewToMe marketplace
+Stack: Angular + Spring Boot + MySQL + JWT
+Working features:
+- Auth (login/register/me)
+- Listings tied to owner
+- Offers tied to buyer
+- Owner can accept
+- Listing becomes SOLD
+- SOLD badge in UI
+Next goal:
+- Build Account Dashboard (My Listings + My Offers) -->

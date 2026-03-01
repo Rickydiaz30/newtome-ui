@@ -1,11 +1,17 @@
 export interface Listing {
   id: number;
   title: string;
+  description: string;
+  color: string;
   price: number;
   city: string;
+  status: string;
   createdAt: string;
-  imageUrl?: string;
-  category?: { name: string; id?: number };
-  status?: 'ACTIVE' | 'DRAFT' | 'SOLD';
-  description?: string; // ✅ add this
+  imageUrl: string;
+
+  categoryId: number;
+  categoryName: string;
+
+  ownerId: number;
+  ownerFirstName: string;
 }
