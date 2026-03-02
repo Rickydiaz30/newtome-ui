@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { Offer } from '../models/offer.model';
 
 export interface OfferResponse {
   id: number;
@@ -40,6 +41,17 @@ export class OfferService {
   acceptOffer(listingId: number, offerId: number): Observable<OfferResponse> {
     return this.http.post<OfferResponse>(
       `${this.apiUrl}/${listingId}/offers/${offerId}/accept`,
+      {},
+    );
+  }
+
+  getMyOffers() {
+    return this.http.get<Offer[]>(`http://localhost:8081/api/offers/mine`);
+  }
+
+  cancelOffer(offerId: number) {
+    return this.http.patch<Offer>(
+      `http://localhost:8081/api/offers/${offerId}/cancel`,
       {},
     );
   }

@@ -16,4 +16,12 @@ export class ListingService {
   create(listing: Partial<Listing>): Observable<Listing> {
     return this.http.post<Listing>(this.apiUrl, listing);
   }
+
+  getMyListings() {
+    return this.http.get<Listing[]>(`${this.apiUrl}/mine`);
+  }
+
+  deleteListing(id: number) {
+    return this.http.delete(`${this.apiUrl}/${id}`);
+  }
 }

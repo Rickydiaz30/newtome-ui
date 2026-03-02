@@ -1,5 +1,3 @@
-<!-- TODO: Implement offer submission + success state -->
-
 <section class="p-12">
   <h1 class="text-3xl font-bold text-center">Shop</h1>
   <p class="mt-4 text-center text-slate-600">Listings</p>
@@ -42,6 +40,13 @@
           >
             SOLD
           </span>
+
+          <span
+            *ngIf="listing.status === 'ACTIVE'"
+            class="text-xs bg-emerald-600 text-white px-2 py-1 rounded"
+          >
+            ACTIVE
+          </span>
         </h2>
 
         <p class="mt-1 text-slate-700">
@@ -51,6 +56,10 @@
         <p class="mt-1 text-sm text-slate-600">
           {{ listing.categoryName }} • Posted
           {{ listing.createdAt | date: "mediumDate" }}
+        </p>
+
+        <p class="mt-1 text-xs text-slate-500">
+          Seller: {{ listing.ownerFirstName }}
         </p>
       </div>
 
