@@ -145,6 +145,10 @@
             {{ selectedListing.createdAt | date: "mediumDate" }}
           </p>
 
+          <p class="mt-1 text-xs text-slate-500">
+            Seller: {{ selectedListing.ownerFirstName }}
+          </p>
+
           <!-- Offer Button -->
           <button
             *ngIf="selectedListing.status === 'ACTIVE' && !isOwner()"

@@ -8,10 +8,10 @@ import { OfferService } from 'src/app/services/offer.service';
 import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
-  selector: 'app-shop',
+  selector: 'app-listings',
   standalone: true,
   imports: [CommonModule, HttpClientModule, FormsModule],
-  templateUrl: './shop.component.html',
+  templateUrl: './listings.component.html',
 })
 export class ShopComponent implements OnInit {
   private listingsUrl = 'http://localhost:8081/api/listings';

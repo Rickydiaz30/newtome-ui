@@ -15,6 +15,7 @@ export class CreateAccountComponent {
   model = {
     firstName: '',
     lastName: '',
+    username: '',
     phone: '',
     email: '',
     password: '',
@@ -52,6 +53,7 @@ export class CreateAccountComponent {
       .register({
         firstName: this.model.firstName.trim(),
         lastName: this.model.lastName.trim(),
+        username: this.model.username.trim(),
         email: this.model.email.trim(),
         password: this.model.password,
         phone: this.model.phone?.trim() || null,

@@ -12,14 +12,15 @@ type MeResponse = {
   id: number;
   firstName: string;
   lastName: string;
+  username: string;
   email: string;
   phone: string | null;
 };
 
 @Component({
-  selector: 'app-account',
+  selector: 'app-my-account',
   standalone: true,
-  templateUrl: './account.component.html',
+  templateUrl: './my-account.component.html',
   imports: [CommonModule, RouterLink],
 })
 export class AccountComponent implements OnInit {
@@ -28,7 +29,21 @@ export class AccountComponent implements OnInit {
   error: string | null = null;
   myListings: Listing[] = [];
   myOffers: Offer[] = [];
+  receivedOffers: Offer[] = [];
   loadingOffers = false;
+
+  selectedTab:
+    | 'ACCOUNT'
+    | 'ACTIVE'
+    | 'SOLD'
+    | 'OFFERS_MADE'
+    | 'OFFERS_RECEIVED' = 'ACCOUNT';
+
+  selectTab(
+    tab: 'ACCOUNT' | 'ACTIVE' | 'SOLD' | 'OFFERS_MADE' | 'OFFERS_RECEIVED',
+  ) {
+    this.selectedTab = tab;
+  }
 
   constructor(
     private http: HttpClient,
@@ -42,6 +57,11 @@ export class AccountComponent implements OnInit {
     this.loadMe();
     this.loadMyListings();
     this.loadMyOffers();
+    this.offerService.getOffersReceived().subscribe({
+      next: (offers) => {
+        this.receivedOffers = offers;
+      },
+    });
   }
 
   loadMe() {
@@ -72,6 +92,14 @@ export class AccountComponent implements OnInit {
     });
   }
 
+  get activeListings() {
+    return this.myListings.filter((l) => l.status === 'ACTIVE');
+  }
+
+  get soldListings() {
+    return this.myListings.filter((l) => l.status === 'SOLD');
+  }
+
   loadMyOffers() {
     this.loadingOffers = true;
 
@@ -82,6 +110,17 @@ export class AccountComponent implements OnInit {
       },
       error: () => {
         this.loadingOffers = false;
+      },
+    });
+  }
+
+  loadReceivedOffers() {
+    this.offerService.getOffersReceived().subscribe({
+      next: (offers) => {
+        this.receivedOffers = offers;
+      },
+      error: () => {
+        console.error('Failed to load received offers');
       },
     });
   }
@@ -106,6 +145,17 @@ export class AccountComponent implements OnInit {
   cancelOffer(offerId: number) {
     this.offerService.cancelOffer(offerId).subscribe(() => {
       this.loadMyOffers();
+    });
+  }
+
+  acceptOffer(listingId: number, offerId: number) {
+    this.offerService.acceptOffer(listingId, offerId).subscribe({
+      next: () => {
+        this.loadReceivedOffers();
+      },
+      error: () => {
+        alert('Failed to accept offer.');
+      },
     });
   }
 

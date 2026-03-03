@@ -52,6 +52,22 @@
               />
             </div>
 
+            <!-- User name -->
+            <div class="sm:col-span-2">
+              <label class="text-sm font-medium text-slate-700"
+                >User name</label
+              >
+              <input
+                type="text"
+                name="username"
+                [(ngModel)]="model.username"
+                required
+                autocomplete="name"
+                placeholder="Jane Doe"
+                class="mt-2 w-full rounded-md border border-blue-950/25 bg-white px-4 py-3 text-slate-900 outline-none focus:border-blue-950 focus:ring-2 focus:ring-blue-950/15"
+              />
+            </div>
+
             <!-- Phone -->
             <div>
               <label class="text-sm font-medium text-slate-700"

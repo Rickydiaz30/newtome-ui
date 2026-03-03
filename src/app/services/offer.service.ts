@@ -49,6 +49,10 @@ export class OfferService {
     return this.http.get<Offer[]>(`http://localhost:8081/api/offers/mine`);
   }
 
+  getOffersReceived() {
+    return this.http.get<Offer[]>('http://localhost:8081/api/offers/received');
+  }
+
   cancelOffer(offerId: number) {
     return this.http.patch<Offer>(
       `http://localhost:8081/api/offers/${offerId}/cancel`,

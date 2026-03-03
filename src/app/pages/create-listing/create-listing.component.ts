@@ -16,11 +16,11 @@ type Category = {
 type ListingStatus = 'ACTIVE' | 'DRAFT';
 
 @Component({
-  selector: 'app-sell',
+  selector: 'app-create-listing',
   standalone: true,
   imports: [CommonModule, FormsModule, RouterLink],
-  templateUrl: './sell.component.html',
-  styleUrls: ['./sell.component.css'],
+  templateUrl: './create-listing.component.html',
+  styleUrls: ['./create-listing.component.css'],
 })
 export class SellComponent implements OnInit {
   private categoriesUrl = 'http://localhost:8081/api/categories';

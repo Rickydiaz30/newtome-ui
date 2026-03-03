@@ -1,0 +1,271 @@
+<section class="mx-auto max-w-5xl px-6 py-12">
+  <h1 class="text-3xl font-bold text-slate-900 text-center">My Account</h1>
+
+  <!-- Tabs -->
+  <div class="mt-10">
+    <nav
+      class="flex justify-center gap-4 bg-slate-100 p-1 rounded-lg w-fit mx-auto"
+    >
+      <button
+        (click)="selectTab('ACCOUNT')"
+        [ngClass]="
+          selectedTab === 'ACCOUNT'
+            ? 'bg-blue-950 text-white'
+            : 'text-slate-600 hover:bg-slate-200'
+        "
+        class="px-5 py-2 rounded-md text-sm font-medium transition"
+      >
+        Account
+      </button>
+
+      <button
+        (click)="selectTab('ACTIVE')"
+        [ngClass]="
+          selectedTab === 'ACTIVE'
+            ? 'bg-blue-950 text-white'
+            : 'text-slate-600 hover:bg-slate-200'
+        "
+        class="px-5 py-2 rounded-md text-sm font-medium transition"
+      >
+        Active
+      </button>
+
+      <button
+        (click)="selectTab('SOLD')"
+        [ngClass]="
+          selectedTab === 'SOLD'
+            ? 'bg-blue-950 text-white'
+            : 'text-slate-600 hover:bg-slate-200'
+        "
+        class="px-5 py-2 rounded-md text-sm font-medium transition"
+      >
+        Sold
+      </button>
+
+      <button
+        (click)="selectTab('OFFERS_MADE')"
+        [ngClass]="
+          selectedTab === 'OFFERS_MADE'
+            ? 'bg-blue-950 text-white'
+            : 'text-slate-600 hover:bg-slate-200'
+        "
+        class="px-5 py-2 rounded-md text-sm font-medium transition"
+      >
+        Offers Made
+      </button>
+
+      <button
+        (click)="selectTab('OFFERS_RECEIVED')"
+        [ngClass]="
+          selectedTab === 'OFFERS_RECEIVED'
+            ? 'bg-blue-950 text-white'
+            : 'text-slate-600 hover:bg-slate-200'
+        "
+        class="px-5 py-2 rounded-md text-sm font-medium transition"
+      >
+        Offers Received
+      </button>
+    </nav>
+  </div>
+
+  <!-- ACCOUNT TAB -->
+  <div *ngIf="selectedTab === 'ACCOUNT'" class="mt-10 max-w-2xl mx-auto">
+    <div class="rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
+      <h2 class="text-lg font-semibold text-slate-800">Account Info</h2>
+
+      <div class="mt-4 space-y-2 text-sm text-slate-700">
+        <p>
+          <span class="font-medium">Name:</span>
+          {{ user?.firstName || "—" }}
+        </p>
+
+        <p>
+          <span class="font-medium">Email:</span>
+          {{ user?.email || "—" }}
+        </p>
+
+        <p>
+          <span class="font-medium">Username:</span>
+          {{ user?.username || "—" }}
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ACTIVE TAB -->
+  <div *ngIf="selectedTab === 'ACTIVE'" class="mt-10">
+    <div *ngIf="activeListings.length === 0" class="text-center text-slate-500">
+      You have no active listings.
+    </div>
+
+    <ul *ngIf="activeListings.length > 0" class="space-y-4 max-w-2xl mx-auto">
+      <li
+        *ngFor="let listing of activeListings"
+        class="rounded-md border border-slate-200 p-4 flex items-center justify-between"
+      >
+        <div>
+          <h2 class="text-lg font-semibold">{{ listing.title }}</h2>
+          <p class="mt-1 text-slate-700">
+            ${{ listing.price }} • {{ listing.city }}
+          </p>
+        </div>
+
+        <img
+          [src]="listing.imageUrl || 'assets/images/ninjaBlender.webp'"
+          class="w-20 h-20 object-cover rounded-md"
+        />
+      </li>
+    </ul>
+  </div>
+
+  <!-- SOLD TAB -->
+  <div *ngIf="selectedTab === 'SOLD'" class="mt-10">
+    <div *ngIf="soldListings.length === 0" class="text-center text-slate-500">
+      You have no sold listings yet.
+    </div>
+
+    <ul *ngIf="soldListings.length > 0" class="space-y-4 max-w-2xl mx-auto">
+      <li
+        *ngFor="let listing of soldListings"
+        class="rounded-md border border-slate-200 p-4 flex items-center justify-between opacity-70"
+      >
+        <div>
+          <h2 class="text-lg font-semibold flex items-center gap-2">
+            {{ listing.title }}
+            <span class="text-xs bg-red-600 text-white px-2 py-1 rounded">
+              SOLD
+            </span>
+          </h2>
+
+          <p class="mt-1 text-slate-700">
+            ${{ listing.price }} • {{ listing.city }}
+          </p>
+        </div>
+
+        <img
+          [src]="listing.imageUrl || 'assets/images/ninjaBlender.webp'"
+          class="w-20 h-20 object-cover rounded-md"
+        />
+      </li>
+    </ul>
+  </div>
+
+  <!-- OFFERS MADE TAB -->
+  <!-- OFFERS MADE -->
+  <div *ngIf="selectedTab === 'OFFERS_MADE'" class="mt-10">
+    <div
+      *ngIf="!loadingOffers && myOffers.length === 0"
+      class="text-center text-slate-500"
+    >
+      You have not made any offers yet.
+    </div>
+
+    <ul
+      *ngIf="!loadingOffers && myOffers.length > 0"
+      class="space-y-4 max-w-2xl mx-auto"
+    >
+      <li
+        *ngFor="let offer of myOffers"
+        class="rounded-md border border-slate-200 p-4 flex items-center justify-between transition"
+      >
+        <!-- Left side -->
+        <div>
+          <h2 class="text-lg font-semibold flex items-center gap-2">
+            {{ offer.listingTitle }}
+
+            <span
+              *ngIf="offer.status === 'PENDING'"
+              class="text-xs bg-amber-500 text-white px-2 py-1 rounded"
+            >
+              PENDING
+            </span>
+
+            <span
+              *ngIf="offer.status === 'ACCEPTED'"
+              class="text-xs bg-emerald-600 text-white px-2 py-1 rounded"
+            >
+              ACCEPTED
+            </span>
+
+            <span
+              *ngIf="offer.status === 'REJECTED'"
+              class="text-xs bg-red-600 text-white px-2 py-1 rounded"
+            >
+              REJECTED
+            </span>
+          </h2>
+
+          <p class="mt-1 text-slate-700">Offered ${{ offer.amount }}</p>
+
+          <p class="mt-1 text-xs text-slate-500">
+            Submitted {{ offer.createdAt | date: "mediumDate" }}
+          </p>
+        </div>
+
+        <!-- Right thumbnail -->
+        <img
+          [src]="offer.listingImageUrl || 'assets/images/ninjaBlender.webp'"
+          class="w-20 h-20 object-cover rounded-md ml-4"
+        />
+      </li>
+    </ul>
+  </div>
+
+  <!-- OFFERS RECEIVED TAB -->
+  <!-- OFFERS RECEIVED -->
+  <div *ngIf="selectedTab === 'OFFERS_RECEIVED'" class="mt-10">
+    <div *ngIf="receivedOffers.length === 0" class="text-center text-slate-500">
+      You have not received any offers yet.
+    </div>
+
+    <ul *ngIf="receivedOffers.length > 0" class="space-y-4 max-w-2xl mx-auto">
+      <li
+        *ngFor="let offer of receivedOffers"
+        class="rounded-md border border-slate-200 p-4 flex items-center justify-between transition"
+      >
+        <!-- Left side -->
+        <div>
+          <h2 class="text-lg font-semibold flex items-center gap-2">
+            {{ offer.listingTitle }}
+
+            <span
+              *ngIf="offer.status === 'PENDING'"
+              class="text-xs bg-amber-500 text-white px-2 py-1 rounded"
+            >
+              PENDING
+            </span>
+
+            <span
+              *ngIf="offer.status === 'ACCEPTED'"
+              class="text-xs bg-emerald-600 text-white px-2 py-1 rounded"
+            >
+              ACCEPTED
+            </span>
+          </h2>
+
+          <p class="mt-1 text-slate-700">
+            ${{ offer.amount }} from {{ offer.buyerFirstName }}
+          </p>
+
+          <p class="mt-1 text-xs text-slate-500">
+            Received {{ offer.createdAt | date: "mediumDate" }}
+          </p>
+
+          <button
+            *ngIf="offer.status === 'PENDING'"
+            (click)="acceptOffer(offer.listingId, offer.id)"
+            class="mt-3 rounded-md bg-green-700 px-4 py-2 text-sm font-semibold text-white hover:bg-green-800 transition"
+          >
+            Accept Offer
+          </button>
+        </div>
+
+        <!-- Right thumbnail -->
+        <img
+          [src]="offer.listingImageUrl || 'assets/images/ninjaBlender.webp'"
+          class="w-20 h-20 object-cover rounded-md ml-4"
+        />
+      </li>
+    </ul>
+  </div>
+</section>

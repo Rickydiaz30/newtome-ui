@@ -39,6 +39,7 @@ export class AuthService {
   register(payload: {
     firstName: string;
     lastName: string;
+    username?: string | null;
     email: string;
     password: string;
     phone?: string | null;
@@ -49,7 +50,10 @@ export class AuthService {
     );
   }
 
-  login(payload: { email: string; password: string }): Observable<CurrentUser> {
+  login(payload: {
+    username: string;
+    password: string;
+  }): Observable<CurrentUser> {
     return this.http.post<LoginResponse>(`${this.baseUrl}/login`, payload).pipe(
       tap((res) => this.setToken(res.token)),
       switchMap(() => this.loadCurrentUser()),

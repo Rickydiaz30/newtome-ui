@@ -12,7 +12,7 @@ import { AuthService } from '../../services/auth.service';
 })
 export class LoginComponent {
   model = {
-    email: '',
+    username: '',
     password: '',
   };
 
@@ -38,7 +38,7 @@ export class LoginComponent {
         this.error =
           err?.error?.message ||
           err?.error ||
-          'Login failed. Check email/password.';
+          'Login failed. Check username/password.';
       },
     });
   }

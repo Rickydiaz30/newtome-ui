@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { BrowseComponent } from './shop.component';
+import { BrowseComponent } from './listings.component';
 
 describe('BrowseComponent', () => {
   let component: BrowseComponent;
