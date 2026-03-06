@@ -239,6 +239,8 @@
             Received {{ offer.createdAt | date: "mediumDate" }}
           </p>
 
+          <p class="mt-2 text-sm text-slate-700">{{ offer.message }}</p>
+
           <button
             *ngIf="offer.status === 'PENDING'"
             (click)="acceptOffer(offer.listingId, offer.id)"
