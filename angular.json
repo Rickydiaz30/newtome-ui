@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "newtome-v1": {
+    "newtome-ui": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -23,7 +23,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/newtome-v1",
+            "outputPath": "dist/newtome-ui",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": ["zone.js"],
@@ -63,10 +63,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "newtome-v1:build:production"
+              "browserTarget": "newtome-ui:build:production"
             },
             "development": {
-              "browserTarget": "newtome-v1:build:development"
+              "browserTarget": "newtome-ui:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -74,7 +74,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "newtome-v1:build"
+            "browserTarget": "newtome-ui:build"
           }
         },
         "test": {
