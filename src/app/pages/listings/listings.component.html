@@ -1,11 +1,43 @@
-<section class="p-12">
-  <h1 class="text-3xl font-bold text-center">Shop</h1>
-  <p class="mt-4 text-center text-slate-600">Listings</p>
+<section class="pt-10 pb-16 px-0 md:px-12">
+  <h1 class="text-3xl text-blue-950 font-bold text-center">
+    New <span class="text-sky-400">2</span> Me
+  </h1>
 
+  <!-- Search -->
+  <div class="mt-6 flex justify-center px-4">
+    <div class="relative w-full max-w-lg">
+      <input
+        type="text"
+        [(ngModel)]="searchQuery"
+        (ngModelChange)="onSearchChange($event)"
+        placeholder="Search listings..."
+        class="w-full rounded-full border border-slate-300 px-5 py-3 pl-12 text-sm focus:outline-none focus:ring-2 focus:ring-blue-950"
+      />
+
+      <!-- search icon -->
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="absolute left-4 top-3.5 h-5 w-5 text-slate-400"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M21 21l-4.35-4.35M11 19a8 8 0 100-16 8 8 0 000 16z"
+        />
+      </svg>
+    </div>
+  </div>
+
+  <!-- Loading -->
   <div *ngIf="loading" class="mt-8 text-center text-slate-500">
     Loading listings…
   </div>
 
+  <!-- No Listings -->
   <div
     *ngIf="!loading && listings.length === 0"
     class="mt-8 text-center text-slate-500"
@@ -13,232 +45,168 @@
     No listings yet.
   </div>
 
+  <!-- Listing Grid -->
   <ul
     *ngIf="!loading && listings.length > 0"
-    class="mt-10 space-y-4 max-w-2xl mx-auto"
+    class="mt-8 grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 items-start xl:max-w-7xl xl:mx-auto xl:px-4"
   >
     <li
       *ngFor="let listing of listings"
       (click)="listing.status === 'ACTIVE' && openListing(listing)"
       [ngClass]="{
-        'cursor-pointer hover:bg-slate-50 hover:shadow-sm':
-          listing.status === 'ACTIVE',
+        'cursor-pointer': listing.status === 'ACTIVE',
         'opacity-70': listing.status !== 'ACTIVE',
       }"
-      class="rounded-md border border-slate-200 p-4 flex items-center justify-between transition"
+      class="relative aspect-[4/3] overflow-hidden shadow-md group"
     >
-      <!-- Left side (existing content stays stacked) -->
-      <div>
-        <h2
-          class="text-lg font-semibold text-slate-900 flex items-center gap-2"
-        >
+      <!-- Image -->
+      <img
+        [src]="listing.imageUrl || 'assets/images/ninjaBlender.webp'"
+        class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition duration-300"
+      />
+
+      <!-- Gradient -->
+      <div
+        class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent"
+      ></div>
+
+      <!-- Text -->
+      <div class="relative h-full flex flex-col justify-end p-3 text-white">
+        <h2 class="text-sm md:text-lg font-semibold flex items-center gap-2">
           {{ listing.title }}
 
           <span
-            *ngIf="listing.status === 'SOLD'"
-            class="text-xs bg-red-600 text-white px-2 py-1 rounded"
-          >
-            SOLD
-          </span>
-
-          <span
             *ngIf="listing.status === 'ACTIVE'"
-            class="text-xs bg-emerald-600 text-white px-2 py-1 rounded"
+            class="text-[10px] md:text-xs bg-emerald-600 px-2 py-1 rounded"
           >
             ACTIVE
           </span>
+
+          <span
+            *ngIf="listing.status === 'SOLD'"
+            class="text-[10px] md:text-xs bg-red-600 px-2 py-1 rounded"
+          >
+            SOLD
+          </span>
         </h2>
 
-        <p class="mt-1 text-slate-700">
+        <p class="text-xs md:text-sm mt-1">
           ${{ listing.price }} • {{ listing.city }}
         </p>
 
-        <p class="mt-1 text-sm text-slate-600">
-          {{ listing.categoryName }} • Posted
+        <p class="text-[10px] md:text-xs text-slate-200">
+          {{ listing.categoryName }} •
           {{ listing.createdAt | date: "mediumDate" }}
         </p>
 
-        <p class="mt-1 text-xs text-slate-500">
+        <p class="text-[10px] md:text-xs text-slate-300">
           Seller: {{ listing.ownerFirstName }}
         </p>
       </div>
-
-      <!-- Right side thumbnail -->
-      <img
-        [src]="listing.imageUrl || 'assets/images/ninjaBlender.webp'"
-        alt="Listing thumbnail"
-        class="w-20 h-20 object-cover rounded-md ml-4"
-      />
     </li>
   </ul>
 
   <!-- Listing Modal -->
   <div
     *ngIf="showListingModal && selectedListing"
-    class="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+    class="fixed inset-0 bg-black/70 flex items-center justify-center z-50"
   >
-    <div class="bg-white w-full max-w-2xl rounded-xl shadow-lg p-6 relative">
-      <!-- Close button -->
-      <button
-        (click)="showListingModal = false"
-        class="absolute top-4 right-4 text-slate-500 hover:text-slate-900"
-      >
-        ✕
-      </button>
+    <div class="relative w-full max-w-3xl overflow-hidden shadow-xl">
+      <!-- Background Image -->
+      <img
+        [src]="selectedListing.imageUrl || 'assets/images/ninjaBlender.webp'"
+        class="absolute inset-0 w-full h-full object-cover"
+      />
 
-      <!-- Detail Form -->
-      <div *ngIf="modalView === 'DETAIL'">
-        <!-- Image -->
-        <div
-          class="w-full max-h-[400px] bg-slate-100 border border-slate-200 rounded-lg flex items-center justify-center"
+      <!-- Gradient -->
+      <div
+        class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20"
+      ></div>
+
+      <!-- Content -->
+      <div class="relative p-6 md:p-10 text-white">
+        <!-- Close -->
+        <button
+          (click)="showListingModal = false"
+          class="absolute top-4 right-4 text-white text-xl"
         >
-          <img
-            [src]="
-              selectedListing.imageUrl || 'assets/images/ninjaBlender.webp'
-            "
-            alt="Listing image"
-            class="max-h-[400px] w-auto object-contain"
-          />
-        </div>
+          ✕
+        </button>
 
-        <div *ngIf="isOwner() && offers.length > 0" class="mt-8">
-          <h3 class="text-lg font-semibold">Offers</h3>
-
-          <div *ngFor="let offer of offers" class="border p-4 mt-3 rounded">
-            <p>
-              <strong>{{ offer.buyerFirstName }}</strong>
-            </p>
-            <p>${{ offer.amount }}</p>
-            <p>{{ offer.message }}</p>
-            <p>Status: {{ offer.status }}</p>
-
-            <button
-              *ngIf="offer.status === 'PENDING'"
-              (click)="acceptOffer(offer.id)"
-              class="mt-2 bg-green-700 text-white px-4 py-2 rounded"
-            >
-              Accept
-            </button>
-          </div>
-        </div>
-
-        <!-- Content -->
-        <div class="mt-6">
-          <h2 class="text-2xl font-bold text-slate-900">
+        <!-- DETAIL VIEW -->
+        <div *ngIf="modalView === 'DETAIL'">
+          <h2 class="text-3xl font-bold">
             {{ selectedListing.title }}
+
             <span
               *ngIf="selectedListing.status !== 'ACTIVE'"
-              class="text-xs bg-red-600 text-white px-2 py-1 rounded"
+              class="ml-2 text-xs bg-red-600 px-2 py-1 rounded"
             >
               SOLD
             </span>
           </h2>
 
-          <p>Status: {{ selectedListing.status }}</p>
-
-          <p class="mt-2 text-slate-700">
-            ${{ selectedListing.price }} • {{ selectedListing?.city }}
+          <p class="mt-2 text-lg">
+            ${{ selectedListing.price }} • {{ selectedListing.city }}
           </p>
 
-          <p class="mt-2 text-sm text-slate-600">
-            {{ selectedListing.categoryName }} • Posted
+          <p class="text-sm text-slate-200 mt-1">
+            {{ selectedListing.categoryName }} •
             {{ selectedListing.createdAt | date: "mediumDate" }}
           </p>
 
-          <p class="mt-1 text-xs text-slate-500">
+          <p class="text-xs text-slate-300 mt-1">
             Seller: {{ selectedListing.ownerFirstName }}
           </p>
 
-          <!-- Offer Button -->
           <button
             *ngIf="selectedListing.status === 'ACTIVE' && !isOwner()"
-            (click)="modalView = 'OFFER'"
-            class="mt-6 w-full rounded-md bg-blue-950 px-5 py-3 text-sm font-semibold text-slate-50 hover:bg-blue-900 transition"
+            (click)="handleOfferClick()"
+            class="mt-8 w-full rounded-md bg-blue-950 px-5 py-3 text-sm font-semibold text-white hover:bg-blue-900 transition"
           >
             Make Offer
           </button>
         </div>
-      </div>
 
-      <!-- Offer Form -->
-      <div *ngIf="modalView === 'OFFER'">
-        <!-- Back -->
-        <button
-          (click)="modalView = 'DETAIL'"
-          class="text-sm text-slate-500 hover:text-slate-900"
-        >
-          ← Back
-        </button>
+        <!-- OFFER VIEW -->
+        <div *ngIf="modalView === 'OFFER'">
+          <button (click)="modalView = 'DETAIL'" class="text-sm text-slate-300">
+            ← Back
+          </button>
 
-        <h3 class="mt-4 text-xl font-bold text-slate-900">Make an Offer</h3>
+          <h3 class="mt-4 text-2xl font-bold">Make an Offer</h3>
 
-        <!-- Offer Amount -->
-        <div class="mt-4">
-          <label class="text-sm font-medium text-slate-700">
-            Offer Amount
-          </label>
-          <div class="mt-2 flex rounded-md border border-blue-950/25 bg-white">
-            <span class="flex items-center px-3 text-slate-600">$</span>
-            <input
-              type="number"
-              [(ngModel)]="offerAmount"
-              class="w-full px-4 py-3 outline-none"
-            />
+          <div class="mt-6">
+            <label class="text-sm text-slate-200"> Offer Amount </label>
+
+            <div class="mt-2 flex rounded-md bg-white text-black">
+              <span class="flex items-center px-3">$</span>
+              <input
+                type="number"
+                [(ngModel)]="offerAmount"
+                class="w-full px-4 py-3 outline-none"
+              />
+            </div>
           </div>
+
+          <div class="mt-4">
+            <label class="text-sm text-slate-200"> Message </label>
+
+            <textarea
+              rows="3"
+              [(ngModel)]="offerMessage"
+              class="mt-2 w-full rounded-md px-4 py-3 text-black"
+            ></textarea>
+          </div>
+
+          <button
+            (click)="submitOffer()"
+            class="mt-6 w-full rounded-md bg-blue-950 px-5 py-3 text-white hover:bg-blue-900"
+          >
+            Submit Offer
+          </button>
         </div>
-
-        <!-- Message -->
-        <div class="mt-4">
-          <label class="text-sm font-medium text-slate-700">
-            Message (optional)
-          </label>
-          <textarea
-            rows="3"
-            [(ngModel)]="offerMessage"
-            class="mt-2 w-full rounded-md border border-blue-950/25 px-4 py-3 outline-none"
-            placeholder="Anything you'd like the seller to know?"
-          ></textarea>
-        </div>
-
-        <p class="mt-4 text-xs text-slate-600">
-          We will place a temporary authorization hold on your card. You are
-          only charged if the seller accepts.
-        </p>
-
-        <button
-          (click)="submitOffer()"
-          class="mt-6 w-full rounded-md bg-blue-950 px-5 py-3 text-sm font-semibold text-slate-50 hover:bg-blue-900 transition"
-        >
-          Submit Offer
-        </button>
-      </div>
-      <!-- Success View -->
-      <div *ngIf="modalView === 'SUCCESS'" class="text-center py-12">
-        <div class="text-3xl font-bold text-emerald-600">Offer Sent ✓</div>
-
-        <p class="mt-4 text-slate-600">
-          The seller has been notified. You will only be charged if they accept.
-        </p>
-
-        <button
-          (click)="showListingModal = false"
-          class="mt-6 rounded-md bg-blue-950 px-6 py-3 text-sm font-semibold text-white hover:bg-blue-900 transition"
-        >
-          Close
-        </button>
       </div>
     </div>
   </div>
 </section>
-
-<!-- Project: newtome-ui marketplace
-Stack: Angular + Spring Boot + MySQL + JWT
-Working features:
-- Auth (login/register/me)
-- Listings tied to owner
-- Offers tied to buyer
-- Owner can accept
-- Listing becomes SOLD
-- SOLD badge in UI
-Next goal:
-- Build Account Dashboard (My Listings + My Offers) -->

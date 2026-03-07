@@ -24,4 +24,8 @@ export class ListingService {
   deleteListing(id: number) {
     return this.http.delete(`${this.apiUrl}/${id}`);
   }
+
+  search(query: string) {
+    return this.http.get<any[]>(`${this.apiUrl}/search?query=${query}`);
+  }
 }

@@ -1,83 +1,88 @@
-<!-- Logo -->
+<!-- HERO -->
+
 <section
-  class="flex min-h-[80vh] items-center justify-center bg-slate-50 px-6 py-24"
+  class="flex min-h-[70vh] flex-col items-center justify-center bg-slate-50 px-6 py-16 text-center"
 >
   <img
     src="assets/images/bluelogo.png"
     alt="new2me logo"
-    class="w-[90vw] sm:w-[100vw] md:w-[90vw] lg:w-[40vw]"
+    class="w-[90vw] sm:w-[70vw] md:w-[55vw] lg:w-[35vw]"
   />
-</section>
 
-<section
-  class="flex min-h-screen items-center justify-center bg-blue-950 px-6 py-12 md:py-24 lg:py-12"
->
-  <div class="mx-auto max-w-2xl text-center">
-    <h1 class="text-4xl font-bold tracking-tight text-slate-50 sm:text-5xl">
-      new
-      <span class="text-blue-400 text-4xl sm:text-6xl">2</span>
-      me
-    </h1>
+  <p class="mt-6 max-w-xl text-lg text-blue-950">
+    Find great items that are new to you. Browse quality second-hand products,
+    save money, and give great things a second life.
+  </p>
 
-    <p class="mt-6 text-lg leading-relaxed text-slate-50">
-      new2me is a modern marketplace built around the idea that great items
-      don’t have to be brand new. The platform helps people discover
-      high-quality, gently used products that still feel fresh and reliable. By
-      focusing on simplicity, trust, and a clean browsing experience, new2me
-      makes it easy to shop smarter while reducing waste. It’s a better way to
-      find value, extend the life of products, and make more intentional buying
-      decisions.
-    </p>
+  <!-- SEARCH -->
 
-    <!-- Call to Action -->
-    <div class="mt-10 flex justify-center gap-4">
-      <a
-        routerLink="/browse"
-        class="inline-flex items-center rounded-md bg-blue-900 px-6 py-3 text-base font-semibold text-slate-50 shadow-sm transition hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-      >
-        Explore Listings
-      </a>
-    </div>
+  <div class="mt-8 w-full max-w-xl">
+    <input
+      type="text"
+      placeholder="Search the marketplace..."
+      class="w-full rounded-full border border-slate-300 px-6 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-950"
+      routerLink="/shop"
+    />
+  </div>
+
+  <!-- CTA -->
+
+  <div class="mt-6 flex cursor-pointer gap-4">
+    <a
+      routerLink="/shop"
+      class="rounded-md bg-blue-950 px-6 py-3 font-semibold text-white transition hover:bg-blue-900"
+    >
+      Browse Listings
+    </a>
+
+    <a
+      routerLink="/sell"
+      class="rounded-md border border-blue-950 px-6 py-3 font-semibold text-blue-950 transition hover:bg-blue-50"
+    >
+      Sell an Item
+    </a>
   </div>
 </section>
 
+<!-- VALUE PROPOSITION -->
+
+<section class="flex items-center justify-center bg-blue-950 px-6 py-20">
+  <div class="mx-auto max-w-2xl text-center">
+    <h2 class="text-4xl font-bold text-white">A smarter way to buy and sell</h2>
+
+    <p class="mt-6 text-lg text-slate-200 leading-relaxed">
+      new2me is a modern marketplace built around the idea that great items
+      don’t have to be brand new. Discover high-quality used products, save
+      money, and reduce waste while enjoying a clean and simple marketplace
+      experience.
+    </p>
+  </div>
+</section>
+
+<!-- FEATURE PILLARS -->
+
 <section class="bg-slate-50 px-6 py-24">
   <div class="mx-auto max-w-5xl">
-    <h2 class="text-center text-3xl font-bold text-blue-950">
-      A smarter way to buy and sell
-    </h2>
-
-    <p class="mx-auto mt-6 max-w-2xl text-center text-lg text-blue-950">
-      new2me was built around the idea that great items shouldn’t be forgotten.
-      We make it easy to give quality products a second life — without the
-      clutter, friction, or pressure of traditional resale platforms.
-    </p>
-
-    <div class="mt-16 grid gap-12 sm:grid-cols-2 lg:grid-cols-3">
-      <!-- Pillar 1 -->
-      <div class="text-center">
+    ```
+    <div class="grid gap-12 sm:grid-cols-2 lg:grid-cols-3 text-center">
+      <div>
         <h3 class="text-3xl font-bold text-blue-950">Save money</h3>
         <p class="mt-3 text-blue-950">
-          Find high-quality, gently used items at prices that make sense. Smart
-          shopping without sacrificing quality.
+          Find high-quality, gently used items at prices that make sense.
         </p>
       </div>
 
-      <!-- Pillar 2 -->
-      <div class="text-center">
+      <div>
         <h3 class="text-3xl font-bold text-blue-950">Reduce waste</h3>
         <p class="mt-3 text-blue-950">
-          Buying pre-owned keeps useful items out of landfills and helps extend
-          the life of products already made.
+          Extend the life of products and keep great items out of landfills.
         </p>
       </div>
 
-      <!-- Pillar 3 -->
-      <div class="text-center sm:col-span-2 lg:col-span-1">
+      <div>
         <h3 class="text-3xl font-bold text-blue-950">Simple experience</h3>
         <p class="mt-3 text-blue-950">
-          Clean design, easy browsing, and a focus on what matters — finding and
-          listing items without distractions.
+          Clean browsing, easy listings, and a marketplace focused on people.
         </p>
       </div>
     </div>

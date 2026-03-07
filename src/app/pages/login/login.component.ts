@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { Router, RouterLink, ActivatedRoute } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
@@ -22,6 +22,7 @@ export class LoginComponent {
   constructor(
     private auth: AuthService,
     private router: Router,
+    private route: ActivatedRoute,
   ) {}
 
   submit() {
@@ -31,10 +32,26 @@ export class LoginComponent {
     this.auth.login(this.model).subscribe({
       next: () => {
         this.loading = false;
-        this.router.navigateByUrl('/account', { replaceUrl: true }); // or '/sell'
+
+        const redirect = this.route.snapshot.queryParamMap.get('redirect');
+        const listingId = this.route.snapshot.queryParamMap.get('listingId');
+
+        if (redirect === 'offer' && listingId) {
+          this.router.navigate(['/shop'], {
+            queryParams: {
+              redirect: 'offer',
+              listingId: listingId,
+            },
+            replaceUrl: true,
+          });
+        } else {
+          this.router.navigateByUrl('/account', { replaceUrl: true });
+        }
       },
+
       error: (err) => {
         this.loading = false;
+
         this.error =
           err?.error?.message ||
           err?.error ||

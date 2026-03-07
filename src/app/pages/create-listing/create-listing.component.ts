@@ -22,7 +22,7 @@ type ListingStatus = 'ACTIVE' | 'DRAFT';
   templateUrl: './create-listing.component.html',
   styleUrls: ['./create-listing.component.css'],
 })
-export class SellComponent implements OnInit {
+export class CreateListingComponent implements OnInit {
   private categoriesUrl = 'http://localhost:8081/api/categories';
 
   model = {
@@ -35,6 +35,9 @@ export class SellComponent implements OnInit {
     categoryId: null as number | null,
     imageUrl: '',
   };
+
+  previewUrl: string | null = null;
+  selectedFile: File | null = null;
 
   categories: Array<{ id: number; name: string }> = [];
   loadingCategories = false;
@@ -79,6 +82,26 @@ export class SellComponent implements OnInit {
       });
   }
 
+  onFileSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+
+    if (!input.files || input.files.length === 0) {
+      return;
+    }
+
+    const file = input.files[0];
+    this.selectedFile = file;
+
+    // Create preview
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.previewUrl = reader.result as string;
+      this.model.imageUrl = this.previewUrl; // for dev purposes
+    };
+
+    reader.readAsDataURL(file);
+  }
+
   private isValidForSubmit(): boolean {
     if (!this.model.title.trim()) return false;
     if (!this.model.description.trim()) return false;
@@ -105,7 +128,7 @@ export class SellComponent implements OnInit {
       description: this.model.description,
       color: this.model.color,
       price: this.model.price ?? undefined,
-      city: this.model.city,
+      city: this.capitalizeCity(this.model.city),
       status: this.model.status,
       categoryId: this.model.categoryId ?? undefined,
       imageUrl: this.model.imageUrl || 'assets/images/blueLogo.png',
@@ -134,6 +157,11 @@ export class SellComponent implements OnInit {
           this.errorMsg = 'Something went wrong saving your listing.';
         },
       });
+  }
+
+  capitalizeCity(city: string | undefined): string | undefined {
+    if (!city) return city;
+    return city.charAt(0).toUpperCase() + city.slice(1).toLowerCase();
   }
 
   saveDraft() {
