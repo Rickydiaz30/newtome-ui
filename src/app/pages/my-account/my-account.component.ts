@@ -159,6 +159,20 @@ export class AccountComponent implements OnInit {
     });
   }
 
+  rejectOffer(listingId: number, offerId: number) {
+    this.offerService.rejectOffer(listingId, offerId).subscribe({
+      next: (updatedOffer) => {
+        const offer = this.receivedOffers.find((o) => o.id === updatedOffer.id);
+        if (offer) {
+          offer.status = updatedOffer.status;
+        }
+      },
+      error: (err) => {
+        console.error('Failed to reject offer', err);
+      },
+    });
+  }
+
   logout() {
     this.auth.logout();
     this.router.navigateByUrl('/login');

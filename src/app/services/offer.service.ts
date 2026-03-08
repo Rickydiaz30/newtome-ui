@@ -59,4 +59,11 @@ export class OfferService {
       {},
     );
   }
+
+  rejectOffer(listingId: number, offerId: number) {
+    return this.http.post<Offer>(
+      `${this.apiUrl}/${listingId}/offers/${offerId}/reject`,
+      {},
+    );
+  }
 }
