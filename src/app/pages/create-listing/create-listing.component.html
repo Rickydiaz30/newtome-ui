@@ -205,8 +205,10 @@
             <button
               type="submit"
               [disabled]="listingForm.invalid || submitting"
-              class="rounded-md bg-blue-950 px-5 py-3 text-sm font-semibold text-slate-50 shadow-sm transition hover:bg-blue-900 disabled:opacity-50"
+              class="rounded-md bg-blue-950 px-5 py-3 text-sm font-semibold text-slate-50 shadow-sm transition hover:bg-blue-900 disabled:opacity-50 flex items-center justify-center gap-2"
             >
+              <app-spinner *ngIf="submitting"></app-spinner>
+
               <span *ngIf="!submitting">Publish listing</span>
               <span *ngIf="submitting">Saving...</span>
             </button>

@@ -5,6 +5,8 @@ import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { finalize } from 'rxjs/operators';
 import { ListingService } from 'src/app/services/listing-service.service';
+import { SpinnerComponent } from 'src/app/shared/spinner/spinner.component';
+import { delay } from 'rxjs/operators';
 
 type Category = {
   id: number;
@@ -18,7 +20,7 @@ type ListingStatus = 'ACTIVE' | 'DRAFT';
 @Component({
   selector: 'app-create-listing',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, FormsModule, RouterLink, SpinnerComponent],
   templateUrl: './create-listing.component.html',
   styleUrls: ['./create-listing.component.css'],
 })
@@ -136,7 +138,10 @@ export class CreateListingComponent implements OnInit {
 
     this.listingService
       .create(payload)
-      .pipe(finalize(() => (this.submitting = false)))
+      .pipe(
+        delay(1000), // TEMP delay so spinner is visible
+        finalize(() => (this.submitting = false)),
+      )
       .subscribe({
         next: (response) => {
           console.log('Listing created:', response);
@@ -151,10 +156,6 @@ export class CreateListingComponent implements OnInit {
               }
             });
           }
-        },
-        error: (err) => {
-          console.error('Error creating listing:', err);
-          this.errorMsg = 'Something went wrong saving your listing.';
         },
       });
   }

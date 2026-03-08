@@ -38,6 +38,7 @@
           [disabled]="f.invalid || loading"
           class="w-full rounded-md bg-blue-950 px-5 py-3 text-sm font-semibold text-slate-50 transition hover:bg-blue-900 disabled:opacity-50"
         >
+          <app-spinner *ngIf="loading"></app-spinner>
           {{ loading ? "Logging in..." : "Login" }}
         </button>
 
