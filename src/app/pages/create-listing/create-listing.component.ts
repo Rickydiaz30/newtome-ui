@@ -68,10 +68,7 @@ export class CreateListingComponent implements OnInit {
         next: (data) => {
           this.errorMsg = '';
 
-          this.categories = (data ?? [])
-            .filter((c) => c.active)
-            .sort((a, b) => a.name.localeCompare(b.name))
-            .map((c) => ({ id: c.id, name: c.name }));
+          this.categories = data.sort((a, b) => a.name.localeCompare(b.name));
 
           if (this.categories.length === 0) {
             this.errorMsg = 'No categories available.';

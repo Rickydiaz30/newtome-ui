@@ -1,10 +1,15 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { tap } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { switchMap } from 'rxjs';
 
-type LoginResponse = { message: string; token: string };
+type LoginResponse = {
+  success: boolean;
+  message: string;
+  data: { token: string };
+};
+
 type RegisterResponse = { message: string };
 
 type JwtPayload = {
@@ -55,7 +60,7 @@ export class AuthService {
     password: string;
   }): Observable<CurrentUser> {
     return this.http.post<LoginResponse>(`${this.baseUrl}/login`, payload).pipe(
-      tap((res) => this.setToken(res.token)),
+      tap((res) => this.setToken(res.data.token)),
       switchMap(() => this.loadCurrentUser()),
     );
   }
@@ -79,11 +84,16 @@ export class AuthService {
 
   loadCurrentUser(): Observable<CurrentUser> {
     return this.http
-      .get<CurrentUser>('http://localhost:8081/api/users/me')
+      .get<{
+        success: boolean;
+        message: string;
+        data: CurrentUser;
+      }>('http://localhost:8081/api/users/me')
       .pipe(
-        tap((user) => {
-          this.user = user;
+        tap((res) => {
+          this.user = res.data;
         }),
+        map((res) => res.data),
       );
   }
 

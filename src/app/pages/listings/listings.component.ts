@@ -56,10 +56,10 @@ export class ListingsComponent implements OnInit {
     this.loading = true;
 
     this.listingService.getAll().subscribe({
-      next: (data) => {
-        console.log('SHOP LOAD DATA:', data.length);
+      next: (listings) => {
+        console.log('LISTINGS RECEIVED:', listings);
 
-        this.listings = data;
+        this.listings = listings;
         this.loading = false;
 
         // Handle redirect after listings load

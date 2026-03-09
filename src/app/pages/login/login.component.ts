@@ -50,7 +50,7 @@ export class LoginComponent {
               replaceUrl: true,
             });
           } else {
-            this.router.navigateByUrl('/account', { replaceUrl: true });
+            this.router.navigateByUrl('/shop', { replaceUrl: true });
           }
         },
 

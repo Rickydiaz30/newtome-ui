@@ -2,6 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Listing } from '../models/listing.model';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+
+type ApiResponse<T> = {
+  success: boolean;
+  message: string;
+  data: T;
+};
 
 @Injectable({ providedIn: 'root' })
 export class ListingService {
@@ -14,18 +21,22 @@ export class ListingService {
   }
 
   create(listing: Partial<Listing>): Observable<Listing> {
-    return this.http.post<Listing>(this.apiUrl, listing);
+    return this.http
+      .post<ApiResponse<Listing>>(this.apiUrl, listing)
+      .pipe(map((res) => res.data));
   }
 
-  getMyListings() {
-    return this.http.get<Listing[]>(`${this.apiUrl}/mine`);
+  getMyListings(): Observable<Listing[]> {
+    return this.http
+      .get<ApiResponse<Listing[]>>(`${this.apiUrl}/mine`)
+      .pipe(map((res) => res.data ?? []));
   }
 
   deleteListing(id: number) {
     return this.http.delete(`${this.apiUrl}/${id}`);
   }
 
-  search(query: string) {
-    return this.http.get<any[]>(`${this.apiUrl}/search?query=${query}`);
+  search(query: string): Observable<Listing[]> {
+    return this.http.get<Listing[]>(`${this.apiUrl}/search?query=${query}`);
   }
 }

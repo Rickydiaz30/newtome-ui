@@ -8,6 +8,12 @@ import { Listing } from '../../models/listing.model';
 import { OfferService } from '../../services/offer.service';
 import { Offer } from '../../models/offer.model';
 
+type ApiResponse<T> = {
+  success: boolean;
+  message: string;
+  data: T;
+};
+
 type MeResponse = {
   id: number;
   firstName: string;
@@ -27,6 +33,7 @@ export class AccountComponent implements OnInit {
   user: MeResponse | null = null;
   loading = false;
   error: string | null = null;
+
   myListings: Listing[] = [];
   myOffers: Offer[] = [];
   receivedOffers: Offer[] = [];
@@ -39,24 +46,19 @@ export class AccountComponent implements OnInit {
     | 'OFFERS_MADE'
     | 'OFFERS_RECEIVED' = 'ACCOUNT';
 
-  selectTab(
-    tab: 'ACCOUNT' | 'ACTIVE' | 'SOLD' | 'OFFERS_MADE' | 'OFFERS_RECEIVED',
-  ) {
-    this.selectedTab = tab;
-  }
-
   constructor(
     private http: HttpClient,
     private auth: AuthService,
     private router: Router,
     private offerService: OfferService,
-    private listingService: ListingService, // 👈 add this
+    private listingService: ListingService,
   ) {}
 
   ngOnInit(): void {
     this.loadMe();
     this.loadMyListings();
     this.loadMyOffers();
+
     this.offerService.getOffersReceived().subscribe({
       next: (offers) => {
         this.receivedOffers = offers;
@@ -64,21 +66,28 @@ export class AccountComponent implements OnInit {
     });
   }
 
+  selectTab(
+    tab: 'ACCOUNT' | 'ACTIVE' | 'SOLD' | 'OFFERS_MADE' | 'OFFERS_RECEIVED',
+  ) {
+    this.selectedTab = tab;
+  }
+
   loadMe() {
     this.loading = true;
     this.error = null;
 
-    // Your interceptor should attach Bearer token automatically
-    this.http.get<MeResponse>('http://localhost:8081/api/users/me').subscribe({
-      next: (data) => {
-        this.user = data;
-        this.loading = false;
-      },
-      error: () => {
-        this.loading = false;
-        this.error = 'Failed to load account.';
-      },
-    });
+    this.http
+      .get<ApiResponse<MeResponse>>('http://localhost:8081/api/users/me')
+      .subscribe({
+        next: (res) => {
+          this.user = res.data;
+          this.loading = false;
+        },
+        error: () => {
+          this.loading = false;
+          this.error = 'Failed to load account.';
+        },
+      });
   }
 
   loadMyListings() {
@@ -92,11 +101,11 @@ export class AccountComponent implements OnInit {
     });
   }
 
-  get activeListings() {
+  get activeListings(): Listing[] {
     return this.myListings.filter((l) => l.status === 'ACTIVE');
   }
 
-  get soldListings() {
+  get soldListings(): Listing[] {
     return this.myListings.filter((l) => l.status === 'SOLD');
   }
 
@@ -125,7 +134,6 @@ export class AccountComponent implements OnInit {
     });
   }
 
-  // Delete listing with confirmation
   deleteListing(id: number) {
     if (!confirm('Are you sure you want to delete this listing?')) {
       return;
@@ -133,7 +141,6 @@ export class AccountComponent implements OnInit {
 
     this.listingService.deleteListing(id).subscribe({
       next: () => {
-        // remove from UI immediately
         this.myListings = this.myListings.filter((l) => l.id !== id);
       },
       error: () => {
