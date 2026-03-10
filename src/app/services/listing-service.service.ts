@@ -3,12 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Listing } from '../models/listing.model';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-
-type ApiResponse<T> = {
-  success: boolean;
-  message: string;
-  data: T;
-};
+import { ApiResponse } from '../models/api-response';
 
 @Injectable({ providedIn: 'root' })
 export class ListingService {
@@ -27,9 +22,7 @@ export class ListingService {
   }
 
   getMyListings(): Observable<Listing[]> {
-    return this.http
-      .get<ApiResponse<Listing[]>>(`${this.apiUrl}/mine`)
-      .pipe(map((res) => res.data ?? []));
+    return this.http.get<Listing[]>(`${this.apiUrl}/mine`);
   }
 
   deleteListing(id: number) {
@@ -37,6 +30,8 @@ export class ListingService {
   }
 
   search(query: string): Observable<Listing[]> {
-    return this.http.get<Listing[]>(`${this.apiUrl}/search?query=${query}`);
+    return this.http
+      .get<ApiResponse<Listing[]>>(`${this.apiUrl}/search?query=${query}`)
+      .pipe(map((res) => res.data ?? []));
   }
 }

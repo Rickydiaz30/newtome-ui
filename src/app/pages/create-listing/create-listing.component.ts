@@ -7,6 +7,7 @@ import { finalize } from 'rxjs/operators';
 import { ListingService } from 'src/app/services/listing-service.service';
 import { SpinnerComponent } from 'src/app/shared/spinner/spinner.component';
 import { delay } from 'rxjs/operators';
+import { ApiResponse } from 'src/app/models/api-response';
 
 type Category = {
   id: number;
@@ -62,13 +63,15 @@ export class CreateListingComponent implements OnInit {
     this.loadingCategories = true;
 
     this.http
-      .get<Category[]>(this.categoriesUrl)
+      .get<ApiResponse<Category[]>>(this.categoriesUrl)
       .pipe(finalize(() => (this.loadingCategories = false)))
       .subscribe({
-        next: (data) => {
+        next: (res) => {
           this.errorMsg = '';
 
-          this.categories = data.sort((a, b) => a.name.localeCompare(b.name));
+          this.categories = res.data.sort((a, b) =>
+            a.name.localeCompare(b.name),
+          );
 
           if (this.categories.length === 0) {
             this.errorMsg = 'No categories available.';

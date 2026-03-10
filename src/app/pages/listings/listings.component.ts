@@ -7,6 +7,7 @@ import { FormsModule } from '@angular/forms';
 import { OfferService } from 'src/app/services/offer.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { Router, ActivatedRoute } from '@angular/router';
+import { ApiResponse } from 'src/app/models/api-response';
 
 @Component({
   selector: 'app-listings',
@@ -56,13 +57,12 @@ export class ListingsComponent implements OnInit {
     this.loading = true;
 
     this.listingService.getAll().subscribe({
-      next: (listings) => {
+      next: (listings: Listing[]) => {
         console.log('LISTINGS RECEIVED:', listings);
 
-        this.listings = listings;
+        this.listings = listings ?? [];
         this.loading = false;
 
-        // Handle redirect after listings load
         if (this.redirectListingId) {
           const listing = this.listings.find(
             (l) => l.id === this.redirectListingId,
@@ -90,18 +90,24 @@ export class ListingsComponent implements OnInit {
   }
 
   searchListings() {
-    if (!this.searchQuery.trim()) {
+    const query = this.searchQuery.trim();
+
+    if (!query) {
       this.loadListings();
       return;
     }
 
-    this.listingService.search(this.searchQuery).subscribe({
-      next: (data) => {
-        this.listings = data;
+    this.loading = true;
+
+    this.listingService.search(query).subscribe({
+      next: (listings: Listing[]) => {
+        console.log('SEARCH RESULTS:', listings);
+        this.listings = listings ?? [];
       },
 
       error: (err) => {
         console.error('Search failed', err);
+        this.loading = false;
       },
     });
   }

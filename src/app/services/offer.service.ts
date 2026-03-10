@@ -20,6 +20,7 @@ export interface OfferResponse {
 })
 export class OfferService {
   private apiUrl = 'http://localhost:8081/api/listings';
+  private offersApi = 'http://localhost:8081/api/offers';
 
   constructor(private http: HttpClient) {}
 
@@ -45,25 +46,22 @@ export class OfferService {
     );
   }
 
-  getMyOffers() {
-    return this.http.get<Offer[]>(`http://localhost:8081/api/offers/mine`);
-  }
-
-  getOffersReceived() {
-    return this.http.get<Offer[]>('http://localhost:8081/api/offers/received');
-  }
-
-  cancelOffer(offerId: number) {
-    return this.http.patch<Offer>(
-      `http://localhost:8081/api/offers/${offerId}/cancel`,
-      {},
-    );
-  }
-
-  rejectOffer(listingId: number, offerId: number) {
-    return this.http.post<Offer>(
+  rejectOffer(listingId: number, offerId: number): Observable<OfferResponse> {
+    return this.http.post<OfferResponse>(
       `${this.apiUrl}/${listingId}/offers/${offerId}/reject`,
       {},
     );
+  }
+
+  getMyOffers(): Observable<Offer[]> {
+    return this.http.get<Offer[]>(`${this.offersApi}/mine`);
+  }
+
+  getOffersReceived(): Observable<Offer[]> {
+    return this.http.get<Offer[]>(`${this.offersApi}/received`);
+  }
+
+  cancelOffer(offerId: number): Observable<Offer> {
+    return this.http.patch<Offer>(`${this.offersApi}/${offerId}/cancel`, {});
   }
 }

@@ -8,12 +8,6 @@ import { Listing } from '../../models/listing.model';
 import { OfferService } from '../../services/offer.service';
 import { Offer } from '../../models/offer.model';
 
-type ApiResponse<T> = {
-  success: boolean;
-  message: string;
-  data: T;
-};
-
 type MeResponse = {
   id: number;
   firstName: string;
@@ -76,18 +70,16 @@ export class AccountComponent implements OnInit {
     this.loading = true;
     this.error = null;
 
-    this.http
-      .get<ApiResponse<MeResponse>>('http://localhost:8081/api/users/me')
-      .subscribe({
-        next: (res) => {
-          this.user = res.data;
-          this.loading = false;
-        },
-        error: () => {
-          this.loading = false;
-          this.error = 'Failed to load account.';
-        },
-      });
+    this.http.get<MeResponse>('http://localhost:8081/api/users/me').subscribe({
+      next: (user) => {
+        this.user = user;
+        this.loading = false;
+      },
+      error: () => {
+        this.loading = false;
+        this.error = 'Failed to load account.';
+      },
+    });
   }
 
   loadMyListings() {

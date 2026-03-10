@@ -7,7 +7,9 @@ import { switchMap } from 'rxjs';
 type LoginResponse = {
   success: boolean;
   message: string;
-  data: { token: string };
+  data: {
+    token: string;
+  };
 };
 
 type RegisterResponse = { message: string };
@@ -60,11 +62,10 @@ export class AuthService {
     password: string;
   }): Observable<CurrentUser> {
     return this.http.post<LoginResponse>(`${this.baseUrl}/login`, payload).pipe(
-      tap((res) => this.setToken(res.data.token)),
+      tap((res: any) => this.setToken(res.token)),
       switchMap(() => this.loadCurrentUser()),
     );
   }
-
   logout(): void {
     localStorage.removeItem(this.tokenKey);
     this.user = null;
@@ -84,16 +85,11 @@ export class AuthService {
 
   loadCurrentUser(): Observable<CurrentUser> {
     return this.http
-      .get<{
-        success: boolean;
-        message: string;
-        data: CurrentUser;
-      }>('http://localhost:8081/api/users/me')
+      .get<CurrentUser>('http://localhost:8081/api/users/me')
       .pipe(
-        tap((res) => {
-          this.user = res.data;
+        tap((user) => {
+          this.user = user;
         }),
-        map((res) => res.data),
       );
   }
 
