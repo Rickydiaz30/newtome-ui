@@ -19,6 +19,10 @@ export class CreateAccountComponent {
     phone: '',
     email: '',
     password: '',
+    streetAddress: '',
+    city: '',
+    state: '',
+    zipCode: '',
   };
 
   confirmPassword = '';
@@ -57,20 +61,18 @@ export class CreateAccountComponent {
         email: this.model.email.trim(),
         password: this.model.password,
         phone: this.model.phone?.trim() || null,
+        streetAddress: this.model.streetAddress.trim(),
+        city: this.model.city.trim(),
+        state: this.model.state.trim(),
+        zipCode: this.model.zipCode.trim(),
       })
       .subscribe({
         next: () => {
           this.loading = false;
-
-          // Option 1: send them to login
           this.router.navigateByUrl('/login');
-
-          // Option 2 (later): auto-login after register
         },
         error: (err) => {
           this.loading = false;
-
-          // your backend sometimes returns {message:"..."} or a raw string
           this.error =
             err?.error?.message ||
             (typeof err?.error === 'string' ? err.error : null) ||

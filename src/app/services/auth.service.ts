@@ -50,6 +50,10 @@ export class AuthService {
     email: string;
     password: string;
     phone?: string | null;
+    streetAddress: string;
+    city: string;
+    state: string;
+    zipCode: string;
   }): Observable<RegisterResponse> {
     return this.http.post<RegisterResponse>(
       `${this.baseUrl}/register`,

@@ -68,23 +68,156 @@
     </nav>
   </div>
 
-  <!-- ACCOUNT TAB -->
   <div *ngIf="selectedTab === 'ACCOUNT'" class="mt-10 max-w-2xl mx-auto">
-    <div class="rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
-      <h2 class="text-lg font-semibold text-slate-800">Account Info</h2>
+    <div class="rounded-xl border border-blue-950/20 bg-white p-8 shadow-sm">
+      <h2 class="text-lg font-semibold text-slate-900">Account Info</h2>
 
-      <div class="mt-4 space-y-2 text-sm text-slate-700">
-        <p>
-          <span class="font-medium">Name:</span> {{ user?.firstName || "—" }}
-        </p>
-        <p><span class="font-medium">Email:</span> {{ user?.email || "—" }}</p>
-        <p>
-          <span class="font-medium">Username:</span> {{ user?.username || "—" }}
-        </p>
-        <!-- <p>
-          <span class="font-medium">Active Listings:</span>
-          {{ user?.listings || "—" }}
-        </p> -->
+      <div class="mt-6 grid gap-5 sm:grid-cols-2 text-sm text-slate-700">
+        <!-- FIRST NAME -->
+        <div>
+          <label class="text-sm font-medium text-slate-700">First Name</label>
+
+          <p *ngIf="!editing" class="mt-1 text-slate-900">
+            {{ user?.firstName || "—" }}
+          </p>
+
+          <input
+            *ngIf="editing"
+            [(ngModel)]="editModel.firstName"
+            class="mt-1 w-full rounded-md border border-blue-950/25 px-4 py-2 focus:border-blue-950 focus:ring-2 focus:ring-blue-950/15 outline-none"
+          />
+        </div>
+
+        <!-- LAST NAME -->
+        <div>
+          <label class="text-sm font-medium text-slate-700">Last Name</label>
+
+          <p *ngIf="!editing" class="mt-1 text-slate-900">
+            {{ user?.lastName || "—" }}
+          </p>
+
+          <input
+            *ngIf="editing"
+            [(ngModel)]="editModel.lastName"
+            class="mt-1 w-full rounded-md border border-blue-950/25 px-4 py-2 focus:border-blue-950 focus:ring-2 focus:ring-blue-950/15 outline-none"
+          />
+        </div>
+
+        <!-- EMAIL -->
+        <div class="sm:col-span-2">
+          <label class="text-sm font-medium text-slate-700">Email</label>
+          <p class="mt-1 text-slate-900">{{ user?.email || "—" }}</p>
+        </div>
+
+        <!-- USERNAME -->
+        <div class="sm:col-span-2">
+          <label class="text-sm font-medium text-slate-700">Username</label>
+          <p class="mt-1 text-slate-900">{{ user?.username || "—" }}</p>
+        </div>
+
+        <!-- PHONE -->
+        <div class="sm:col-span-2">
+          <label class="text-sm font-medium text-slate-700">Phone</label>
+
+          <p *ngIf="!editing" class="mt-1 text-slate-900">
+            {{ user?.phone || "—" }}
+          </p>
+
+          <input
+            *ngIf="editing"
+            [(ngModel)]="editModel.phone"
+            class="mt-1 w-full rounded-md border border-blue-950/25 px-4 py-2 focus:border-blue-950 focus:ring-2 focus:ring-blue-950/15 outline-none"
+          />
+        </div>
+
+        <!-- STREET -->
+        <div class="sm:col-span-2">
+          <label class="text-sm font-medium text-slate-700"
+            >Street Address</label
+          >
+
+          <p *ngIf="!editing" class="mt-1 text-slate-900">
+            {{ user?.streetAddress || "—" }}
+          </p>
+
+          <input
+            *ngIf="editing"
+            [(ngModel)]="editModel.streetAddress"
+            class="mt-1 w-full rounded-md border border-blue-950/25 px-4 py-2 focus:border-blue-950 focus:ring-2 focus:ring-blue-950/15 outline-none"
+          />
+        </div>
+
+        <!-- CITY -->
+        <div>
+          <label class="text-sm font-medium text-slate-700">City</label>
+
+          <p *ngIf="!editing" class="mt-1 text-slate-900">
+            {{ user?.city || "—" }}
+          </p>
+
+          <input
+            *ngIf="editing"
+            [(ngModel)]="editModel.city"
+            class="mt-1 w-full rounded-md border border-blue-950/25 px-4 py-2 focus:border-blue-950 focus:ring-2 focus:ring-blue-950/15 outline-none"
+          />
+        </div>
+
+        <!-- STATE -->
+        <div>
+          <label class="text-sm font-medium text-slate-700">State</label>
+
+          <p *ngIf="!editing" class="mt-1 text-slate-900">
+            {{ user?.state || "—" }}
+          </p>
+
+          <input
+            *ngIf="editing"
+            [(ngModel)]="editModel.state"
+            class="mt-1 w-full rounded-md border border-blue-950/25 px-4 py-2 focus:border-blue-950 focus:ring-2 focus:ring-blue-950/15 outline-none"
+          />
+        </div>
+
+        <!-- ZIP -->
+        <div class="sm:col-span-2">
+          <label class="text-sm font-medium text-slate-700">Zip Code</label>
+
+          <p *ngIf="!editing" class="mt-1 text-slate-900">
+            {{ user?.zipCode || "—" }}
+          </p>
+
+          <input
+            *ngIf="editing"
+            [(ngModel)]="editModel.zipCode"
+            class="mt-1 w-full rounded-md border border-blue-950/25 px-4 py-2 focus:border-blue-950 focus:ring-2 focus:ring-blue-950/15 outline-none"
+          />
+        </div>
+      </div>
+
+      <!-- ACTION BUTTONS -->
+      <div class="mt-8 flex gap-3">
+        <button
+          *ngIf="!editing"
+          (click)="startEdit()"
+          class="rounded-md bg-blue-950 px-5 py-2 text-sm font-semibold text-white hover:bg-blue-900 transition"
+        >
+          Edit Profile
+        </button>
+
+        <button
+          *ngIf="editing"
+          (click)="saveProfile()"
+          class="rounded-md bg-green-700 px-5 py-2 text-sm font-semibold text-white hover:bg-green-800 transition"
+        >
+          Save Changes
+        </button>
+
+        <button
+          *ngIf="editing"
+          (click)="cancelEdit()"
+          class="rounded-md bg-gray-400 px-5 py-2 text-sm font-semibold text-white hover:bg-gray-500 transition"
+        >
+          Cancel
+        </button>
       </div>
     </div>
   </div>

@@ -1,5 +1,5 @@
 <section class="bg-slate-50 px-6 py-16">
-  <div class="mx-auto max-w-3xl">
+  <div class="mx-auto max-w-2xl">
     <!-- Header -->
     <div class="text-center">
       <h1 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
@@ -12,16 +12,16 @@
 
     <!-- Card -->
     <div
-      class="mt-10 rounded-xl border border-blue-950/20 bg-white p-6 shadow-sm sm:p-8"
+      class="mt-10 rounded-xl border border-blue-950/20 bg-white p-6 shadow-sm sm:p-10"
     >
-      <form class="space-y-10" (ngSubmit)="submit()" #f="ngForm">
+      <form class="space-y-8" (ngSubmit)="submit()" #f="ngForm">
         <!-- Personal Info -->
         <div>
           <h2 class="text-lg font-semibold text-slate-900">Personal info</h2>
 
           <div class="mt-4 grid gap-4 sm:grid-cols-2">
             <!-- First name -->
-            <div class="sm:col-span-2">
+            <div>
               <label class="text-sm font-medium text-slate-700"
                 >First name</label
               >
@@ -30,14 +30,14 @@
                 name="firstName"
                 [(ngModel)]="model.firstName"
                 required
-                autocomplete="name"
-                placeholder="Jane Doe"
+                autocomplete="given-name"
+                placeholder="Jane"
                 class="mt-2 w-full rounded-md border border-blue-950/25 bg-white px-4 py-3 text-slate-900 outline-none focus:border-blue-950 focus:ring-2 focus:ring-blue-950/15"
               />
             </div>
 
             <!-- Last name -->
-            <div class="sm:col-span-2">
+            <div>
               <label class="text-sm font-medium text-slate-700"
                 >Last name</label
               >
@@ -46,13 +46,13 @@
                 name="lastName"
                 [(ngModel)]="model.lastName"
                 required
-                autocomplete="name"
-                placeholder="Jane Doe"
+                autocomplete="family-name"
+                placeholder="Doe"
                 class="mt-2 w-full rounded-md border border-blue-950/25 bg-white px-4 py-3 text-slate-900 outline-none focus:border-blue-950 focus:ring-2 focus:ring-blue-950/15"
               />
             </div>
 
-            <!-- User name -->
+            <!-- Username -->
             <div class="sm:col-span-2">
               <label class="text-sm font-medium text-slate-700"
                 >User name</label
@@ -62,8 +62,8 @@
                 name="username"
                 [(ngModel)]="model.username"
                 required
-                autocomplete="name"
-                placeholder="Jane Doe"
+                autocomplete="username"
+                placeholder="janedoe"
                 class="mt-2 w-full rounded-md border border-blue-950/25 bg-white px-4 py-3 text-slate-900 outline-none focus:border-blue-950 focus:ring-2 focus:ring-blue-950/15"
               />
             </div>
@@ -96,8 +96,74 @@
                 class="mt-2 w-full rounded-md border border-blue-950/25 bg-white px-4 py-3 text-slate-900 outline-none focus:border-blue-950 focus:ring-2 focus:ring-blue-950/15"
               />
             </div>
+          </div>
+        </div>
 
-            <!-- Password -->
+        <!-- Address -->
+        <div>
+          <h2 class="text-lg font-semibold text-slate-900">Address</h2>
+          <p class="mt-1 text-sm text-slate-600">
+            This will be used later for shipping and account details.
+          </p>
+
+          <div class="mt-4 grid gap-4 sm:grid-cols-6">
+            <!-- Street -->
+            <div class="sm:col-span-6">
+              <label class="text-sm font-medium text-slate-700"
+                >Street address</label
+              >
+              <input
+                type="text"
+                name="streetAddress"
+                [(ngModel)]="model.streetAddress"
+                placeholder="123 Main Street"
+                class="mt-2 w-full rounded-md border border-blue-950/25 bg-white px-4 py-3 text-slate-900 outline-none focus:border-blue-950 focus:ring-2 focus:ring-blue-950/15"
+              />
+            </div>
+
+            <!-- City -->
+            <div class="sm:col-span-3">
+              <label class="text-sm font-medium text-slate-700">City</label>
+              <input
+                type="text"
+                name="city"
+                [(ngModel)]="model.city"
+                placeholder="Omaha"
+                class="mt-2 w-full rounded-md border border-blue-950/25 bg-white px-4 py-3 text-slate-900 outline-none focus:border-blue-950 focus:ring-2 focus:ring-blue-950/15"
+              />
+            </div>
+
+            <!-- State -->
+            <div class="sm:col-span-1">
+              <label class="text-sm font-medium text-slate-700">State</label>
+              <input
+                type="text"
+                name="state"
+                [(ngModel)]="model.state"
+                placeholder="NE"
+                class="mt-2 w-full rounded-md border border-blue-950/25 bg-white px-4 py-3 text-slate-900 outline-none focus:border-blue-950 focus:ring-2 focus:ring-blue-950/15"
+              />
+            </div>
+
+            <!-- ZIP -->
+            <div class="sm:col-span-2">
+              <label class="text-sm font-medium text-slate-700">ZIP</label>
+              <input
+                type="text"
+                name="zipCode"
+                [(ngModel)]="model.zipCode"
+                placeholder="68104"
+                class="mt-2 w-full rounded-md border border-blue-950/25 bg-white px-4 py-3 text-slate-900 outline-none focus:border-blue-950 focus:ring-2 focus:ring-blue-950/15"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- Security -->
+        <div>
+          <h2 class="text-lg font-semibold text-slate-900">Security</h2>
+
+          <div class="mt-4 grid gap-4 sm:grid-cols-2">
             <div>
               <label class="text-sm font-medium text-slate-700">Password</label>
               <input
@@ -112,7 +178,6 @@
               />
             </div>
 
-            <!-- Confirm password -->
             <div>
               <label class="text-sm font-medium text-slate-700"
                 >Confirm password</label
@@ -128,7 +193,6 @@
               />
             </div>
 
-            <!-- Password mismatch -->
             <p
               *ngIf="passwordMismatch"
               class="sm:col-span-2 text-sm text-red-600"
@@ -138,49 +202,18 @@
           </div>
         </div>
 
-        <!-- Address (display-only for now) -->
-        <div>
-          <h2 class="text-lg font-semibold text-slate-900">Address</h2>
-          <p class="mt-1 text-sm text-slate-600">
-            Address details will be used later for receipts and verification.
-          </p>
-
-          <div class="mt-4 grid gap-4 sm:grid-cols-2">
-            <input
-              class="rounded-md border px-4 py-3"
-              placeholder="Street address"
-              disabled
-            />
-            <input
-              class="rounded-md border px-4 py-3"
-              placeholder="City"
-              disabled
-            />
-            <input
-              class="rounded-md border px-4 py-3"
-              placeholder="State"
-              disabled
-            />
-            <input
-              class="rounded-md border px-4 py-3"
-              placeholder="ZIP"
-              disabled
-            />
-          </div>
-        </div>
-
         <!-- Footer -->
         <div
-          class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
+          class="flex flex-col gap-4 border-t border-slate-200 pt-6 sm:flex-row sm:items-center sm:justify-between"
         >
-          <p class="text-xs text-slate-600">
+          <p class="max-w-md text-xs text-slate-600">
             By creating an account, you agree to our Terms and Privacy Policy.
           </p>
 
           <button
             type="submit"
             [disabled]="f.invalid || passwordMismatch || loading"
-            class="inline-flex justify-center rounded-md bg-blue-950 px-6 py-3 text-sm font-semibold text-slate-50 transition hover:bg-blue-900 disabled:opacity-50"
+            class="inline-flex min-w-[160px] justify-center rounded-md bg-blue-950 px-6 py-3 text-sm font-semibold text-slate-50 transition hover:bg-blue-900 disabled:opacity-50"
           >
             {{ loading ? "Creating account…" : "Create account" }}
           </button>

@@ -8,6 +8,7 @@ import { Listing } from '../../models/listing.model';
 import { OfferService } from '../../services/offer.service';
 import { Offer } from '../../models/offer.model';
 import { SpinnerComponent } from 'src/app/shared/spinner/spinner.component';
+import { FormsModule } from '@angular/forms';
 
 type MeResponse = {
   id: number;
@@ -16,13 +17,17 @@ type MeResponse = {
   username: string;
   email: string;
   phone: string | null;
+  streetAddress: string | null;
+  city: string | null;
+  state: string | null;
+  zipCode: string | null;
 };
 
 @Component({
   selector: 'app-my-account',
   standalone: true,
   templateUrl: './my-account.component.html',
-  imports: [CommonModule, RouterLink, SpinnerComponent],
+  imports: [CommonModule, RouterLink, SpinnerComponent, FormsModule],
 })
 export class AccountComponent implements OnInit {
   user: MeResponse | null = null;
@@ -34,6 +39,17 @@ export class AccountComponent implements OnInit {
   myOffers: Offer[] = [];
   receivedOffers: Offer[] = [];
   loadingOffers = false;
+  editing = false;
+
+  editModel = {
+    firstName: '',
+    lastName: '',
+    phone: '',
+    streetAddress: '',
+    city: '',
+    state: '',
+    zipCode: '',
+  };
 
   selectedTab:
     | 'ACCOUNT'
@@ -74,6 +90,7 @@ export class AccountComponent implements OnInit {
 
     this.http.get<MeResponse>('http://localhost:8081/api/users/me').subscribe({
       next: (user) => {
+        console.log('ME RESPONSE:', user);
         this.user = user;
         this.loading = false;
       },
@@ -186,6 +203,45 @@ export class AccountComponent implements OnInit {
         this.loadingAction = null;
       },
     });
+  }
+
+  startEdit() {
+    if (!this.user) return;
+
+    this.editing = true;
+
+    this.editModel = {
+      firstName: this.user.firstName || '',
+      lastName: this.user.lastName || '',
+      phone: this.user.phone || '',
+      streetAddress: this.user.streetAddress || '',
+      city: this.user.city || '',
+      state: this.user.state || '',
+      zipCode: this.user.zipCode || '',
+    };
+  }
+
+  cancelEdit() {
+    this.editing = false;
+  }
+
+  saveProfile() {
+    this.loading = true;
+
+    this.http
+      .patch<any>('http://localhost:8081/api/users/me', this.editModel)
+      .subscribe({
+        next: (res) => {
+          this.user = res;
+
+          this.editing = false;
+          this.loading = false;
+        },
+        error: () => {
+          this.loading = false;
+          alert('Failed to update profile');
+        },
+      });
   }
 
   logout() {
