@@ -33,8 +33,8 @@
   </div>
 
   <!-- Loading -->
-  <div *ngIf="loading" class="mt-8 text-center text-slate-500">
-    Loading listings…
+  <div class="mt-8 flex justify-center">
+    <app-spinner *ngIf="loading"></app-spinner>
   </div>
 
   <!-- No Listings -->
@@ -203,12 +203,23 @@
             ></textarea>
           </div>
 
-          <button
-            (click)="submitOffer()"
-            class="mt-6 w-full rounded-md bg-blue-950 px-5 py-3 text-white hover:bg-blue-900"
-          >
-            Submit Offer
-          </button>
+          <div class="relative mt-6">
+            <button
+              (click)="submitOffer()"
+              [disabled]="loading"
+              class="w-full rounded-md bg-blue-950 px-5 py-3 text-white hover:bg-blue-900 relative flex items-center justify-center"
+            >
+              Submit Offer
+
+              <!-- Spinner overlay -->
+              <div
+                *ngIf="loading"
+                class="absolute inset-0 flex items-center justify-center bg-blue-950/70 rounded-md"
+              >
+                <app-spinner></app-spinner>
+              </div>
+            </button>
+          </div>
         </div>
 
         <!-- SUCCESS VIEW -->

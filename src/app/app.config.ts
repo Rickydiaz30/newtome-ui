@@ -5,6 +5,7 @@ import { provideHttpClient, withInterceptors } from '@angular/common/http';
 
 import { authInterceptor } from './interceptors/auth.interceptor';
 import { apiResponseInterceptor } from './interceptors/api-response.interceptor';
+import { delayInterceptor } from './interceptors/delay.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -17,7 +18,11 @@ export const appConfig: ApplicationConfig = {
     ),
 
     provideHttpClient(
-      withInterceptors([authInterceptor, apiResponseInterceptor]),
+      withInterceptors([
+        authInterceptor,
+        apiResponseInterceptor,
+        delayInterceptor,
+      ]),
     ),
   ],
 };

@@ -8,11 +8,13 @@ import { OfferService } from 'src/app/services/offer.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ApiResponse } from 'src/app/models/api-response';
+import { SpinnerComponent } from 'src/app/shared/spinner/spinner.component';
+import { delay } from 'rxjs';
 
 @Component({
   selector: 'app-listings',
   standalone: true,
-  imports: [CommonModule, HttpClientModule, FormsModule],
+  imports: [CommonModule, HttpClientModule, FormsModule, SpinnerComponent],
   templateUrl: './listings.component.html',
 })
 export class ListingsComponent implements OnInit {
@@ -144,9 +146,11 @@ export class ListingsComponent implements OnInit {
           listingId: this.selectedListing?.id,
         },
       });
-
       return;
     }
+
+    this.offerAmount = null;
+    this.offerMessage = '';
 
     this.modalView = 'OFFER';
   }
@@ -154,15 +158,23 @@ export class ListingsComponent implements OnInit {
   submitOffer() {
     if (!this.selectedListing || !this.offerAmount) return;
 
+    this.loading = true;
+
     this.offerService
       .createOffer(this.selectedListing.id, this.offerAmount, this.offerMessage)
       .subscribe({
         next: () => {
+          this.loading = false;
           this.modalView = 'SUCCESS';
+          this.searchQuery = '';
+
+          this.offerAmount = null;
+          this.offerMessage = '';
         },
 
         error: (err) => {
           console.error('Offer failed', err);
+          this.loading = false;
         },
       });
   }

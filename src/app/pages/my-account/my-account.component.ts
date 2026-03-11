@@ -7,6 +7,7 @@ import { ListingService } from '../../services/listing-service.service';
 import { Listing } from '../../models/listing.model';
 import { OfferService } from '../../services/offer.service';
 import { Offer } from '../../models/offer.model';
+import { SpinnerComponent } from 'src/app/shared/spinner/spinner.component';
 
 type MeResponse = {
   id: number;
@@ -21,13 +22,14 @@ type MeResponse = {
   selector: 'app-my-account',
   standalone: true,
   templateUrl: './my-account.component.html',
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, SpinnerComponent],
 })
 export class AccountComponent implements OnInit {
   user: MeResponse | null = null;
   loading = false;
   error: string | null = null;
-
+  loadingOfferId: number | null = null;
+  loadingAction: 'accept' | 'reject' | null = null;
   myListings: Listing[] = [];
   myOffers: Offer[] = [];
   receivedOffers: Offer[] = [];
@@ -148,26 +150,40 @@ export class AccountComponent implements OnInit {
   }
 
   acceptOffer(listingId: number, offerId: number) {
+    this.loadingOfferId = offerId;
+    this.loadingAction = 'accept';
+
     this.offerService.acceptOffer(listingId, offerId).subscribe({
       next: () => {
         this.loadReceivedOffers();
+        this.loadingOfferId = null;
+        this.loadingAction = null;
       },
       error: () => {
+        this.loadingOfferId = null;
+        this.loadingAction = null;
         alert('Failed to accept offer.');
       },
     });
   }
 
   rejectOffer(listingId: number, offerId: number) {
+    this.loadingOfferId = offerId;
+    this.loadingAction = 'reject';
+
     this.offerService.rejectOffer(listingId, offerId).subscribe({
       next: (updatedOffer) => {
         const offer = this.receivedOffers.find((o) => o.id === updatedOffer.id);
         if (offer) {
           offer.status = updatedOffer.status;
         }
+
+        this.loadingOfferId = null;
+        this.loadingAction = null;
       },
-      error: (err) => {
-        console.error('Failed to reject offer', err);
+      error: () => {
+        this.loadingOfferId = null;
+        this.loadingAction = null;
       },
     });
   }

@@ -1,3 +1,8 @@
+<!-- Top loading bar -->
+<div
+  class="fixed top-0 left-0 h-1 bg-sky-500 z-[9999] transition-all duration-300"
+  [style.width.%]="loading ? progress : 0"
+></div>
 <app-navbar></app-navbar>
 
 <router-outlet></router-outlet>
