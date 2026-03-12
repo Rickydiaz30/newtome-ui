@@ -1,8 +1,27 @@
-<!-- Top loading bar -->
+<!-- Loading bar -->
 <div
   class="fixed top-0 left-0 h-1 bg-sky-500 z-[9999] transition-all duration-300"
   [style.width.%]="loading ? progress : 0"
 ></div>
+
+<!-- Spinner overlay -->
+<div
+  class="fixed inset-0 z-[9998] flex items-center justify-center bg-black/40 transition-opacity duration-300"
+  [class.opacity-100]="loading"
+  [class.opacity-0]="!loading"
+  [class.pointer-events-none]="!loading"
+>
+  <div
+    class="transition-all duration-300"
+    [class.scale-100]="loading"
+    [class.scale-90]="!loading"
+    [class.opacity-100]="loading"
+    [class.opacity-0]="!loading"
+  >
+    <app-spinner></app-spinner>
+  </div>
+</div>
+
 <app-navbar></app-navbar>
 
 <router-outlet></router-outlet>

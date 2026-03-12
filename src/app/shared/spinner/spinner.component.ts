@@ -8,12 +8,4 @@ import { CommonModule } from '@angular/common';
   templateUrl: './spinner.component.html',
   styleUrls: ['./spinner.component.css'],
 })
-export class SpinnerComponent {
-  loading = true;
-
-  ngOnInit() {
-    setTimeout(() => {
-      this.loading = false;
-    }, 2000);
-  }
-}
+export class SpinnerComponent {}

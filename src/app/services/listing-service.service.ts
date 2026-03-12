@@ -30,8 +30,6 @@ export class ListingService {
   }
 
   search(query: string): Observable<Listing[]> {
-    return this.http
-      .get<ApiResponse<Listing[]>>(`${this.apiUrl}/search?query=${query}`)
-      .pipe(map((res) => res.data ?? []));
+    return this.http.get<Listing[]>(`${this.apiUrl}/search?query=${query}`);
   }
 }
