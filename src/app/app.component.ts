@@ -12,6 +12,7 @@ import {
 import { NavbarComponent } from './layout/navbar/navbar.component';
 import { FooterComponent } from './layout/footer/footer.component';
 import { HomeComponent } from './pages/home/home.component';
+import { SpinnerComponent } from './shared/spinner/spinner.component';
 
 @Component({
   selector: 'app-root',
@@ -22,6 +23,7 @@ import { HomeComponent } from './pages/home/home.component';
     NavbarComponent,
     FooterComponent,
     HomeComponent,
+    SpinnerComponent,
   ],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
@@ -33,7 +35,9 @@ export class AppComponent {
   progress = 0;
   private timer: any;
 
-  constructor(private router: Router) {
+  constructor(private router: Router) {}
+
+  ngOnInit() {
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationStart) {
         this.loading = true;
@@ -57,7 +61,7 @@ export class AppComponent {
         setTimeout(() => {
           this.loading = false;
           this.progress = 0;
-        }, 200);
+        }, 500);
       }
     });
   }

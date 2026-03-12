@@ -56,6 +56,12 @@ export class ListingsComponent implements OnInit {
   }
 
   loadListings() {
+    if (this.searchQuery.trim().length > 0) {
+      return;
+    }
+
+    console.log('LOAD LISTINGS TRIGGERED');
+
     this.loading = true;
 
     this.listingService.getAll().subscribe({
@@ -64,22 +70,7 @@ export class ListingsComponent implements OnInit {
 
         this.listings = listings ?? [];
         this.loading = false;
-
-        if (this.redirectListingId) {
-          const listing = this.listings.find(
-            (l) => l.id === this.redirectListingId,
-          );
-
-          if (listing) {
-            this.selectedListing = listing;
-            this.showListingModal = true;
-            this.modalView = 'OFFER';
-          }
-
-          this.redirectListingId = null;
-        }
       },
-
       error: (err) => {
         console.error('Failed to load listings', err);
         this.loading = false;
@@ -99,22 +90,19 @@ export class ListingsComponent implements OnInit {
       return;
     }
 
-    this.loading = true;
-
     this.listingService.search(query).subscribe({
-      next: (listings: Listing[]) => {
+      next: (listings) => {
         console.log('SEARCH RESULTS:', listings);
-        this.listings = listings ?? [];
-      },
 
+        this.listings = listings;
+      },
       error: (err) => {
         console.error('Search failed', err);
-        this.loading = false;
       },
     });
   }
 
-  onSearchChange(value: string) {
+  onSearchChange() {
     clearTimeout(this.searchTimeout);
 
     this.searchTimeout = setTimeout(() => {
