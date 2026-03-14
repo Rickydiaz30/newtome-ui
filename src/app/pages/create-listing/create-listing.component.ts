@@ -4,16 +4,18 @@ import { RouterLink, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { finalize } from 'rxjs/operators';
-import { ListingService } from 'src/app/services/listing-service.service';
+import { ListingService } from 'src/app/services/listing-service';
 import { SpinnerComponent } from 'src/app/shared/spinner/spinner.component';
 import { delay } from 'rxjs/operators';
 import { ApiResponse } from 'src/app/models/api-response';
+import { environment } from 'src/environments/environment';
+import { CategoryService } from 'src/app/services/category-service';
+import { Observable, of } from 'rxjs';
+import { switchMap, tap } from 'rxjs/operators';
 
 type Category = {
   id: number;
   name: string;
-  description: string;
-  active: boolean;
 };
 
 type ListingStatus = 'ACTIVE' | 'DRAFT';
@@ -26,8 +28,6 @@ type ListingStatus = 'ACTIVE' | 'DRAFT';
   styleUrls: ['./create-listing.component.css'],
 })
 export class CreateListingComponent implements OnInit {
-  private categoriesUrl = 'http://localhost:8081/api/categories';
-
   model = {
     title: '',
     description: '',
@@ -42,7 +42,7 @@ export class CreateListingComponent implements OnInit {
   previewUrl: string | null = null;
   selectedFile: File | null = null;
 
-  categories: Array<{ id: number; name: string }> = [];
+  categories: Category[] = [];
   loadingCategories = false;
 
   submitting = false;
@@ -50,9 +50,10 @@ export class CreateListingComponent implements OnInit {
   successMsg = '';
 
   constructor(
-    private http: HttpClient, // still used for categories
+    private categoryService: CategoryService,
     private listingService: ListingService,
     private router: Router,
+    private http: HttpClient,
   ) {}
 
   ngOnInit(): void {
@@ -62,20 +63,23 @@ export class CreateListingComponent implements OnInit {
   loadCategories() {
     this.loadingCategories = true;
 
-    this.http
-      .get<ApiResponse<Category[]>>(this.categoriesUrl)
+    this.categoryService
+      .getCategories()
       .pipe(finalize(() => (this.loadingCategories = false)))
       .subscribe({
-        next: (res) => {
-          this.errorMsg = '';
+        next: (categories) => {
+          console.log('Categories from API:', categories);
 
-          this.categories = res.data.sort((a, b) =>
+          this.categories = (categories ?? []).sort((a, b) =>
             a.name.localeCompare(b.name),
           );
 
           if (this.categories.length === 0) {
             this.errorMsg = 'No categories available.';
+          } else {
+            this.errorMsg = '';
           }
+          console.log(Array.isArray(categories));
         },
         error: (err) => {
           console.error('Failed to load categories', err);
@@ -98,7 +102,6 @@ export class CreateListingComponent implements OnInit {
     const reader = new FileReader();
     reader.onload = () => {
       this.previewUrl = reader.result as string;
-      this.model.imageUrl = this.previewUrl; // for dev purposes
     };
 
     reader.readAsDataURL(file);
@@ -112,10 +115,23 @@ export class CreateListingComponent implements OnInit {
     return true;
   }
 
-  submit() {
-    this.errorMsg = '';
-    this.successMsg = '';
+  private uploadImageIfNeeded(): Observable<any> {
+    if (!this.selectedFile) {
+      return of(null);
+    }
 
+    return this.listingService.getPresignedUrl(this.selectedFile.name).pipe(
+      switchMap((res: any) =>
+        this.http.put(res.uploadUrl, this.selectedFile!, {}).pipe(
+          tap(() => {
+            this.model.imageUrl = res.imageUrl;
+          }),
+        ),
+      ),
+    );
+  }
+
+  submit() {
     if (this.submitting) return;
 
     if (this.model.status === 'ACTIVE' && !this.isValidForSubmit()) {
@@ -124,38 +140,41 @@ export class CreateListingComponent implements OnInit {
     }
 
     this.submitting = true;
+    this.errorMsg = '';
+    this.successMsg = '';
 
-    const payload = {
-      title: this.model.title,
-      description: this.model.description,
-      color: this.model.color,
-      price: this.model.price ?? undefined,
-      city: this.capitalizeCity(this.model.city),
-      status: this.model.status,
-      categoryId: this.model.categoryId ?? undefined,
-      imageUrl: this.model.imageUrl || 'assets/images/blueLogo.png',
-    };
-
-    this.listingService
-      .create(payload)
+    this.uploadImageIfNeeded()
       .pipe(
-        delay(1000), // TEMP delay so spinner is visible
+        switchMap(() => {
+          const payload = {
+            title: this.model.title,
+            description: this.model.description,
+            color: this.model.color,
+            price: this.model.price ?? undefined,
+            city: this.capitalizeCity(this.model.city),
+            status: this.model.status,
+            categoryId: this.model.categoryId ?? undefined,
+            imageUrl:
+              this.model.imageUrl ||
+              'https://d3qyvu5wcarbxw.cloudfront.net/assets/images/ninjaBlender.webp',
+          };
+
+          return this.listingService.create(payload);
+        }),
+        delay(1000),
         finalize(() => (this.submitting = false)),
       )
       .subscribe({
-        next: (response) => {
-          console.log('Listing created:', response);
-
+        next: () => {
           this.successMsg =
             this.model.status === 'DRAFT' ? 'Draft saved.' : 'Listing created.';
 
           if (this.model.status === 'ACTIVE') {
-            this.router.navigate(['/shop']).then((ok) => {
-              if (ok) {
-                this.resetForm();
-              }
-            });
+            this.router.navigate(['/shop']).then(() => this.resetForm());
           }
+        },
+        error: () => {
+          this.errorMsg = 'Failed to create listing.';
         },
       });
   }

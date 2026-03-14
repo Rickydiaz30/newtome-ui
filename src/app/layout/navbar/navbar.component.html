@@ -117,11 +117,14 @@
 
               <div class="my-2 h-px bg-slate-200"></div>
               <button
-                class="w-full px-4 py-2 text-left hover:bg-slate-100"
+                class="w-full px-4 py-2 text-left hover:bg-slate-100 flex items-center gap-2"
                 type="button"
                 (click)="logout(); closeAll()"
+                [disabled]="logoutLoading"
               >
-                Log out
+                <app-spinner *ngIf="logoutLoading"></app-spinner>
+
+                <span *ngIf="!logoutLoading"> Log out </span>
               </button>
             </ng-template>
           </div>

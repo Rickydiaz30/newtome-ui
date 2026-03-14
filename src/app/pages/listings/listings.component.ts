@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
-import { ListingService } from 'src/app/services/listing-service.service';
+import { ListingService } from 'src/app/services/listing-service';
 import { Listing } from 'src/app/models/listing.model';
 import { FormsModule } from '@angular/forms';
 import { OfferService } from 'src/app/services/offer.service';
@@ -44,33 +44,44 @@ export class ListingsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // Check query params first
     this.route.queryParams.subscribe((params) => {
       if (params['redirect'] === 'offer' && params['listingId']) {
         this.redirectListingId = Number(params['listingId']);
       }
     });
 
-    // Load listings
     this.loadListings();
   }
 
   loadListings() {
-    if (this.searchQuery.trim().length > 0) {
-      return;
-    }
-
-    console.log('LOAD LISTINGS TRIGGERED');
-
     this.loading = true;
 
     this.listingService.getAll().subscribe({
       next: (listings: Listing[]) => {
-        console.log('LISTINGS RECEIVED:', listings);
-
         this.listings = listings ?? [];
         this.loading = false;
+
+        if (this.redirectListingId) {
+          const listing = this.listings.find(
+            (l) => l.id === this.redirectListingId,
+          );
+
+          if (listing) {
+            // If user owns listing → do nothing
+            if (this.currentUser?.id === listing.ownerId) {
+              this.redirectListingId = null;
+              return;
+            }
+
+            // Otherwise reopen offer modal
+            this.openListing(listing);
+            this.modalView = 'OFFER';
+          }
+
+          this.redirectListingId = null;
+        }
       },
+
       error: (err) => {
         console.error('Failed to load listings', err);
         this.loading = false;

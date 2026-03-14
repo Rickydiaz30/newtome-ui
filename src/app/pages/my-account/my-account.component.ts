@@ -3,12 +3,13 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../../services/auth.service';
-import { ListingService } from '../../services/listing-service.service';
+import { ListingService } from '../../services/listing-service';
 import { Listing } from '../../models/listing.model';
 import { OfferService } from '../../services/offer.service';
 import { Offer } from '../../models/offer.model';
 import { SpinnerComponent } from 'src/app/shared/spinner/spinner.component';
 import { FormsModule } from '@angular/forms';
+import { environment } from 'src/environments/environment-prod';
 
 type MeResponse = {
   id: number;
@@ -40,6 +41,7 @@ export class AccountComponent implements OnInit {
   receivedOffers: Offer[] = [];
   loadingOffers = false;
   editing = false;
+  loadingListings = false;
 
   editModel = {
     firstName: '',
@@ -81,14 +83,32 @@ export class AccountComponent implements OnInit {
   selectTab(
     tab: 'ACCOUNT' | 'ACTIVE' | 'SOLD' | 'OFFERS_MADE' | 'OFFERS_RECEIVED',
   ) {
+    if (this.selectedTab === tab) return;
+
     this.selectedTab = tab;
+
+    if (tab === 'ACCOUNT') {
+      this.loadMe();
+    }
+
+    if (tab === 'ACTIVE' || tab === 'SOLD') {
+      this.loadMyListings();
+    }
+
+    if (tab === 'OFFERS_MADE') {
+      this.loadMyOffers();
+    }
+
+    if (tab === 'OFFERS_RECEIVED') {
+      this.loadReceivedOffers();
+    }
   }
 
   loadMe() {
     this.loading = true;
     this.error = null;
 
-    this.http.get<MeResponse>('http://localhost:8081/api/users/me').subscribe({
+    this.http.get<MeResponse>(`${environment.apiUrl}/api/users/me`).subscribe({
       next: (user) => {
         console.log('ME RESPONSE:', user);
         this.user = user;
@@ -102,12 +122,16 @@ export class AccountComponent implements OnInit {
   }
 
   loadMyListings() {
+    this.loadingListings = true;
+
     this.listingService.getMyListings().subscribe({
       next: (listings) => {
         this.myListings = listings;
+        this.loadingListings = false;
       },
       error: () => {
         console.error('Failed to load listings');
+        this.loadingListings = false;
       },
     });
   }
@@ -135,12 +159,16 @@ export class AccountComponent implements OnInit {
   }
 
   loadReceivedOffers() {
+    this.loadingOffers = true;
+
     this.offerService.getOffersReceived().subscribe({
       next: (offers) => {
         this.receivedOffers = offers;
+        this.loadingOffers = false;
       },
       error: () => {
         console.error('Failed to load received offers');
+        this.loadingOffers = false;
       },
     });
   }
@@ -229,7 +257,7 @@ export class AccountComponent implements OnInit {
     this.loading = true;
 
     this.http
-      .patch<any>('http://localhost:8081/api/users/me', this.editModel)
+      .patch<any>(`${environment.apiUrl}/api/users/me`, this.editModel)
       .subscribe({
         next: (res) => {
           this.user = res;

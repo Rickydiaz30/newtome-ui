@@ -1,23 +1,16 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { map, tap } from 'rxjs/operators';
+import { tap, switchMap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
-import { switchMap } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 type LoginResponse = {
-  success: boolean;
-  message: string;
-  data: {
-    token: string;
-  };
+  token: string;
 };
 
-type RegisterResponse = { message: string };
-
-type JwtPayload = {
-  sub?: string; // email (subject)
-  exp?: number;
-  iat?: number;
+type RegisterResponse = {
+  success?: boolean;
+  message: string;
 };
 
 export type CurrentUser = {
@@ -30,7 +23,7 @@ export type CurrentUser = {
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private readonly baseUrl = 'http://localhost:8081/api/auth';
+  private readonly baseUrl = `${environment.apiUrl}/api/auth`;
   private readonly tokenKey = 'auth_token';
 
   private user: CurrentUser | null = null;
@@ -38,7 +31,7 @@ export class AuthService {
   constructor(private http: HttpClient) {
     if (this.getToken()) {
       this.loadCurrentUser().subscribe({
-        error: () => this.logout(), // token invalid/expired → clear it
+        error: () => this.logout(),
       });
     }
   }
@@ -66,10 +59,14 @@ export class AuthService {
     password: string;
   }): Observable<CurrentUser> {
     return this.http.post<LoginResponse>(`${this.baseUrl}/login`, payload).pipe(
-      tap((res: any) => this.setToken(res.token)),
+      tap((res) => {
+        console.log('LOGIN RESPONSE:', res);
+        this.setToken(res.token);
+      }),
       switchMap(() => this.loadCurrentUser()),
     );
   }
+
   logout(): void {
     localStorage.removeItem(this.tokenKey);
     this.user = null;
@@ -89,7 +86,7 @@ export class AuthService {
 
   loadCurrentUser(): Observable<CurrentUser> {
     return this.http
-      .get<CurrentUser>('http://localhost:8081/api/users/me')
+      .get<CurrentUser>(`${environment.apiUrl}/api/users/me`)
       .pipe(
         tap((user) => {
           this.user = user;
@@ -99,21 +96,5 @@ export class AuthService {
 
   private setToken(token: string): void {
     localStorage.setItem(this.tokenKey, token);
-  }
-
-  private decodeJwt(token: string): JwtPayload | null {
-    try {
-      const parts = token.split('.');
-      if (parts.length !== 3) return null;
-
-      // base64url -> base64
-      const base64 = parts[1].replace(/-/g, '+').replace(/_/g, '/');
-      const padded = base64.padEnd(Math.ceil(base64.length / 4) * 4, '=');
-
-      const json = atob(padded);
-      return JSON.parse(json) as JwtPayload;
-    } catch {
-      return null;
-    }
   }
 }

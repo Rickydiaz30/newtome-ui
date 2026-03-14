@@ -5,6 +5,7 @@ import { Router, RouterLink, ActivatedRoute } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { SpinnerComponent } from '../../shared/spinner/spinner.component';
 import { delay } from 'rxjs/operators';
+import { ListingService } from 'src/app/services/listing-service';
 
 @Component({
   selector: 'app-login',
@@ -25,6 +26,7 @@ export class LoginComponent {
     private auth: AuthService,
     private router: Router,
     private route: ActivatedRoute,
+    private listingService: ListingService,
   ) {}
 
   submit() {
@@ -53,7 +55,6 @@ export class LoginComponent {
 
       error: (err) => {
         this.loading = false;
-
         this.error =
           err?.error?.message ||
           err?.error ||

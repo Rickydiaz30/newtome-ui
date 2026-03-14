@@ -1,81 +1,113 @@
-<section class="mx-auto w-full max-w-5xl px-4 sm:px-6 py-10 sm:py-12">
-  <h1 class="text-3xl font-bold text-slate-900 text-center">My Account</h1>
+<section class="mx-auto max-w-3xl px-4 py-10">
+  <!-- Page Title -->
+  <div class="text-center">
+    <h1 class="text-4xl font-bold text-blue-950 tracking-tight">My Account</h1>
+
+    <p class="text-slate-500 mt-2 text-sm">
+      Manage your listings, offers, and profile
+    </p>
+  </div>
 
   <!-- Tabs -->
-  <div class="mt-10">
-    <nav
-      class="flex flex-wrap justify-center gap-2 sm:gap-4 bg-slate-100 p-1 rounded-lg w-full sm:w-fit mx-auto"
-    >
+  <div class="mt-8 flex justify-center">
+    <nav class="flex flex-wrap gap-2 bg-slate-100 p-1 rounded-lg shadow-sm">
       <button
         (click)="selectTab('ACCOUNT')"
+        [disabled]="loading"
         [ngClass]="
           selectedTab === 'ACCOUNT'
             ? 'bg-blue-950 text-white'
             : 'text-slate-600 hover:bg-slate-200'
         "
-        class="px-4 sm:px-5 py-2 rounded-md text-sm font-medium transition"
+        class="px-4 py-2 rounded-md text-sm font-medium transition flex items-center gap-2"
       >
-        Account
+        <app-spinner *ngIf="selectedTab === 'ACCOUNT' && loading"></app-spinner>
+
+        <span>👤 Account</span>
       </button>
 
       <button
         (click)="selectTab('ACTIVE')"
+        [disabled]="loadingListings"
         [ngClass]="
           selectedTab === 'ACTIVE'
             ? 'bg-blue-950 text-white'
             : 'text-slate-600 hover:bg-slate-200'
         "
-        class="px-4 sm:px-5 py-2 rounded-md text-sm font-medium transition"
+        class="px-4 py-2 rounded-md text-sm font-medium transition flex items-center gap-2"
       >
-        Active
+        <app-spinner
+          *ngIf="selectedTab === 'ACTIVE' && loadingListings"
+        ></app-spinner>
+
+        <span>📦 Active</span>
       </button>
 
       <button
         (click)="selectTab('SOLD')"
+        [disabled]="loadingListings"
         [ngClass]="
           selectedTab === 'SOLD'
             ? 'bg-blue-950 text-white'
             : 'text-slate-600 hover:bg-slate-200'
         "
-        class="px-4 sm:px-5 py-2 rounded-md text-sm font-medium transition"
+        class="px-4 py-2 rounded-md text-sm font-medium transition flex items-center gap-2"
       >
-        Sold
+        <app-spinner
+          *ngIf="selectedTab === 'SOLD' && loadingListings"
+        ></app-spinner>
+
+        <span>✔ Sold</span>
       </button>
 
       <button
         (click)="selectTab('OFFERS_MADE')"
+        [disabled]="loadingOffers"
         [ngClass]="
           selectedTab === 'OFFERS_MADE'
             ? 'bg-blue-950 text-white'
             : 'text-slate-600 hover:bg-slate-200'
         "
-        class="px-4 sm:px-5 py-2 rounded-md text-sm font-medium transition"
+        class="px-4 py-2 rounded-md text-sm font-medium transition flex items-center gap-2"
       >
-        Offers Made
+        <app-spinner
+          *ngIf="selectedTab === 'OFFERS_MADE' && loadingOffers"
+        ></app-spinner>
+
+        <span> 💰 Offers Made </span>
       </button>
 
       <button
         (click)="selectTab('OFFERS_RECEIVED')"
+        [disabled]="loadingOffers"
         [ngClass]="
           selectedTab === 'OFFERS_RECEIVED'
             ? 'bg-blue-950 text-white'
             : 'text-slate-600 hover:bg-slate-200'
         "
-        class="px-4 sm:px-5 py-2 rounded-md text-sm font-medium transition"
+        class="px-4 py-2 rounded-md text-sm font-medium transition flex items-center gap-2"
       >
-        Offers Received
+        <app-spinner
+          *ngIf="selectedTab === 'OFFERS_RECEIVED' && loadingOffers"
+        ></app-spinner>
+
+        <span>📩 Offers Received</span>
       </button>
     </nav>
   </div>
 
-  <div *ngIf="selectedTab === 'ACCOUNT'" class="mt-10 max-w-2xl mx-auto">
-    <div class="rounded-xl border border-blue-950/20 bg-white p-8 shadow-sm">
+  <!-- Content Card -->
+  <div class="mt-8 rounded-xl border border-slate-200 bg-white p-8 shadow-sm">
+    <!-- ACCOUNT TAB -->
+    <div *ngIf="selectedTab === 'ACCOUNT'">
       <h2 class="text-lg font-semibold text-slate-900">Account Info</h2>
 
-      <div class="mt-6 grid gap-5 sm:grid-cols-2 text-sm text-slate-700">
+      <div
+        class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-5 text-sm text-slate-700"
+      >
         <!-- FIRST NAME -->
         <div>
-          <label class="text-sm font-medium text-slate-700">First Name</label>
+          <label class="font-medium">First Name</label>
 
           <p *ngIf="!editing" class="mt-1 text-slate-900">
             {{ user?.firstName || "—" }}
@@ -84,13 +116,13 @@
           <input
             *ngIf="editing"
             [(ngModel)]="editModel.firstName"
-            class="mt-1 w-full rounded-md border border-blue-950/25 px-4 py-2 focus:border-blue-950 focus:ring-2 focus:ring-blue-950/15 outline-none"
+            class="mt-1 w-full rounded-md border border-slate-300 px-4 py-2 focus:ring-2 focus:ring-blue-950/20 outline-none"
           />
         </div>
 
         <!-- LAST NAME -->
         <div>
-          <label class="text-sm font-medium text-slate-700">Last Name</label>
+          <label class="font-medium">Last Name</label>
 
           <p *ngIf="!editing" class="mt-1 text-slate-900">
             {{ user?.lastName || "—" }}
@@ -99,25 +131,29 @@
           <input
             *ngIf="editing"
             [(ngModel)]="editModel.lastName"
-            class="mt-1 w-full rounded-md border border-blue-950/25 px-4 py-2 focus:border-blue-950 focus:ring-2 focus:ring-blue-950/15 outline-none"
+            class="mt-1 w-full rounded-md border border-slate-300 px-4 py-2 focus:ring-2 focus:ring-blue-950/20 outline-none"
           />
         </div>
 
         <!-- EMAIL -->
-        <div class="sm:col-span-2">
-          <label class="text-sm font-medium text-slate-700">Email</label>
-          <p class="mt-1 text-slate-900">{{ user?.email || "—" }}</p>
+        <div>
+          <label class="font-medium">Email</label>
+          <p class="mt-1 text-slate-900">
+            {{ user?.email || "—" }}
+          </p>
         </div>
 
         <!-- USERNAME -->
-        <div class="sm:col-span-2">
-          <label class="text-sm font-medium text-slate-700">Username</label>
-          <p class="mt-1 text-slate-900">{{ user?.username || "—" }}</p>
+        <div>
+          <label class="font-medium">Username</label>
+          <p class="mt-1 text-slate-900">
+            {{ user?.username || "—" }}
+          </p>
         </div>
 
         <!-- PHONE -->
-        <div class="sm:col-span-2">
-          <label class="text-sm font-medium text-slate-700">Phone</label>
+        <div>
+          <label class="font-medium">Phone</label>
 
           <p *ngIf="!editing" class="mt-1 text-slate-900">
             {{ user?.phone || "—" }}
@@ -126,15 +162,13 @@
           <input
             *ngIf="editing"
             [(ngModel)]="editModel.phone"
-            class="mt-1 w-full rounded-md border border-blue-950/25 px-4 py-2 focus:border-blue-950 focus:ring-2 focus:ring-blue-950/15 outline-none"
+            class="mt-1 w-full rounded-md border border-slate-300 px-4 py-2 focus:ring-2 focus:ring-blue-950/20 outline-none"
           />
         </div>
 
         <!-- STREET -->
-        <div class="sm:col-span-2">
-          <label class="text-sm font-medium text-slate-700"
-            >Street Address</label
-          >
+        <div>
+          <label class="font-medium">Street Address</label>
 
           <p *ngIf="!editing" class="mt-1 text-slate-900">
             {{ user?.streetAddress || "—" }}
@@ -143,13 +177,13 @@
           <input
             *ngIf="editing"
             [(ngModel)]="editModel.streetAddress"
-            class="mt-1 w-full rounded-md border border-blue-950/25 px-4 py-2 focus:border-blue-950 focus:ring-2 focus:ring-blue-950/15 outline-none"
+            class="mt-1 w-full rounded-md border border-slate-300 px-4 py-2 focus:ring-2 focus:ring-blue-950/20 outline-none"
           />
         </div>
 
         <!-- CITY -->
         <div>
-          <label class="text-sm font-medium text-slate-700">City</label>
+          <label class="font-medium">City</label>
 
           <p *ngIf="!editing" class="mt-1 text-slate-900">
             {{ user?.city || "—" }}
@@ -158,13 +192,13 @@
           <input
             *ngIf="editing"
             [(ngModel)]="editModel.city"
-            class="mt-1 w-full rounded-md border border-blue-950/25 px-4 py-2 focus:border-blue-950 focus:ring-2 focus:ring-blue-950/15 outline-none"
+            class="mt-1 w-full rounded-md border border-slate-300 px-4 py-2 focus:ring-2 focus:ring-blue-950/20 outline-none"
           />
         </div>
 
         <!-- STATE -->
         <div>
-          <label class="text-sm font-medium text-slate-700">State</label>
+          <label class="font-medium">State</label>
 
           <p *ngIf="!editing" class="mt-1 text-slate-900">
             {{ user?.state || "—" }}
@@ -173,13 +207,13 @@
           <input
             *ngIf="editing"
             [(ngModel)]="editModel.state"
-            class="mt-1 w-full rounded-md border border-blue-950/25 px-4 py-2 focus:border-blue-950 focus:ring-2 focus:ring-blue-950/15 outline-none"
+            class="mt-1 w-full rounded-md border border-slate-300 px-4 py-2 focus:ring-2 focus:ring-blue-950/20 outline-none"
           />
         </div>
 
         <!-- ZIP -->
-        <div class="sm:col-span-2">
-          <label class="text-sm font-medium text-slate-700">Zip Code</label>
+        <div>
+          <label class="font-medium">Zip Code</label>
 
           <p *ngIf="!editing" class="mt-1 text-slate-900">
             {{ user?.zipCode || "—" }}
@@ -188,13 +222,13 @@
           <input
             *ngIf="editing"
             [(ngModel)]="editModel.zipCode"
-            class="mt-1 w-full rounded-md border border-blue-950/25 px-4 py-2 focus:border-blue-950 focus:ring-2 focus:ring-blue-950/15 outline-none"
+            class="mt-1 w-full rounded-md border border-slate-300 px-4 py-2 focus:ring-2 focus:ring-blue-950/20 outline-none"
           />
         </div>
       </div>
 
-      <!-- ACTION BUTTONS -->
-      <div class="mt-8 flex gap-3">
+      <!-- Buttons -->
+      <div class="mt-8 flex justify-end gap-3">
         <button
           *ngIf="!editing"
           (click)="startEdit()"
@@ -206,9 +240,12 @@
         <button
           *ngIf="editing"
           (click)="saveProfile()"
-          class="rounded-md bg-green-700 px-5 py-2 text-sm font-semibold text-white hover:bg-green-800 transition"
+          [disabled]="loading"
+          class="rounded-md bg-green-700 px-5 py-2 text-sm font-semibold text-white hover:bg-green-800 transition flex items-center justify-center gap-2 relative"
         >
-          Save Changes
+          <span *ngIf="!loading">Save Changes</span>
+
+          <app-spinner *ngIf="loading"></app-spinner>
         </button>
 
         <button
@@ -220,233 +257,240 @@
         </button>
       </div>
     </div>
-  </div>
 
-  <!-- ACTIVE TAB -->
-  <div *ngIf="selectedTab === 'ACTIVE'" class="mt-10">
-    <div *ngIf="activeListings.length === 0" class="text-center text-slate-500">
-      You have no active listings.
-    </div>
-
-    <ul *ngIf="activeListings.length > 0" class="space-y-4 max-w-2xl mx-auto">
-      <li
-        *ngFor="let listing of activeListings"
-        class="rounded-md border border-slate-200 p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
+    <!-- ACTIVE TAB -->
+    <div *ngIf="selectedTab === 'ACTIVE'">
+      <div
+        *ngIf="activeListings.length === 0"
+        class="text-center text-slate-500"
       >
-        <div>
-          <h2 class="text-lg font-semibold">{{ listing.title }}</h2>
-          <p class="mt-1 text-slate-700">
-            ${{ listing.price }} • {{ listing.city }}
-          </p>
-        </div>
+        You have no active listings.
+      </div>
 
-        <img
-          [src]="listing.imageUrl || 'assets/images/ninjaBlender.webp'"
-          class="w-full sm:w-20 h-40 sm:h-20 object-contain rounded-md"
-        />
-      </li>
-    </ul>
-  </div>
-
-  <!-- SOLD TAB -->
-  <div *ngIf="selectedTab === 'SOLD'" class="mt-10">
-    <div *ngIf="soldListings.length === 0" class="text-center text-slate-500">
-      You have no sold listings yet.
-    </div>
-
-    <ul *ngIf="soldListings.length > 0" class="space-y-4 max-w-2xl mx-auto">
-      <li
-        *ngFor="let listing of soldListings"
-        class="rounded-md border border-slate-200 p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 opacity-70"
-      >
-        <div>
-          <h2 class="text-lg font-semibold flex items-center gap-2">
-            {{ listing.title }}
-            <span class="text-xs bg-red-600 text-white px-2 py-1 rounded">
-              SOLD
-            </span>
-          </h2>
-
-          <p class="mt-1 text-slate-700">
-            ${{ listing.price }} • {{ listing.city }}
-          </p>
-        </div>
-
-        <img
-          [src]="listing.imageUrl || 'assets/images/ninjaBlender.webp'"
-          class="w-full sm:w-20 h-40 sm:h-20 object-contain rounded-md"
-        />
-      </li>
-    </ul>
-  </div>
-
-  <!-- OFFERS MADE -->
-  <div *ngIf="selectedTab === 'OFFERS_MADE'" class="mt-10">
-    <div
-      *ngIf="!loadingOffers && myOffers.length === 0"
-      class="text-center text-slate-500"
-    >
-      You have not made any offers yet.
-    </div>
-
-    <ul
-      *ngIf="!loadingOffers && myOffers.length > 0"
-      class="space-y-4 max-w-2xl mx-auto"
-    >
-      <li
-        *ngFor="let offer of myOffers"
-        class="rounded-md border border-slate-200 p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
-      >
-        <div>
-          <h2 class="text-lg font-semibold flex items-center gap-2">
-            {{ offer.listingTitle }}
-
-            <span
-              *ngIf="offer.status === 'PENDING'"
-              class="text-xs bg-amber-500 text-white px-2 py-1 rounded"
-            >
-              PENDING
-            </span>
-
-            <span
-              *ngIf="offer.status === 'ACCEPTED'"
-              class="text-xs bg-emerald-600 text-white px-2 py-1 rounded"
-            >
-              ACCEPTED
-            </span>
-
-            <span
-              *ngIf="offer.status === 'REJECTED'"
-              class="text-xs bg-red-600 text-white px-2 py-1 rounded"
-            >
-              REJECTED
-            </span>
-          </h2>
-
-          <p class="mt-1 text-slate-700">Offered ${{ offer.amount }}</p>
-
-          <p class="mt-1 text-xs text-slate-500">
-            Submitted {{ offer.createdAt | date: "mediumDate" }}
-          </p>
-        </div>
-
-        <img
-          [src]="offer.listingImageUrl || 'assets/images/ninjaBlender.webp'"
-          class="w-full sm:w-20 h-40 sm:h-20 object-contain rounded-md"
-        />
-      </li>
-    </ul>
-  </div>
-
-  <!-- OFFERS RECEIVED -->
-  <div *ngIf="selectedTab === 'OFFERS_RECEIVED'" class="mt-10">
-    <div *ngIf="receivedOffers.length === 0" class="text-center text-slate-500">
-      You have not received any offers yet.
-    </div>
-
-    <ul *ngIf="receivedOffers.length > 0" class="space-y-4 max-w-2xl mx-auto">
-      <li
-        *ngFor="let offer of receivedOffers"
-        class="rounded-md border border-slate-200 p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
-      >
-        <div>
-          <h2 class="text-lg font-semibold flex items-center gap-2">
-            {{ offer.listingTitle }}
-
-            <span
-              *ngIf="offer.status === 'PENDING'"
-              class="text-xs bg-amber-500 text-white px-2 py-1 rounded"
-            >
-              PENDING
-            </span>
-
-            <span
-              *ngIf="offer.status === 'ACCEPTED'"
-              class="text-xs bg-emerald-600 text-white px-2 py-1 rounded"
-            >
-              ACCEPTED
-            </span>
-
-            <span
-              *ngIf="offer.status === 'REJECTED'"
-              class="text-xs bg-red-600 text-white px-2 py-1 rounded"
-            >
-              REJECTED
-            </span>
-          </h2>
-
-          <p class="mt-1 text-slate-700">
-            ${{ offer.amount }} from {{ offer.buyerFirstName }}
-          </p>
-
-          <p class="mt-1 text-xs text-slate-500">
-            Received {{ offer.createdAt | date: "mediumDate" }}
-          </p>
-
-          <p
-            *ngIf="offer.status === 'REJECTED'"
-            class="mt-2 text-sm text-red-600 font-medium"
-          >
-            You rejected {{ offer.buyerFirstName }}'s offer.
-          </p>
-
-          <p
-            *ngIf="offer.status === 'ACCEPTED'"
-            class="mt-2 text-sm text-green-600 font-medium"
-          >
-            You accepted {{ offer.buyerFirstName }}'s offer.
-          </p>
-
-          <p class="mt-2 text-sm text-slate-700">{{ offer.message }}</p>
-
-          <div *ngIf="offer.status === 'PENDING'" class="mt-3 flex gap-2">
-            <!-- ACCEPT -->
-            <button
-              (click)="acceptOffer(offer.listingId, offer.id)"
-              class="rounded-md bg-green-700 px-4 py-2 text-sm font-semibold text-white hover:bg-green-800 transition flex items-center justify-center gap-2"
-            >
-              <app-spinner
-                *ngIf="
-                  loadingOfferId === offer.id && loadingAction === 'accept'
-                "
-              ></app-spinner>
-
-              <span
-                *ngIf="
-                  !(loadingOfferId === offer.id && loadingAction === 'accept')
-                "
-              >
-                Accept
-              </span>
-            </button>
-
-            <!-- REJECT -->
-            <button
-              (click)="rejectOffer(offer.listingId, offer.id)"
-              class="rounded-md bg-red-600 px-4 py-2 text-sm font-semibold text-white hover:bg-red-700 transition flex items-center justify-center gap-2"
-            >
-              <app-spinner
-                *ngIf="
-                  loadingOfferId === offer.id && loadingAction === 'reject'
-                "
-              ></app-spinner>
-
-              <span
-                *ngIf="
-                  !(loadingOfferId === offer.id && loadingAction === 'reject')
-                "
-              >
-                Reject
-              </span>
-            </button>
+      <ul *ngIf="activeListings.length > 0" class="space-y-4">
+        <li
+          *ngFor="let listing of activeListings"
+          class="rounded-lg border border-slate-200 p-4 flex justify-between items-center"
+        >
+          <div>
+            <h2 class="font-semibold">{{ listing.title }}</h2>
+            <p class="text-sm text-slate-600">
+              ${{ listing.price }} • {{ listing.city }}
+            </p>
           </div>
-        </div>
 
-        <img
-          [src]="offer.listingImageUrl || 'assets/images/ninjaBlender.webp'"
-          class="w-full sm:w-20 h-40 sm:h-20 object-contain rounded-md"
-        />
-      </li>
-    </ul>
+          <img
+            [src]="listing.imageUrl || 'assets/images/ninjaBlender.webp'"
+            class="w-16 h-16 object-contain"
+          />
+        </li>
+      </ul>
+    </div>
+
+    <!-- SOLD TAB -->
+    <div *ngIf="selectedTab === 'SOLD'">
+      <div *ngIf="soldListings.length === 0" class="text-center text-slate-500">
+        You have no sold listings yet.
+      </div>
+
+      <ul *ngIf="soldListings.length > 0" class="space-y-4">
+        <li
+          *ngFor="let listing of soldListings"
+          class="rounded-lg border border-slate-200 p-4 flex justify-between items-center opacity-70"
+        >
+          <div>
+            <h2 class="font-semibold flex items-center gap-2">
+              {{ listing.title }}
+
+              <span class="text-xs bg-red-600 text-white px-2 py-1 rounded">
+                SOLD
+              </span>
+            </h2>
+
+            <p class="text-sm text-slate-600">
+              ${{ listing.price }} • {{ listing.city }}
+            </p>
+          </div>
+
+          <img
+            [src]="listing.imageUrl || 'assets/images/ninjaBlender.webp'"
+            class="w-16 h-16 object-contain"
+          />
+        </li>
+      </ul>
+    </div>
+
+    <!-- OFFERS MADE -->
+    <div *ngIf="selectedTab === 'OFFERS_MADE'" class="mt-10">
+      <div
+        *ngIf="!loadingOffers && myOffers.length === 0"
+        class="text-center text-slate-500"
+      >
+        You have not made any offers yet.
+      </div>
+
+      <ul
+        *ngIf="!loadingOffers && myOffers.length > 0"
+        class="space-y-4 max-w-2xl mx-auto"
+      >
+        <li
+          *ngFor="let offer of myOffers"
+          class="rounded-md border border-slate-200 p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
+        >
+          <div>
+            <h2 class="text-lg font-semibold flex items-center gap-2">
+              {{ offer.listingTitle }}
+
+              <span
+                *ngIf="offer.status === 'PENDING'"
+                class="text-xs bg-amber-500 text-white px-2 py-1 rounded"
+              >
+                PENDING
+              </span>
+
+              <span
+                *ngIf="offer.status === 'ACCEPTED'"
+                class="text-xs bg-emerald-600 text-white px-2 py-1 rounded"
+              >
+                ACCEPTED
+              </span>
+
+              <span
+                *ngIf="offer.status === 'REJECTED'"
+                class="text-xs bg-red-600 text-white px-2 py-1 rounded"
+              >
+                REJECTED
+              </span>
+            </h2>
+
+            <p class="mt-1 text-slate-700">Offered ${{ offer.amount }}</p>
+
+            <p class="mt-1 text-xs text-slate-500">
+              Submitted {{ offer.createdAt | date: "mediumDate" }}
+            </p>
+          </div>
+
+          <img
+            [src]="offer.listingImageUrl || 'assets/images/ninjaBlender.webp'"
+            class="w-full sm:w-20 h-40 sm:h-20 object-contain rounded-md"
+          />
+        </li>
+      </ul>
+    </div>
+
+    <!-- OFFERS RECEIVED -->
+    <div *ngIf="selectedTab === 'OFFERS_RECEIVED'" class="mt-10">
+      <div
+        *ngIf="receivedOffers.length === 0"
+        class="text-center text-slate-500"
+      >
+        You have not received any offers yet.
+      </div>
+
+      <ul *ngIf="receivedOffers.length > 0" class="space-y-4 max-w-2xl mx-auto">
+        <li
+          *ngFor="let offer of receivedOffers"
+          class="rounded-md border border-slate-200 p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
+        >
+          <div>
+            <h2 class="text-lg font-semibold flex items-center gap-2">
+              {{ offer.listingTitle }}
+
+              <span
+                *ngIf="offer.status === 'PENDING'"
+                class="text-xs bg-amber-500 text-white px-2 py-1 rounded"
+              >
+                PENDING
+              </span>
+
+              <span
+                *ngIf="offer.status === 'ACCEPTED'"
+                class="text-xs bg-emerald-600 text-white px-2 py-1 rounded"
+              >
+                ACCEPTED
+              </span>
+
+              <span
+                *ngIf="offer.status === 'REJECTED'"
+                class="text-xs bg-red-600 text-white px-2 py-1 rounded"
+              >
+                REJECTED
+              </span>
+            </h2>
+
+            <p class="mt-1 text-slate-700">
+              ${{ offer.amount }} from {{ offer.buyerFirstName }}
+            </p>
+
+            <p class="mt-1 text-xs text-slate-500">
+              Received {{ offer.createdAt | date: "mediumDate" }}
+            </p>
+
+            <p
+              *ngIf="offer.status === 'REJECTED'"
+              class="mt-2 text-sm text-red-600 font-medium"
+            >
+              You rejected {{ offer.buyerFirstName }}'s offer.
+            </p>
+
+            <p
+              *ngIf="offer.status === 'ACCEPTED'"
+              class="mt-2 text-sm text-green-600 font-medium"
+            >
+              You accepted {{ offer.buyerFirstName }}'s offer.
+            </p>
+
+            <p class="mt-2 text-sm text-slate-700">{{ offer.message }}</p>
+
+            <div *ngIf="offer.status === 'PENDING'" class="mt-3 flex gap-2">
+              <!-- ACCEPT -->
+              <button
+                (click)="acceptOffer(offer.listingId, offer.id)"
+                class="rounded-md bg-green-700 px-4 py-2 text-sm font-semibold text-white hover:bg-green-800 transition flex items-center justify-center gap-2"
+              >
+                <app-spinner
+                  *ngIf="
+                    loadingOfferId === offer.id && loadingAction === 'accept'
+                  "
+                ></app-spinner>
+
+                <span
+                  *ngIf="
+                    !(loadingOfferId === offer.id && loadingAction === 'accept')
+                  "
+                >
+                  Accept
+                </span>
+              </button>
+
+              <!-- REJECT -->
+              <button
+                (click)="rejectOffer(offer.listingId, offer.id)"
+                class="rounded-md bg-red-600 px-4 py-2 text-sm font-semibold text-white hover:bg-red-700 transition flex items-center justify-center gap-2"
+              >
+                <app-spinner
+                  *ngIf="
+                    loadingOfferId === offer.id && loadingAction === 'reject'
+                  "
+                ></app-spinner>
+
+                <span
+                  *ngIf="
+                    !(loadingOfferId === offer.id && loadingAction === 'reject')
+                  "
+                >
+                  Reject
+                </span>
+              </button>
+            </div>
+          </div>
+
+          <img
+            [src]="offer.listingImageUrl || 'assets/images/ninjaBlender.webp'"
+            class="w-full sm:w-20 h-40 sm:h-20 object-contain rounded-md"
+          />
+        </li>
+      </ul>
+    </div>
   </div>
 </section>

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Offer } from '../models/offer.model';
+import { environment } from 'src/environments/environment';
 
 export interface OfferResponse {
   id: number;
@@ -19,8 +20,9 @@ export interface OfferResponse {
   providedIn: 'root',
 })
 export class OfferService {
-  private apiUrl = 'http://localhost:8081/api/listings';
-  private offersApi = 'http://localhost:8081/api/offers';
+  private baseUrl = environment.apiUrl;
+  private listingsApi = `${this.baseUrl}/api/listings`;
+  private offersApi = `${this.baseUrl}/api/offers`;
 
   constructor(private http: HttpClient) {}
 
@@ -29,26 +31,31 @@ export class OfferService {
     amount: number,
     message: string,
   ): Observable<OfferResponse> {
-    return this.http.post<OfferResponse>(`${this.apiUrl}/${listingId}/offers`, {
-      amount,
-      message,
-    });
+    return this.http.post<OfferResponse>(
+      `${this.listingsApi}/${listingId}/offers`,
+      {
+        amount,
+        message,
+      },
+    );
   }
 
   getOffersForListing(listingId: number): Observable<OfferResponse[]> {
-    return this.http.get<OfferResponse[]>(`${this.apiUrl}/${listingId}/offers`);
+    return this.http.get<OfferResponse[]>(
+      `${this.listingsApi}/${listingId}/offers`,
+    );
   }
 
   acceptOffer(listingId: number, offerId: number): Observable<OfferResponse> {
     return this.http.post<OfferResponse>(
-      `${this.apiUrl}/${listingId}/offers/${offerId}/accept`,
+      `${this.listingsApi}/${listingId}/offers/${offerId}/accept`,
       {},
     );
   }
 
   rejectOffer(listingId: number, offerId: number): Observable<OfferResponse> {
     return this.http.post<OfferResponse>(
-      `${this.apiUrl}/${listingId}/offers/${offerId}/reject`,
+      `${this.listingsApi}/${listingId}/offers/${offerId}/reject`,
       {},
     );
   }

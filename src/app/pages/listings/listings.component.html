@@ -64,7 +64,10 @@
         class="absolute inset-0 flex items-start justify-center bg-white pt-6"
       >
         <img
-          [src]="listing.imageUrl || 'assets/images/ninjaBlender.webp'"
+          [src]="
+            listing.imageUrl ||
+            'https://dxsg03couz5uo.cloudfront.net/assets/images/ninjaBlender.webp'
+          "
           class="max-h-[65%] object-contain group-hover:scale-105 transition duration-300"
         />
       </div>

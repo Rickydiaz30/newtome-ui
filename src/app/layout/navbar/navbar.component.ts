@@ -30,26 +30,8 @@ import { AuthService } from 'src/app/services/auth.service';
 export class NavbarComponent {
   mobileOpen = false;
   dropdownOpen = false;
-  loading = false; // to track navigation loading
-
-  // constructor(
-  //   public auth: AuthService,
-  //   private router: Router,
-  // ) {
-  //   this.router.events.subscribe((event) => {
-  //     if (event instanceof NavigationStart) {
-  //       this.loading = true;
-  //     }
-
-  //     if (
-  //       event instanceof NavigationEnd ||
-  //       event instanceof NavigationCancel ||
-  //       event instanceof NavigationError
-  //     ) {
-  //       this.loading = false;
-  //     }
-  //   });
-  // }
+  loading = false;
+  logoutLoading: any;
 
   constructor(
     public auth: AuthService,
