@@ -1,4 +1,4 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   Router,
@@ -30,7 +30,8 @@ import { SpinnerComponent } from './shared/spinner/spinner.component';
 })
 export class AppComponent {
   dropdownOpen = false;
-
+  deferredPrompt: any = null;
+  showInstallButton = false;
   loading = false;
   progress = 0;
   private timer: any;
@@ -44,10 +45,10 @@ export class AppComponent {
         this.progress = 10;
 
         this.timer = setInterval(() => {
-          if (this.progress < 90) {
-            this.progress += 10;
+          if (this.progress < 85) {
+            this.progress += Math.random() * 8;
           }
-        }, 120);
+        }, 200);
       }
 
       if (
@@ -63,6 +64,25 @@ export class AppComponent {
           this.progress = 0;
         }, 500);
       }
+    });
+
+    // PWA install prompt
+    window.addEventListener('beforeinstallprompt', (event: any) => {
+      event.preventDefault();
+
+      this.deferredPrompt = event;
+      this.showInstallButton = true;
+    });
+  }
+
+  installApp() {
+    if (!this.deferredPrompt) return;
+
+    this.deferredPrompt.prompt();
+
+    this.deferredPrompt.userChoice.then(() => {
+      this.deferredPrompt = null;
+      this.showInstallButton = false;
     });
   }
 

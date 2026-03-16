@@ -32,6 +32,7 @@ export class NavbarComponent {
   dropdownOpen = false;
   loading = false;
   logoutLoading: any;
+  scrolled = false;
 
   constructor(
     public auth: AuthService,
@@ -112,5 +113,10 @@ export class NavbarComponent {
   @HostListener('document:keydown.escape')
   onEscape() {
     this.closeAll();
+  }
+
+  @HostListener('window:scroll', [])
+  onWindowScroll() {
+    this.scrolled = window.scrollY > 40;
   }
 }

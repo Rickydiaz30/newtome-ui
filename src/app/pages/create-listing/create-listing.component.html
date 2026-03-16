@@ -125,12 +125,43 @@
               <div class="sm:col-span-2">
                 <label class="text-sm font-medium text-slate-700">Image</label>
 
+                <div class="mt-2 flex gap-3">
+                  <!-- Upload from gallery -->
+                  <button
+                    type="button"
+                    (click)="fileInput.click()"
+                    class="rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
+                  >
+                    Upload Photo
+                  </button>
+
+                  <!-- Use camera -->
+                  <button
+                    type="button"
+                    (click)="cameraInput.click()"
+                    class="rounded-md bg-green-600 px-4 py-2 text-white hover:bg-green-700"
+                  >
+                    Use Camera
+                  </button>
+                </div>
+
+                <!-- Hidden file input (gallery) -->
                 <input
+                  #fileInput
+                  type="file"
+                  accept="image/*"
+                  (change)="onFileSelected($event)"
+                  hidden
+                />
+
+                <!-- Hidden camera input -->
+                <input
+                  #cameraInput
                   type="file"
                   accept="image/*"
                   capture="environment"
                   (change)="onFileSelected($event)"
-                  class="mt-2 w-full"
+                  hidden
                 />
 
                 <!-- Preview -->

@@ -22,6 +22,17 @@
   </div>
 </div>
 
+<div *ngIf="showInstallButton" class="bg-green-600 text-white text-center py-2">
+  Install the New2Me app for a better experience
+
+  <button
+    (click)="installApp()"
+    class="ml-3 rounded bg-white text-green-700 px-3 py-1"
+  >
+    Install
+  </button>
+</div>
+
 <app-navbar></app-navbar>
 
 <router-outlet></router-outlet>

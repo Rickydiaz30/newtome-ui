@@ -1,52 +1,61 @@
 <!-- HERO -->
 
 <section
-  class="flex min-h-[70vh] flex-col items-center justify-center bg-slate-50 px-6 py-16 text-center"
+  class="flex min-h-[75vh] flex-col items-center justify-center bg-slate-50 px-6 py-20 text-center"
 >
+  <!-- Logo -->
   <img
     src="assets/images/bluelogo.png"
     alt="new2me logo"
     class="w-[90vw] sm:w-[70vw] md:w-[55vw] lg:w-[35vw]"
   />
 
-  <p class="mt-6 max-w-xl text-lg text-blue-950">
+  <!-- Tagline -->
+  <p class="mt-6 max-w-xl text-lg text-blue-950 leading-relaxed">
     Find great items that are new to you. Browse quality second-hand products,
     save money, and give great things a second life.
   </p>
 
-  <!-- SEARCH -->
+  <!-- SEARCH CARD -->
 
-  <div class="mt-8 w-full max-w-xl">
-    <input
-      type="text"
-      placeholder="Search the marketplace..."
-      class="w-full rounded-full border border-slate-300 px-6 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-950"
-      routerLink="/shop"
-    />
-  </div>
+  <div
+    class="mt-10 w-full max-w-xl rounded-xl bg-white p-4 shadow-md border border-slate-200"
+  >
+    <div class="flex items-center gap-3">
+      <!-- Search Icon -->
+      <svg
+        class="h-5 w-5 text-slate-400"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        viewBox="0 0 24 24"
+      >
+        <circle cx="11" cy="11" r="8"></circle>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+      </svg>
 
-  <!-- CTA -->
+      <!-- Input -->
+      <input
+        routerLink="/shop"
+        type="text"
+        placeholder="Search the marketplace..."
+        class="flex-1 border-none outline-none text-sm"
+      />
 
-  <div class="mt-6 flex cursor-pointer gap-4">
-    <a
-      routerLink="/shop"
-      class="rounded-md bg-blue-950 px-6 py-3 font-semibold text-white transition hover:bg-blue-900"
-    >
-      Browse Listings
-    </a>
-
-    <a
-      routerLink="/sell"
-      class="rounded-md border border-blue-950 px-6 py-3 font-semibold text-blue-950 transition hover:bg-blue-50"
-    >
-      Sell an Item
-    </a>
+      <!-- Button -->
+      <a
+        routerLink="/shop"
+        class="rounded-md bg-blue-950 px-5 py-2 text-sm font-semibold text-white transition hover:bg-blue-900 hover:scale-[1.02]"
+      >
+        Browse
+      </a>
+    </div>
   </div>
 </section>
 
 <!-- VALUE PROPOSITION -->
 
-<section class="flex items-center justify-center bg-blue-950 px-6 py-20">
+<section class="flex items-center justify-center bg-blue-950 px-6 py-24">
   <div class="mx-auto max-w-2xl text-center">
     <h2 class="text-4xl font-bold text-white">A smarter way to buy and sell</h2>
 
@@ -63,23 +72,23 @@
 
 <section class="bg-slate-50 px-6 py-24">
   <div class="mx-auto max-w-5xl">
-    <div class="grid gap-12 sm:grid-cols-2 lg:grid-cols-3 text-center">
-      <div>
-        <h3 class="text-3xl font-bold text-blue-950">Save money</h3>
+    <div class="grid gap-10 sm:grid-cols-2 lg:grid-cols-3 text-center">
+      <div class="rounded-lg bg-white p-8 shadow-sm transition hover:shadow-md">
+        <h3 class="text-2xl font-bold text-blue-950">Save money</h3>
         <p class="mt-3 text-blue-950">
           Find high-quality, gently used items at prices that make sense.
         </p>
       </div>
 
-      <div>
-        <h3 class="text-3xl font-bold text-blue-950">Reduce waste</h3>
+      <div class="rounded-lg bg-white p-8 shadow-sm transition hover:shadow-md">
+        <h3 class="text-2xl font-bold text-blue-950">Reduce waste</h3>
         <p class="mt-3 text-blue-950">
           Extend the life of products and keep great items out of landfills.
         </p>
       </div>
 
-      <div>
-        <h3 class="text-3xl font-bold text-blue-950">Simple experience</h3>
+      <div class="rounded-lg bg-white p-8 shadow-sm transition hover:shadow-md">
+        <h3 class="text-2xl font-bold text-blue-950">Simple experience</h3>
         <p class="mt-3 text-blue-950">
           Clean browsing, easy listings, and a marketplace focused on people.
         </p>
