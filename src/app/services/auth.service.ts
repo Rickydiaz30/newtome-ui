@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { tap, switchMap } from 'rxjs/operators';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
 type LoginResponse = {
@@ -26,15 +26,9 @@ export class AuthService {
   private readonly baseUrl = `${environment.apiUrl}/api/auth`;
   private readonly tokenKey = 'auth_token';
 
-  private user: CurrentUser | null = null;
+  public user: CurrentUser | null = null;
 
-  constructor(private http: HttpClient) {
-    if (this.getToken()) {
-      this.loadCurrentUser().subscribe({
-        error: () => this.logout(),
-      });
-    }
-  }
+  constructor(private http: HttpClient) {}
 
   register(payload: {
     firstName: string;
@@ -59,10 +53,7 @@ export class AuthService {
     password: string;
   }): Observable<CurrentUser> {
     return this.http.post<LoginResponse>(`${this.baseUrl}/login`, payload).pipe(
-      tap((res) => {
-        console.log('LOGIN RESPONSE:', res);
-        this.setToken(res.token);
-      }),
+      tap((res) => this.setToken(res.token)),
       switchMap(() => this.loadCurrentUser()),
     );
   }
@@ -92,6 +83,14 @@ export class AuthService {
           this.user = user;
         }),
       );
+  }
+
+  restoreSession(): Observable<CurrentUser | null> {
+    if (!this.getToken()) {
+      return of(null);
+    }
+
+    return this.loadCurrentUser();
   }
 
   private setToken(token: string): void {

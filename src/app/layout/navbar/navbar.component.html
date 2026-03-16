@@ -200,6 +200,15 @@
             class="block rounded-md px-3 py-2 hover:bg-blue-900"
             >Shop Now</a
           >
+
+          <a
+            *ngIf="!loggedIn"
+            routerLink="/create-account"
+            (click)="closeAll()"
+            class="block rounded-md px-3 py-2 hover:bg-slate-700"
+            >Create Account</a
+          >
+
           <a
             *ngIf="loggedIn"
             routerLink="/sell"
@@ -233,58 +242,6 @@
               Log out
             </button>
           </ng-template>
-
-          <!-- ✅ Mobile “More” (always visible) -->
-          <button
-            type="button"
-            class="mt-2 flex w-full items-center justify-between rounded-md px-3 py-2 hover:bg-slate-700"
-            (click)="toggleDropdown(); $event.stopPropagation()"
-            [attr.aria-expanded]="dropdownOpen"
-          >
-            More
-            <span
-              class="text-xs transition-transform duration-300 ease-in-out"
-              [class.rotate-180]="dropdownOpen"
-              >▾</span
-            >
-          </button>
-
-          <div
-            class="overflow-hidden transition-all duration-500 ease-in-out"
-            [class.max-h-0]="!dropdownOpen"
-            [class.max-h-56]="dropdownOpen"
-          >
-            <div class="space-y-1 pl-2">
-              <!-- Logged OUT menu -->
-              <ng-container *ngIf="!loggedIn; else mobileMoreLoggedIn">
-                <a
-                  routerLink="/create-account"
-                  (click)="closeAll()"
-                  class="block rounded-md px-3 py-2 hover:bg-slate-700"
-                  >Create Account</a
-                >
-                <a
-                  routerLink="/about"
-                  (click)="closeAll()"
-                  class="block rounded-md px-3 py-2 hover:bg-slate-700"
-                  >About</a
-                >
-              </ng-container>
-
-              <!-- Logged IN menu -->
-              <ng-template #mobileMoreLoggedIn>
-                <a
-                  routerLink="/account"
-                  (click)="closeAll()"
-                  class="block rounded-md px-3 py-2 hover:bg-slate-700"
-                  >Account</a
-                >
-                <a class="block rounded-md px-3 py-2 hover:bg-slate-700"
-                  >Settings</a
-                >
-              </ng-template>
-            </div>
-          </div>
         </div>
       </div>
     </div>

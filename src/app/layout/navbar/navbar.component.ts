@@ -37,6 +37,7 @@ export class NavbarComponent {
     public auth: AuthService,
     private router: Router,
   ) {
+    this.auth.restoreSession().subscribe();
     let startTime = 0;
 
     this.router.events.subscribe((event) => {
@@ -61,18 +62,15 @@ export class NavbarComponent {
   }
 
   get displayName(): string {
-    const u = this.auth.getUser();
-    return u?.firstName?.trim() || u?.email || '';
+    return this.auth.user?.firstName ?? '';
   }
 
   get loggedIn(): boolean {
-    return this.auth.isLoggedIn();
+    return !!this.auth.getToken();
   }
 
   get firstName(): string {
-    const firstName = this.auth.getUser()?.firstName;
-    if (!firstName) return '';
-    return firstName;
+    return this.auth.user?.firstName ?? '';
   }
 
   get greeting(): string {

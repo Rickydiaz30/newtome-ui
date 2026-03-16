@@ -105,6 +105,13 @@ export class AccountComponent implements OnInit {
   }
 
   loadMe() {
+    const existingUser = this.auth.getUser() as any;
+
+    if (existingUser) {
+      this.user = existingUser;
+      return;
+    }
+
     this.loading = true;
     this.error = null;
 
