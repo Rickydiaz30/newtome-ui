@@ -7,6 +7,11 @@
         class="cursor-pointer font-bold tracking-wide hover:text-slate-300"
       >
         New <span class="text-sky-400 text-xl">2</span> Me
+
+        <div *ngIf="loggedIn" class="mt-1 text-sm text-slate-100/90">
+          <span class="text-sky-500">Hello, </span>
+          <span class="font-semibold">{{ displayName }}</span>
+        </div>
       </div>
 
       <!-- Desktop links -->
@@ -183,15 +188,6 @@
         <div
           class="space-y-1 rounded-lg bg-blue-950/95 p-2 shadow-lg ring-1 ring-black/10"
         >
-          <!-- Logged-in header -->
-          <div
-            *ngIf="loggedIn"
-            class="rounded-md px-3 py-2 text-sm text-slate-100/90"
-          >
-            <span class="text-sky-500">Hello, </span>
-            <span class="font-semibold">{{ displayName }}</span>
-          </div>
-
           <a
             routerLink="/"
             (click)="closeAll()"
@@ -205,6 +201,7 @@
             >Shop Now</a
           >
           <a
+            *ngIf="loggedIn"
             routerLink="/sell"
             (click)="closeAll()"
             class="block rounded-md px-3 py-2 hover:bg-blue-900"
@@ -272,12 +269,6 @@
                   class="block rounded-md px-3 py-2 hover:bg-slate-700"
                   >About</a
                 >
-                <!-- <a
-                  routerLink="/contact"
-                  (click)="closeAll()"
-                  class="block rounded-md px-3 py-2 hover:bg-slate-700"
-                  >Contact</a
-                > -->
               </ng-container>
 
               <!-- Logged IN menu -->
