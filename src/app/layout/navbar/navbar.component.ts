@@ -82,6 +82,11 @@ export class NavbarComponent {
     if (!this.mobileOpen) this.dropdownOpen = false;
   }
 
+  closeMobile() {
+    this.mobileOpen = false;
+    this.dropdownOpen = false;
+  }
+
   toggleDropdown() {
     this.dropdownOpen = !this.dropdownOpen;
   }

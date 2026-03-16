@@ -78,62 +78,27 @@
           <span class="text-sky-500">Hello,</span> {{ displayName }}
         </a>
 
-        <!-- ✅ More dropdown ALWAYS visible -->
-        <div class="relative">
-          <button
-            type="button"
-            class="flex items-center gap-2 rounded-md px-3 py-2 hover:bg-slate-800"
-            (click)="toggleDropdown(); $event.stopPropagation()"
-            [attr.aria-expanded]="dropdownOpen"
-          >
-            More
-            <span
-              class="text-xs transition-transform duration-300 ease-in-out"
-              [class.rotate-180]="dropdownOpen"
-              >▾</span
-            >
-          </button>
+        <a
+          *ngIf="loggedIn"
+          routerLink="/login"
+          routerLinkActive="!text-sky-400"
+          [routerLinkActiveOptions]="{ exact: true }"
+          class="hover:text-slate-300"
+          (click)="logout(); closeAll()"
+        >
+          Logout
+        </a>
 
-          <div
-            *ngIf="dropdownOpen"
-            class="absolute right-0 mt-2 w-48 rounded-lg bg-white py-2 text-slate-800 shadow-lg ring-1 ring-black/10"
-            (click)="$event.stopPropagation()"
-          >
-            <!-- Logged OUT menu -->
-            <ng-container *ngIf="!loggedIn; else loggedInMenu">
-              <a
-                routerLink="/create-account"
-                (click)="closeAll()"
-                class="block px-4 py-2 hover:bg-slate-100"
-              >
-                Create Account
-              </a>
-            </ng-container>
-
-            <!-- Logged IN menu -->
-            <ng-template #loggedInMenu>
-              <a
-                routerLink="/account"
-                (click)="closeAll()"
-                class="block px-4 py-2 hover:bg-slate-100"
-              >
-                Account
-              </a>
-
-              <div class="my-2 h-px bg-slate-200"></div>
-              <button
-                class="w-full px-4 py-2 text-left hover:bg-slate-100 flex items-center gap-2"
-                type="button"
-                (click)="logout(); closeAll()"
-                [disabled]="logoutLoading"
-              >
-                <app-spinner *ngIf="logoutLoading"></app-spinner>
-
-                <span *ngIf="!logoutLoading"> Log out </span>
-              </button>
-            </ng-template>
-          </div>
-        </div>
+        <a
+          *ngIf="!loggedIn"
+          routerLink="/create-account"
+          routerLinkActive="!text-sky-400"
+          [routerLinkActiveOptions]="{ exact: true }"
+          class="hover:text-slate-300"
+          (click)="closeAll()"
+        >
+          Create Account
+        </a>
       </div>
 
       <!-- Mobile hamburger -->
