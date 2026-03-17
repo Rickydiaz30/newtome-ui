@@ -45,12 +45,19 @@ export class ListingsComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.queryParams.subscribe((params) => {
+      // Existing redirect logic
       if (params['redirect'] === 'offer' && params['listingId']) {
         this.redirectListingId = Number(params['listingId']);
       }
-    });
 
-    this.loadListings();
+      // ✅ NEW: handle search query
+      if (params['q']) {
+        this.searchQuery = params['q'];
+        this.searchListings();
+      } else {
+        this.loadListings();
+      }
+    });
   }
 
   loadListings() {

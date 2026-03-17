@@ -31,7 +31,9 @@ export class ListingService {
   }
 
   search(query: string): Observable<Listing[]> {
-    return this.http.get<Listing[]>(`${this.apiUrl}/search?query=${query}`);
+    return this.http.get<Listing[]>(`${this.apiUrl}/search`, {
+      params: { query },
+    });
   }
 
   getListingById(id: number): Observable<Listing> {
