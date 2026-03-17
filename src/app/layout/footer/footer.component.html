@@ -32,6 +32,16 @@
           Shop
         </a>
         <a
+          *ngIf="!authService.isLoggedIn()"
+          routerLink="/create-account"
+          routerLinkActive="!text-sky-400"
+          [routerLinkActiveOptions]="{ exact: true }"
+          class="text-slate-50 hover:underline"
+        >
+          Create Account
+        </a>
+        <a
+          *ngIf="authService.isLoggedIn()"
           routerLink="/sell"
           routerLinkActive="!text-sky-400"
           [routerLinkActiveOptions]="{ exact: true }"
