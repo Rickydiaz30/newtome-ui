@@ -160,7 +160,8 @@ export class CreateListingComponent implements OnInit {
             city: this.capitalizeCity(this.model.city),
             status: this.model.status,
             categoryId: this.model.categoryId ?? undefined,
-            imageUrl: imageUrls?.[0] || '',
+            imageUrl: imageUrls?.[0] || '', // keep fallback
+            imageUrls: imageUrls || [], // 👈 ADD THIS LINE
           };
 
           console.log('PAYLOAD:', payload);

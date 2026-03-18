@@ -128,19 +128,17 @@ export class AccountComponent implements OnInit {
   }
 
   loadMe() {
-    const existingUser = this.auth.getUser() as any;
+    const existingUser = this.auth.getUser();
 
     if (existingUser) {
-      this.user = existingUser;
-      return;
+      // optional: use it for quick UI while loading full data
+      this.user = existingUser as any;
     }
 
     this.loading = true;
-    this.error = null;
 
     this.http.get<MeResponse>(`${environment.apiUrl}/api/users/me`).subscribe({
       next: (user) => {
-        console.log('ME RESPONSE:', user);
         this.user = user;
         this.loading = false;
       },

@@ -14,9 +14,12 @@
       >
         New <span class="text-sky-400 text-xl">2</span> Me
 
-        <div *ngIf="loggedIn" class="mt-1 text-sm text-slate-100/90">
+        <div
+          *ngIf="auth.user$ | async as user"
+          class="mt-1 text-sm text-slate-100/90"
+        >
           <span class="text-sky-500">Hello, </span>
-          <span class="font-semibold">{{ displayName }}</span>
+          <span class="font-semibold">{{ user.firstName }}</span>
         </div>
       </div>
 

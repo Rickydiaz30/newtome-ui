@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { tap, switchMap } from 'rxjs/operators';
-import { Observable, of } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
 type LoginResponse = {
@@ -29,6 +29,9 @@ export class AuthService {
   public user: CurrentUser | null = null;
 
   constructor(private http: HttpClient) {}
+
+  private userSubject = new BehaviorSubject<CurrentUser | null>(null);
+  public user$ = this.userSubject.asObservable();
 
   register(payload: {
     firstName: string;
@@ -61,6 +64,7 @@ export class AuthService {
   logout(): void {
     localStorage.removeItem(this.tokenKey);
     this.user = null;
+    this.userSubject.next(null);
   }
 
   isLoggedIn(): boolean {
@@ -81,6 +85,7 @@ export class AuthService {
       .pipe(
         tap((user) => {
           this.user = user;
+          this.userSubject.next(user);
         }),
       );
   }

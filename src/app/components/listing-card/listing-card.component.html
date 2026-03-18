@@ -7,12 +7,33 @@
   class="relative overflow-hidden rounded-lg bg-white shadow-sm hover:shadow-md transition duration-300 group aspect-[4/6] flex flex-col"
 >
   <!-- ✅ IMAGE SECTION -->
-  <div class="h-[60%] flex items-center justify-center bg-white p-4">
+  <div
+    class="relative h-[60%] bg-white flex items-center justify-center overflow-hidden"
+  >
+    <!-- LEFT ARROW -->
+    <button
+      *ngIf="(listing.imageUrls?.length || 0) > 1"
+      (click)="prev($event, listing)"
+      class="absolute left-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white w-8 h-8 flex items-center justify-center rounded-full transition"
+    >
+      ◀
+    </button>
+
+    <!-- IMAGE -->
     <img
-      [src]="listing.imageUrls?.[0] || listing.imageUrl || fallback"
+      [src]="getCurrentImage(listing)"
       (error)="onImageError($event)"
-      class="max-h-full object-contain group-hover:scale-105 transition duration-300"
+      class="max-h-full object-contain transition duration-300"
     />
+
+    <!-- RIGHT ARROW -->
+    <button
+      *ngIf="(listing.imageUrls?.length || 0) > 1"
+      (click)="next($event, listing)"
+      class="absolute right-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white w-8 h-8 flex items-center justify-center rounded-full transition"
+    >
+      ▶
+    </button>
   </div>
 
   <!-- ✅ CONTENT SECTION -->
