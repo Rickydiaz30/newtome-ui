@@ -10,6 +10,7 @@ import { Offer } from '../../models/offer.model';
 import { SpinnerComponent } from 'src/app/shared/spinner/spinner.component';
 import { FormsModule } from '@angular/forms';
 import { environment } from 'src/environments/environment-prod';
+import { APP_CONSTANTS } from 'src/app/constants/app.constants';
 
 type MeResponse = {
   id: number;
@@ -68,6 +69,8 @@ export class AccountComponent implements OnInit {
     private listingService: ListingService,
   ) {}
 
+  fallback = APP_CONSTANTS.FALLBACK_IMAGE;
+
   ngOnInit(): void {
     this.loadMe();
     this.loadMyListings();
@@ -102,6 +105,26 @@ export class AccountComponent implements OnInit {
     if (tab === 'OFFERS_RECEIVED') {
       this.loadReceivedOffers();
     }
+  }
+
+  getImageUrl(item: any): string {
+    const cdnBase = 'https://d3qyvu5wcarbxw.cloudfront.net';
+
+    const image = item.imageUrl || item.listingImageUrl;
+
+    if (!image) return this.fallback;
+
+    // 🔥 Replace S3 with CloudFront
+    if (image.includes('amazonaws.com')) {
+      const key = image.split('.amazonaws.com/')[1];
+      return `${cdnBase}/${key}`;
+    }
+
+    if (image.startsWith('http') || image.startsWith('data:image')) {
+      return image;
+    }
+
+    return `${cdnBase}/${image}`;
   }
 
   loadMe() {

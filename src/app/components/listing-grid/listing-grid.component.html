@@ -1,0 +1,11 @@
+<ul
+  *ngIf="listings.length > 0"
+  class="mt-12 grid gap-2 grid-cols-2 md:grid-cols-3 xl:grid-cols-4 xl:max-w-7xl xl:mx-auto"
+>
+  <!-- LISTING CARDS -->
+  <app-listing-card
+    *ngFor="let listing of listings"
+    [listing]="listing"
+    (select)="select.emit($event)"
+  ></app-listing-card>
+</ul>

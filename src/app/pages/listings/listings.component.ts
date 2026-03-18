@@ -10,11 +10,24 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { ApiResponse } from 'src/app/models/api-response';
 import { SpinnerComponent } from 'src/app/shared/spinner/spinner.component';
 import { delay } from 'rxjs';
+import { ListingCardComponent } from 'src/app/components/listing-card/listing-card.component';
+import { ListingSearchComponent } from 'src/app/components/listing-search/listing-search.component';
+import { ListingGridComponent } from 'src/app/components/listing-grid/listing-grid.component';
+import { ListingModalComponent } from 'src/app/components/listing-modal/listing-modal.component';
 
 @Component({
   selector: 'app-listings',
   standalone: true,
-  imports: [CommonModule, HttpClientModule, FormsModule, SpinnerComponent],
+  imports: [
+    CommonModule,
+    HttpClientModule,
+    FormsModule,
+    SpinnerComponent,
+    ListingCardComponent,
+    ListingSearchComponent,
+    ListingGridComponent,
+    ListingModalComponent,
+  ],
   templateUrl: './listings.component.html',
 })
 export class ListingsComponent implements OnInit {
@@ -203,5 +216,17 @@ export class ListingsComponent implements OnInit {
         this.loadOffers();
       },
     });
+  }
+
+  handleSearch(query: string) {
+    this.searchQuery = query;
+    this.searchListings();
+  }
+
+  handleSubmitOffer(event: { amount: number | null; message: string }) {
+    this.offerAmount = event.amount;
+    this.offerMessage = event.message;
+
+    this.submitOffer(); // existing method
   }
 }

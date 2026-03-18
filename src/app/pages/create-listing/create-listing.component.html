@@ -149,6 +149,7 @@
                 <input
                   #fileInput
                   type="file"
+                  multiple
                   accept="image/*"
                   (change)="onFileSelected($event)"
                   hidden
@@ -158,6 +159,7 @@
                 <input
                   #cameraInput
                   type="file"
+                  multiple
                   accept="image/*"
                   capture="environment"
                   (change)="onFileSelected($event)"
@@ -165,11 +167,13 @@
                 />
 
                 <!-- Preview -->
-                <img
-                  *ngIf="previewUrl"
-                  [src]="previewUrl"
-                  class="mt-3 max-h-48 rounded-md border"
-                />
+                <div class="mt-3 flex gap-2 flex-wrap">
+                  <img
+                    *ngFor="let img of imagePreviews"
+                    [src]="img"
+                    class="w-20 h-20 object-cover rounded-md border"
+                  />
+                </div>
               </div>
             </div>
           </div>

@@ -7,7 +7,8 @@ export interface Listing {
   city: string;
   status: string;
   createdAt: string;
-  imageUrl: string;
+  imageUrl?: string; // Optional for backward compatibility
+  imageUrls: string[];
 
   categoryId: number;
   categoryName: string;

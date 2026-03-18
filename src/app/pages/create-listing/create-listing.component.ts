@@ -10,7 +10,7 @@ import { delay } from 'rxjs/operators';
 import { ApiResponse } from 'src/app/models/api-response';
 import { environment } from 'src/environments/environment';
 import { CategoryService } from 'src/app/services/category-service';
-import { Observable, of } from 'rxjs';
+import { Observable, of, from, firstValueFrom } from 'rxjs';
 import { switchMap, tap } from 'rxjs/operators';
 
 type Category = {
@@ -39,7 +39,8 @@ export class CreateListingComponent implements OnInit {
     imageUrl: '',
   };
 
-  previewUrl: string | null = null;
+  selectedFiles: File[] = [];
+  imagePreviews: string[] = [];
   selectedFile: File | null = null;
 
   categories: Category[] = [];
@@ -88,23 +89,26 @@ export class CreateListingComponent implements OnInit {
       });
   }
 
-  onFileSelected(event: Event) {
-    const input = event.target as HTMLInputElement;
+  onFileSelected(event: any) {
+    const files = Array.from(event.target.files) as File[];
 
-    if (!input.files || input.files.length === 0) {
-      return;
-    }
+    // limit to 5 total (including existing)
+    const combined = [...this.selectedFiles, ...files].slice(0, 5);
 
-    const file = input.files[0];
-    this.selectedFile = file;
+    this.selectedFiles = combined;
 
-    // Create preview
-    const reader = new FileReader();
-    reader.onload = () => {
-      this.previewUrl = reader.result as string;
-    };
+    // rebuild previews
+    this.imagePreviews = [];
 
-    reader.readAsDataURL(file);
+    this.selectedFiles.forEach((file) => {
+      const reader = new FileReader();
+
+      reader.onload = (e: any) => {
+        this.imagePreviews.push(e.target.result);
+      };
+
+      reader.readAsDataURL(file);
+    });
   }
 
   private isValidForSubmit(): boolean {
@@ -132,6 +136,7 @@ export class CreateListingComponent implements OnInit {
   }
 
   submit() {
+    console.log('Submitting with model:', this.model);
     if (this.submitting) return;
 
     if (this.model.status === 'ACTIVE' && !this.isValidForSubmit()) {
@@ -143,9 +148,10 @@ export class CreateListingComponent implements OnInit {
     this.errorMsg = '';
     this.successMsg = '';
 
-    this.uploadImageIfNeeded()
+    from(this.uploadImages())
       .pipe(
-        switchMap(() => {
+        switchMap((imageUrls) => {
+          console.log('UPLOADED URLS:', imageUrls);
           const payload = {
             title: this.model.title,
             description: this.model.description,
@@ -154,11 +160,10 @@ export class CreateListingComponent implements OnInit {
             city: this.capitalizeCity(this.model.city),
             status: this.model.status,
             categoryId: this.model.categoryId ?? undefined,
-            imageUrl:
-              this.model.imageUrl ||
-              'https://d3qyvu5wcarbxw.cloudfront.net/assets/images/ninjaBlender.webp',
+            imageUrl: imageUrls?.[0] || '',
           };
 
+          console.log('PAYLOAD:', payload);
           return this.listingService.create(payload);
         }),
         delay(1000),
@@ -202,5 +207,41 @@ export class CreateListingComponent implements OnInit {
       categoryId: null,
       imageUrl: '',
     };
+  }
+
+  async uploadImages(): Promise<string[]> {
+    const uploadedUrls: string[] = [];
+
+    for (const file of this.selectedFiles) {
+      try {
+        // ✅ FIXED HERE
+        const res: any = await firstValueFrom(
+          this.listingService.getPresignedUrl(file.name),
+        );
+
+        console.log('PRESIGNED RESPONSE:', res); // 🔍 inspect this
+
+        const uploadUrl = res.uploadUrl;
+
+        // 🔥 FIX THIS LINE BASED ON RESPONSE
+        const fileUrl = res.imageUrl;
+
+        await fetch(uploadUrl, {
+          method: 'PUT',
+          body: file,
+          headers: {
+            'Content-Type': file.type,
+          },
+        });
+
+        uploadedUrls.push(fileUrl);
+      } catch (err) {
+        console.error('Upload failed:', err);
+      }
+    }
+
+    console.log('FINAL UPLOADED URLS:', uploadedUrls); // 👈 add this
+
+    return uploadedUrls;
   }
 }

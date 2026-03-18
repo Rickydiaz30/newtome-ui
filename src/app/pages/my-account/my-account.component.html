@@ -280,7 +280,7 @@
           </div>
 
           <img
-            [src]="listing.imageUrl || 'assets/images/ninjaBlender.webp'"
+            [src]="getImageUrl(listing) || fallback"
             class="w-16 h-16 object-contain"
           />
         </li>
@@ -313,7 +313,7 @@
           </div>
 
           <img
-            [src]="listing.imageUrl || 'assets/images/ninjaBlender.webp'"
+            [src]="getImageUrl(listing) || fallback"
             class="w-16 h-16 object-contain"
           />
         </li>
@@ -371,7 +371,7 @@
           </div>
 
           <img
-            [src]="offer.listingImageUrl || 'assets/images/ninjaBlender.webp'"
+            [src]="getImageUrl(offer) || fallback"
             class="w-full sm:w-20 h-40 sm:h-20 object-contain rounded-md"
           />
         </li>
@@ -486,7 +486,7 @@
           </div>
 
           <img
-            [src]="offer.listingImageUrl || 'assets/images/ninjaBlender.webp'"
+            [src]="getImageUrl(offer) || fallback"
             class="w-full sm:w-20 h-40 sm:h-20 object-contain rounded-md"
           />
         </li>
