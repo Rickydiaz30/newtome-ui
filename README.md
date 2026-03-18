@@ -1,27 +1,83 @@
-# MyTailwindApp
+# Newtome 🛒
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.2.16.
+Newtome is a full-stack web application designed to support user accounts, listings, and catalog management with secure authentication and scalable backend architecture.
 
-## Development server
+This project highlights advanced backend development concepts using Spring Boot, including JWT-based security, layered architecture, and modular domain design.
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+---
 
-## Code scaffolding
+## 🔧 Tech Stack
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+- **Frontend:** Angular (Standalone Components, Routing, Services)
+- **Backend:** Java, Spring Boot (REST API)
+- **Security:** JWT Authentication (custom filter + token service)
+- **Database:** MySQL (designed for scalability, MongoDB integration planned)
+- **Tools:** Postman, Git, IntelliJ, VS Code
 
-## Build
+---
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+## 🧱 Architecture Overview
 
-## Running unit tests
+The backend is built using a **layered architecture** to ensure maintainability and scalability:
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+- **Controller Layer** → Handles HTTP requests and responses
+- **Service Layer** → Contains business logic
+- **Repository Layer** → Manages database interactions
+- **DTOs & Mappers** → Separates internal models from API contracts
 
-## Running end-to-end tests
+### 📂 Core Modules
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+- **Users** → Authentication, account management
+- **Catalog** → Item/listing structure and organization
+- **Uploads** → File handling via REST endpoints
+- **Security** → JWT authentication and request filtering
 
-## Further help
+---
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+## 🔐 Security Implementation
+
+- Implemented **JWT-based authentication** using:
+  - Custom `JwtAuthFilter`
+  - Token generation and validation service
+
+- Secured API endpoints to ensure only authenticated users can access protected resources
+- Configured CORS for safe frontend-backend communication
+
+---
+
+## 📦 Features
+
+- User registration and authentication system
+- Secure login with token-based authorization
+- RESTful APIs for managing listings and catalog data
+- File upload functionality via backend endpoints
+- Modular backend structure for easy feature expansion
+- Frontend integration with Angular services and HTTP client
+
+---
+
+## 🚀 Key Learning Outcomes
+
+- Designed and implemented secure REST APIs using Spring Boot
+- Applied **JWT authentication and request filtering**
+- Structured backend using **industry-standard architecture patterns**
+- Built scalable and modular backend systems
+- Integrated frontend and backend with real-time data exchange
+
+---
+
+## 🔮 Future Enhancements
+
+- Role-based authorization (Admin/User roles)
+- Pagination and filtering for listings
+- Dockerized deployment for backend and database
+- MongoDB integration for flexible data models
+- Improved UI/UX and state management on frontend
+
+---
+
+## 📮 Contact
+
+Created by Ricky Diaz
+tampacustoms@yahoo.com
+813-352-4525
