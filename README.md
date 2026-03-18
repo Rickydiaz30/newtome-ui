@@ -56,6 +56,19 @@ The backend is built using a **layered architecture** to ensure maintainability 
 
 ---
 
+<<<<<<< HEAD
+=======
+## 💰 Offer System
+
+- Implemented an offer-based marketplace system
+- Users can submit offers on listings
+- Sellers can review incoming offers and choose to accept or reject
+- Designed backend logic to handle offer state transitions and user interactions
+- Enables real-world buyer/seller workflow beyond basic CRUD operations
+
+---
+
+>>>>>>> develop
 ## 🚀 Key Learning Outcomes
 
 - Designed and implemented secure REST APIs using Spring Boot
@@ -79,5 +92,8 @@ The backend is built using a **layered architecture** to ensure maintainability 
 ## 📮 Contact
 
 Created by Ricky Diaz
+<<<<<<< HEAD
 tampacustoms@yahoo.com
 813-352-4525
+=======
+>>>>>>> develop
