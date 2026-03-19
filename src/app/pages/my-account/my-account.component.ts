@@ -138,9 +138,11 @@ export class AccountComponent implements OnInit {
 
     this.loading = true;
 
-    this.http.get<ApiResponse<MeResponse>>('/api/users/me').subscribe({
+    this.http.get<MeResponse>('/api/users/me').subscribe({
       next: (response) => {
-        this.user = response.data;
+        console.log('Me response:', response);
+        this.user = response;
+        console.log('SETTING USER:', response);
         this.loading = false;
       },
       error: () => {
