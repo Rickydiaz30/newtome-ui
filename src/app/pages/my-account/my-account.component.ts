@@ -11,6 +11,7 @@ import { SpinnerComponent } from 'src/app/shared/spinner/spinner.component';
 import { FormsModule } from '@angular/forms';
 import { environment } from 'src/environments/environment-prod';
 import { APP_CONSTANTS } from 'src/app/constants/app.constants';
+import { ApiResponse } from 'src/app/models/api-response';
 
 type MeResponse = {
   id: number;
@@ -137,9 +138,9 @@ export class AccountComponent implements OnInit {
 
     this.loading = true;
 
-    this.http.get<MeResponse>(`${environment.apiUrl}/api/users/me`).subscribe({
-      next: (user) => {
-        this.user = user;
+    this.http.get<ApiResponse<MeResponse>>('/api/users/me').subscribe({
+      next: (response) => {
+        this.user = response.data;
         this.loading = false;
       },
       error: () => {

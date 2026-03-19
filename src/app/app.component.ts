@@ -13,6 +13,7 @@ import { NavbarComponent } from './layout/navbar/navbar.component';
 import { FooterComponent } from './layout/footer/footer.component';
 import { HomeComponent } from './pages/home/home.component';
 import { SpinnerComponent } from './shared/spinner/spinner.component';
+import { environment } from 'src/environments/environment-prod';
 
 @Component({
   selector: 'app-root',
@@ -39,6 +40,7 @@ export class AppComponent {
   constructor(private router: Router) {}
 
   ngOnInit() {
+    console.log('API URL:', environment.apiUrl);
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationStart) {
         this.loading = true;
