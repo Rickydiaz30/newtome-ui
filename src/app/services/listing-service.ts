@@ -16,7 +16,7 @@ export class ListingService {
     return this.http.get<Listing[]>(this.apiUrl);
   }
 
-  // This method is used to create a new listing. It takes a partial listing object as input and returns an observable of the created listing.
+  // This method is used to create a new listing. It takes a partial listing object as input and returns an observable of the created listing. For the second time.
   create(listing: Partial<Listing>): Observable<Listing> {
     return this.http.post<Listing>(this.apiUrl, listing);
   }
