@@ -17,9 +17,7 @@ export class ListingService {
   }
 
   create(listing: Partial<Listing>): Observable<Listing> {
-    return this.http
-      .post<ApiResponse<Listing>>(this.apiUrl, listing)
-      .pipe(map((res) => res.data));
+    return this.http.post<Listing>(this.apiUrl, listing);
   }
 
   getMyListings(): Observable<Listing[]> {
@@ -37,9 +35,7 @@ export class ListingService {
   }
 
   getListingById(id: number): Observable<Listing> {
-    return this.http
-      .get<ApiResponse<Listing>>(`${this.apiUrl}/${id}`)
-      .pipe(map((res) => res.data));
+    return this.http.get<Listing>(`${this.apiUrl}/${id}`);
   }
 
   getPresignedUrl(filename: string) {
