@@ -1,105 +1,112 @@
 # Newtome 🛒
 
-Newtome is a full-stack web application designed to support user accounts, listings, and catalog management with secure authentication and scalable backend architecture.
+[Live App](https://dxsg03couz5uo.cloudfront.net)
 
-It highlights advanced backend development concepts using Spring Boot, including JWT-based security, layered architecture, and modular domain design.
+Newtome is a full-stack marketplace application with an Angular frontend designed to interact with a secure Spring Boot backend. The application emphasizes **modular UI design, API integration, and real-world data workflows**, aligning with enterprise software development practices.
 
 ---
 
 ## 🔧 Tech Stack
 
-- **Frontend:** Angular (Standalone Components, Routing, Services)
-- **Backend:** Java, Spring Boot (REST API)
-- **Security:** JWT Authentication (custom filter + token service)
-- **Database:** MySQL _(MongoDB integration planned)_
-- **Tools:** Postman, Git, IntelliJ, VS Code
+### Frontend
+
+- Angular (Standalone Components, Routing, Services)
+- TypeScript
+- RxJS (HTTP requests, reactive programming)
+
+### Backend Integration
+
+- REST APIs (Spring Boot)
+- JWT Authentication
+
+### Tools
+
+- Git / GitHub
+- VS Code / IntelliJ
+- Postman
 
 ---
 
-## 🧱 Architecture Overview
+## 🧱 Frontend Architecture
 
-The backend follows a **layered architecture** to ensure maintainability and scalability:
+The UI follows a **component-based and service-driven architecture**, similar to enterprise frontend systems:
 
-- **Controller Layer** → Handles HTTP requests and responses
-- **Service Layer** → Contains business logic
-- **Repository Layer** → Manages database interactions
-- **DTOs & Mappers** → Separates internal models from API contracts
+- **Components** → Encapsulated UI logic and rendering
+- **Services** → Centralized API communication and business logic
+- **Models/Interfaces** → Strong typing for structured data handling
+- **Routing** → Organized navigation and page flow
 
-### 📂 Core Modules
-
-- **Users** → Authentication and account management
-- **Catalog** → Listing structure and organization
-- **Uploads** → File handling via REST endpoints
-- **Security** → JWT authentication and request filtering
+This structure supports **scalability, maintainability, and clear separation of concerns**.
 
 ---
 
-## 🔐 Security Implementation
+## 🔐 Authentication & API Integration
 
-- Implemented **JWT-based authentication** using:
-  - Custom `JwtAuthFilter`
-  - Token generation and validation service
-
-- Secured API endpoints so only authenticated users can access protected resources
-- Configured CORS for safe frontend-backend communication
+- Implemented **JWT-based authentication flow**
+- Attached tokens to HTTP requests for secure API access
+- Protected routes to restrict unauthorized access
+- Handled asynchronous API calls using Angular services and RxJS
 
 ---
 
 ## 📦 Features
 
-- User registration and authentication
-- Secure login with token-based authorization
-- RESTful APIs for listings and catalog management
-- File upload functionality via backend endpoints
-- Modular backend structure for scalability
-- Angular frontend integration using HTTP services
+- User registration and login interface
+- Secure authentication with token handling
+- Dynamic listing display from backend APIs
+- Offer submission and interaction workflows
+- Image upload and preview functionality
+- Responsive UI for desktop and mobile devices
 
 ---
 
-<<<<<<< HEAD
-=======
-## 💰 Offer System
+## 💰 Offer Workflow (UI Integration)
 
-A key feature of Newtome is its **offer-based marketplace workflow**:
-
-- Users can submit offers on listings
-- Sellers can review and **accept or reject offers**
-- Backend handles **offer state transitions** and user interactions
-- Implements real-world buyer/seller logic beyond basic CRUD
+- Users can submit offers on listings through the UI
+- Sellers can review and respond to offers
+- UI reflects backend-driven state changes (pending, accepted, rejected)
+- Demonstrates handling of **stateful interactions beyond basic CRUD**
 
 ---
 
->>>>>>> develop
-## 🚀 Key Learning Outcomes
+## ☁️ Deployment
 
-- Designed and implemented secure REST APIs using Spring Boot
-- Applied **JWT authentication and request filtering**
-- Built scalable backend systems using **layered architecture**
-- Integrated frontend and backend with real-time data flow
+- Frontend hosted on AWS S3 (static hosting)
+- Distributed globally using AWS CloudFront (CDN)
+- Integrated with backend API through CloudFront routing
+
+---
+
+## 🧩 System Integration
+
+Angular Frontend → CloudFront → Spring Boot API (EC2)
+→ MySQL (Docker)
+→ S3 (image storage)
+
+---
+
+## 🚀 Key Engineering Takeaways
+
+- Developed a **modular Angular application** using reusable components and services
+- Integrated frontend with REST APIs using **asynchronous data handling (RxJS)**
+- Implemented **secure authentication workflows (JWT)**
+- Designed UI to align with backend business logic and data models
+- Deployed a production-ready frontend using **AWS cloud infrastructure**
 
 ---
 
 ## 🔮 Future Enhancements
 
-- Role-based authorization (Admin/User roles)
-- Pagination and filtering for listings
-- Dockerized deployment for backend and database
-- MongoDB integration for flexible data models
-- Improved UI/UX and frontend state management
+- State management (NgRx / Signals)
+- Advanced filtering and search capabilities
+- Role-based UI rendering (Admin/User)
+- Improved error handling and loading states
+- Enhanced mobile-first design
 
 ---
 
 ## 📮 Contact
 
-<<<<<<< HEAD
-Created by Ricky Diaz
-<<<<<<< HEAD
-tampacustoms@yahoo.com
+Ricky Diaz
+[tampacustoms@yahoo.com](mailto:tampacustoms@yahoo.com)
 813-352-4525
-=======
->>>>>>> develop
-=======
-**Ricky Diaz**
-📧 [tampacustoms@yahoo.com](mailto:tampacustoms@yahoo.com)
-📱 813-352-4525
->>>>>>> develop
