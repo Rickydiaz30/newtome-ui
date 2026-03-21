@@ -2,7 +2,8 @@
 
 [Live App](https://dxsg03couz5uo.cloudfront.net)
 
-Newtome is a full-stack marketplace application with an Angular frontend designed to interact with a secure Spring Boot backend. The application emphasizes **modular UI design, API integration, and real-world data workflows**, aligning with enterprise software development practices.
+Newtome is a full-stack marketplace application that enables users to create accounts, list items, and interact through an offer-based system.
+The project emphasizes **secure backend design, scalable architecture, production-safe database management, and automated testing practices** using AWS, Docker, and Spring Boot.
 
 ---
 
@@ -11,102 +12,220 @@ Newtome is a full-stack marketplace application with an Angular frontend designe
 ### Frontend
 
 - Angular (Standalone Components, Routing, Services)
-- TypeScript
-- RxJS (HTTP requests, reactive programming)
 
-### Backend Integration
+### Backend
 
-- REST APIs (Spring Boot)
-- JWT Authentication
+- Java 21
+- Spring Boot (REST API)
+- Spring Data JPA
+
+### Security
+
+- JWT Authentication (custom filter + token service)
+
+### Database
+
+- MySQL (Dockerized)
+- Flyway (database version control)
+
+### Testing
+
+- JUnit 5
+- Mockito (unit testing)
+- Spring Boot Integration Testing (MockMvc + real DB)
+
+### Cloud & Deployment
+
+- AWS EC2 (backend hosting)
+- AWS S3 (static frontend + image storage)
+- AWS CloudFront (CDN + API routing)
+- Docker & Docker Compose (containerization)
 
 ### Tools
 
-- Git / GitHub
-- VS Code / IntelliJ
 - Postman
+- Git / GitHub (PR-based workflow)
+- IntelliJ / VS Code
 
 ---
 
-## 🧱 Frontend Architecture
+## 🧱 Architecture Overview
 
-The UI follows a **component-based and service-driven architecture**, similar to enterprise frontend systems:
+The backend follows a **layered architecture** for scalability and maintainability:
 
-- **Components** → Encapsulated UI logic and rendering
-- **Services** → Centralized API communication and business logic
-- **Models/Interfaces** → Strong typing for structured data handling
-- **Routing** → Organized navigation and page flow
+- **Controller Layer** → Handles HTTP requests/responses
+- **Service Layer** → Business logic
+- **Repository Layer** → Database access (JPA)
+- **DTOs & Mappers** → Clean API contracts
 
-This structure supports **scalability, maintainability, and clear separation of concerns**.
+### 📂 Core Modules
+
+- **Users** → Authentication and account management
+- **Catalog** → Listings and categories
+- **Offers** → Buyer/seller offer workflow
+- **Uploads** → Image handling via S3
+- **Security** → JWT authentication and request filtering
 
 ---
 
-## 🔐 Authentication & API Integration
+## 🔐 Security Implementation
 
-- Implemented **JWT-based authentication flow**
-- Attached tokens to HTTP requests for secure API access
-- Protected routes to restrict unauthorized access
-- Handled asynchronous API calls using Angular services and RxJS
+- Implemented **JWT-based authentication**
+  - Custom `JwtAuthFilter`
+  - Token generation & validation service
+
+- Secure password storage using **BCrypt hashing**
+- Protected API endpoints (authenticated access only)
+- Configured CORS for frontend-backend communication
+
+---
+
+## 🗄️ Database & Migrations (Flyway)
+
+The application uses **Flyway** to manage schema evolution in a production-safe way.
+
+### Migration Strategy
+
+- Existing schema was **baselined into Flyway**
+- All changes are version-controlled:
+
+```
+V1__initial_schema.sql
+V2__add_last_login_to_users.sql
+V3__add_created_at_column.sql
+V4__backfill_created_at.sql
+V5__make_created_at_not_null.sql
+```
+
+- Migrations run automatically on application startup
+
+### Benefits
+
+- Prevents schema drift across environments
+- Enables safe incremental database updates
+- Ensures consistency between development and production
+
+---
+
+## 🧪 Testing Strategy
+
+The backend includes both **unit and integration testing** to ensure reliability:
+
+### Unit Testing
+
+- Service-layer testing using **Mockito**
+- Covers authentication logic (success + failure scenarios)
+
+### Integration Testing
+
+- End-to-end API testing using **MockMvc**
+- Runs against a **real MySQL test database (Docker)**
+- Verifies:
+  - Authentication flow
+  - JWT generation
+  - Database updates (e.g., `last_login_at`)
+
+- Uses **isolated test database (`newtome_test`)** to prevent data loss
+- Handles relational cleanup in correct order:
+
+  ```
+  offers → listings → users
+  ```
+
+### Why This Matters
+
+- Ensures real system behavior (not just mocked logic)
+- Prevents regressions during development
+- Reflects production-like conditions
 
 ---
 
 ## 📦 Features
 
-- User registration and login interface
-- Secure authentication with token handling
-- Dynamic listing display from backend APIs
-- Offer submission and interaction workflows
-- Image upload and preview functionality
-- Responsive UI for desktop and mobile devices
+- User registration and authentication
+- Secure login with JWT-based authorization
+- CRUD operations for listings and categories
+- Offer-based marketplace workflow
+- Image upload system backed by S3
+- CDN delivery for frontend and images
 
 ---
 
-## 💰 Offer Workflow (UI Integration)
+## 💰 Offer System
 
-- Users can submit offers on listings through the UI
-- Sellers can review and respond to offers
-- UI reflects backend-driven state changes (pending, accepted, rejected)
-- Demonstrates handling of **stateful interactions beyond basic CRUD**
+Newtome implements a **real-world marketplace interaction model**:
 
----
-
-## ☁️ Deployment
-
-- Frontend hosted on AWS S3 (static hosting)
-- Distributed globally using AWS CloudFront (CDN)
-- Integrated with backend API through CloudFront routing
+- Users submit offers on listings
+- Sellers can accept or reject offers
+- Backend manages offer states and relationships
+- Enforces buyer/seller interaction rules beyond basic CRUD
 
 ---
 
-## 🧩 System Integration
+## ☁️ Deployment Architecture
 
-Angular Frontend → CloudFront → Spring Boot API (EC2)
-→ MySQL (Docker)
-→ S3 (image storage)
+The application is deployed using a **containerized AWS architecture**:
+
+### Backend & Database
+
+- Backend API runs in a Docker container on an EC2 instance
+- MySQL runs in a separate Docker container using Docker Compose
+
+### Frontend & Assets
+
+- Angular frontend is hosted in an S3 bucket
+- User-uploaded images are stored in S3
+
+### Content Delivery (CloudFront)
+
+CloudFront is used as a **global CDN and routing layer**:
+
+- Serves frontend globally with low latency
+- Delivers images via CDN
+- Routes API requests to the EC2 backend
 
 ---
 
-## 🚀 Key Engineering Takeaways
+## 🧩 Infrastructure Summary
 
-- Developed a **modular Angular application** using reusable components and services
-- Integrated frontend with REST APIs using **asynchronous data handling (RxJS)**
-- Implemented **secure authentication workflows (JWT)**
-- Designed UI to align with backend business logic and data models
-- Deployed a production-ready frontend using **AWS cloud infrastructure**
+```
+Frontend  → S3 → CloudFront
+Images    → S3 → CloudFront
+API       → EC2 (Docker) → CloudFront
+Database  → MySQL (Docker on EC2)
+```
+
+---
+
+## 🚀 Key Learning Outcomes
+
+- Built secure REST APIs using Spring Boot
+- Implemented **JWT authentication and request filtering**
+- Introduced **Flyway for database version control**
+- Designed scalable systems using **layered architecture**
+- Implemented **integration testing with real database**
+- Solved real-world issues like:
+  - Test data isolation
+  - Foreign key constraint handling
+  - Environment-based configuration
+
+- Deployed a full-stack app using **Docker and AWS**
+- Applied **professional Git workflow (feature branches + PRs)**
 
 ---
 
 ## 🔮 Future Enhancements
 
-- State management (NgRx / Signals)
-- Advanced filtering and search capabilities
-- Role-based UI rendering (Admin/User)
-- Improved error handling and loading states
-- Enhanced mobile-first design
+- CI/CD pipeline (GitHub Actions) ← next step
+- Role-based authorization (Admin/User roles)
+- Pagination and filtering for listings
+- MongoDB integration for flexible data models
+- Improved frontend state management (NgRx / Signals)
 
 ---
 
 ## 📮 Contact
 
-Ricky Diaz
-[tampacustoms@yahoo.com](mailto:tampacustoms@yahoo.com)
-813-352-4525
+**Ricky Diaz**
+📧 [tampacustoms@yahoo.com](mailto:tampacustoms@yahoo.com)
+📱 813-352-4525
