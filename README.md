@@ -22,6 +22,7 @@ The project emphasizes **secure backend design, scalable architecture, productio
 ### Security
 
 - JWT Authentication (custom filter + token service)
+- Role-based authorization (Admin/User roles)
 
 ### Database
 
@@ -217,7 +218,6 @@ Database  → MySQL (Docker on EC2)
 ## 🔮 Future Enhancements
 
 - CI/CD pipeline (GitHub Actions) ← next step
-- Role-based authorization (Admin/User roles)
 - Pagination and filtering for listings
 - MongoDB integration for flexible data models
 - Improved frontend state management (NgRx / Signals)
