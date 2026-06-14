@@ -65,6 +65,17 @@
           About
         </a>
 
+        <!-- Account Link -->
+        <a
+          *ngIf="loggedIn"
+          routerLink="/account"
+          routerLinkActive="!text-sky-400"
+          class="hover:text-slate-300"
+          (click)="closeAll()"
+        >
+          Account
+        </a>
+
         <!-- Logged out: show Login -->
         <a
           *ngIf="!loggedIn"
